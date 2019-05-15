@@ -24,25 +24,28 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "scheduling")
 public class Scheduling implements Comparable<Scheduling> {
-    
+
     @Id
     @GeneratedValue
     private Integer id;
-    
+
     @ManyToOne
     private Student student;
-    
+
     @ManyToOne
     private Meal meal;
-    
+
     @Temporal(TemporalType.DATE)
     private Date date;
-    
+
+    @Temporal(TemporalType.DATE)
+    private Date dateInsert;
+
     @Temporal(TemporalType.TIME)
     private Date time;
-    
+
     private boolean wasPresent;
-    
+
     @ManyToOne
     private User user;
 
@@ -129,18 +132,22 @@ public class Scheduling implements Comparable<Scheduling> {
     public void setWasPresent(boolean wasPresent) {
         this.wasPresent = wasPresent;
     }
-    
-    public String getSituaction(){
-        if(isWasPresent()){
-            return "Presente";
-        } else {
-            return "Ausente";
+
+    public String getSituaction() {
+        Date date = new Date();
+        if (this.date.before(date)) {
+            if (isWasPresent()) {
+                return "Presente";
+            } else {
+                return "Ausente";
+            }
         }
+        return "";
     }
 
     @Override
     public int compareTo(Scheduling o) {
-        return o.getTime().compareTo(getTime());
+        return o.getDate().compareTo(getDate());
     }
 
     /**
@@ -156,7 +163,19 @@ public class Scheduling implements Comparable<Scheduling> {
     public void setUser(User user) {
         this.user = user;
     }
-    
-    
-    
+
+    /**
+     * @return the dateInsert
+     */
+    public Date getDateInsert() {
+        return dateInsert;
+    }
+
+    /**
+     * @param dateInsert the dateInsert to set
+     */
+    public void setDateInsert(Date dateInsert) {
+        this.dateInsert = dateInsert;
+    }
+
 }

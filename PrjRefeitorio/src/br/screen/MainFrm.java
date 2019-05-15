@@ -36,6 +36,7 @@ public class MainFrm extends javax.swing.JFrame {
             btVerifyMeal.setEnabled(false);
             smCursos.setEnabled(true);
             smUsers.setEnabled(true);
+            smPermissionMeal.setEnabled(false);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("ASSIS_ESTU")){
         //Assistência Estudantil
             btStudent1.setEnabled(true);
@@ -44,6 +45,7 @@ public class MainFrm extends javax.swing.JFrame {
             btAgenda.setEnabled(true);
             smCursos.setEnabled(true);
             smUsers.setEnabled(false);
+            smPermissionMeal.setEnabled(true);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")){
         //Recepção
             btStudent1.setEnabled(false);
@@ -53,6 +55,7 @@ public class MainFrm extends javax.swing.JFrame {
             btVerifyMeal.setEnabled(false);
             smCursos.setEnabled(false);
             smUsers.setEnabled(false);
+            smPermissionMeal.setEnabled(false);
         }
     }
 
@@ -68,6 +71,7 @@ public class MainFrm extends javax.swing.JFrame {
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenu2 = new javax.swing.JMenu();
+        jMenu3 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         btAgenda = new javax.swing.JButton();
         btVerifyMeal = new javax.swing.JButton();
@@ -76,16 +80,21 @@ public class MainFrm extends javax.swing.JFrame {
         btStudent1 = new javax.swing.JButton();
         btRegisterMeal = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
+        btExit = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         smmCursos = new javax.swing.JMenu();
         smCursos = new javax.swing.JMenuItem();
         smUsers = new javax.swing.JMenuItem();
+        jMenu4 = new javax.swing.JMenu();
+        smPermissionMeal = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Edit");
         jMenuBar1.add(jMenu2);
+
+        jMenu3.setText("jMenu3");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -151,6 +160,15 @@ public class MainFrm extends javax.swing.JFrame {
         jLabel2.setText("SISTEMA DO REFEITÓRIO IFCE CAMPUS CEDRO");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 540, -1));
 
+        btExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/action_exit_close_remove_13915.png"))); // NOI18N
+        btExit.setToolTipText("Sair");
+        btExit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btExitActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, -1, -1));
+
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 410));
 
         smmCursos.setText("Cadastros");
@@ -172,6 +190,18 @@ public class MainFrm extends javax.swing.JFrame {
         smmCursos.add(smUsers);
 
         jMenuBar2.add(smmCursos);
+
+        jMenu4.setText("Outros");
+
+        smPermissionMeal.setText("Permissão para Refeição");
+        smPermissionMeal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smPermissionMealActionPerformed(evt);
+            }
+        });
+        jMenu4.add(smPermissionMeal);
+
+        jMenuBar2.add(jMenu4);
 
         setJMenuBar(jMenuBar2);
 
@@ -213,6 +243,15 @@ public class MainFrm extends javax.swing.JFrame {
        rls.setVisible(true);
     }//GEN-LAST:event_smUsersActionPerformed
 
+    private void btExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExitActionPerformed
+        System.exit(0);
+    }//GEN-LAST:event_btExitActionPerformed
+
+    private void smPermissionMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smPermissionMealActionPerformed
+        AllowMealStudentFrm amsf = new AllowMealStudentFrm();
+        amsf.setVisible(true);
+    }//GEN-LAST:event_smPermissionMealActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -251,6 +290,7 @@ public class MainFrm extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAgenda;
+    private javax.swing.JButton btExit;
     private javax.swing.JButton btMeal;
     private javax.swing.JButton btRegisterMeal;
     private javax.swing.JButton btStudent1;
@@ -258,11 +298,14 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
+    private javax.swing.JMenu jMenu3;
+    private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblUserActive;
     private javax.swing.JMenuItem smCursos;
+    private javax.swing.JMenuItem smPermissionMeal;
     private javax.swing.JMenuItem smUsers;
     private javax.swing.JMenu smmCursos;
     // End of variables declaration//GEN-END:variables

@@ -45,7 +45,8 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         initComponents();
         setModal(true);
         setLocationRelativeTo(null);
-        insertMeals();        
+        insertMeals();  
+        edDate.setText(returnDate());
     }
     
     public String returnDate(){
@@ -91,17 +92,20 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
                     boolean isSelected, boolean hasFocus, int row, int column) {
-                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 //A coluna do status é 3
                 Object ref = table.getValueAt(row, 5);//Coluna Status
                 //Coloca cor em todas as linhas,COLUNA(3) que tem o valor "Aberto"
                 if (ref != null && ref.equals("Ausente")) {//Se Status for igual a "Aberto"
                     Color cor = new Color(255, 127, 80);
                     setBackground(cor);
-                } else {
+                } else if (ref != null && ref.equals("Presente")){
                    Color cor = new Color(144,238,144);
                    setBackground(cor);
-                } 
+                }  else {
+                   setBackground(Color.WHITE); 
+                }
+                comp.setForeground(Color.black);
                 return this;
             }
         });
@@ -145,7 +149,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         jPanel3.add(jLabel23);
         jLabel23.setBounds(0, 0, 460, 30);
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 40));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 40));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(432, 177));
@@ -173,7 +177,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tbStudents);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 570, 440));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 710, 440));
 
         jButton3.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/exit_icon-icons.com_48304.png"))); // NOI18N
@@ -184,7 +188,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 550, 57, 40));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 550, 57, 40));
 
         btBlock.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         btBlock.setText("0 refeições.");
@@ -196,7 +200,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 20, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Data:");
@@ -220,9 +224,9 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 550, -1, -1));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 550, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 600, 600));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 740, 600));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -276,7 +280,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 if (list.size()>0){
                     StudentDAO dao = new StudentDAO();
                     for(Scheduling s : list){
-                        if(s.isWasPresent()==false){
+                        if(s.isWasPresent()==false && s.getSituaction().equals("Ausente")){
                             Student student = s.getStudent();
                             student.setBlock(true);
                             dao.update(student);

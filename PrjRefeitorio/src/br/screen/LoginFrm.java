@@ -80,18 +80,18 @@ public class LoginFrm extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(255, 0, 0));
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel1.setText("Usuário.:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 30, -1, 33));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, -1, 33));
 
         jLabel2.setBackground(new java.awt.Color(255, 0, 0));
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel2.setText("Senha.:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 60, -1, 36));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, -1, 36));
 
         tfLogin.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jPanel1.add(tfLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 30, 226, 29));
+        jPanel1.add(tfLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 226, 29));
 
         tfSenha.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jPanel1.add(tfSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 70, 226, 29));
+        jPanel1.add(tfSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 226, 29));
 
         btLogar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btLogar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/Login_37128.png"))); // NOI18N
@@ -100,7 +100,7 @@ public class LoginFrm extends javax.swing.JFrame {
                 btLogarActionPerformed(evt);
             }
         });
-        jPanel1.add(btLogar, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 100, -1, -1));
+        jPanel1.add(btLogar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, -1, -1));
 
         btCancelar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/forceexit_103817.png"))); // NOI18N
@@ -109,13 +109,13 @@ public class LoginFrm extends javax.swing.JFrame {
                 btCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 100, -1, -1));
+        jPanel1.add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, -1, -1));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/password_userpassword_9564.png"))); // NOI18N
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 10, 90, 80));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/logo-vertical-ifce.png"))); // NOI18N
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, 130));
 
         jLabel5.setText("Assistência Estudantil - IFCE Campus Cedro");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 0, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 460, 160));
 

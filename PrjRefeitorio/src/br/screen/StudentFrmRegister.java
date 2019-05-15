@@ -34,6 +34,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class StudentFrmRegister extends javax.swing.JDialog {
 
     private Student student;
+
     /**
      * Creates new form RegisterStudent
      */
@@ -50,7 +51,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         this.student.setBlock(false);
         cbActive.setSelected(true);
     }
-    
+
     public StudentFrmRegister(Student student) {
         initComponents();
         setLocationRelativeTo(null);
@@ -61,20 +62,20 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         this.student = student;
         tfName.setText(student.getName());
         tfMat.setText(String.valueOf(student.getMat()));
-        if(student.isBlock()){
+        if (student.isBlock()) {
             chbBlock.setSelected(true);
         }
-        if(this.student.getCourse()!=null){
+        if (this.student.getCourse() != null) {
             cbCourse.setSelectedItem(student.getCourse());
         }
-        if(this.student.isActive()){
+        if (this.student.isActive()) {
             cbActive.setSelected(true);
         }
         lblCodigo.setText(String.valueOf(Util.decimalFormat().format(student.getId())));
         tbbPanStudente.setEnabledAt(1, true);
         preencheTabela();
     }
-    
+
     public void insertCourse() {
         cbCourse.removeAllItems();
         cbCourse.addItem("-");
@@ -86,32 +87,37 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             cbCourse.addItem(list.get(i));
         }
     }
-    
+
     public void preencheTabela() {
         SchedulingDAO sDAO = new SchedulingDAO();
-        
+
         List<Scheduling> list = sDAO.checkExists("student", student);
-        
+
         StudentSchedulingTableModel ptm = new StudentSchedulingTableModel(list);
         tbStudentMeals.setModel(ptm);
 
         FormatSizeColJTable.packColumns(tbStudentMeals, 1);
-        
+
         tbStudentMeals.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
                     boolean isSelected, boolean hasFocus, int row, int column) {
-                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 //A coluna do status é 3
                 Object ref = table.getValueAt(row, 3);//Coluna Status
                 //Coloca cor em todas as linhas,COLUNA(3) que tem o valor "Aberto"
                 if (ref != null && ref.equals("Ausente")) {//Se Status for igual a "Aberto"
                     Color cor = new Color(255, 127, 80);
                     setBackground(cor);
-                } else {
-                    Color cor = new Color(144,238,144);
+                } else if (ref != null && ref.equals("Presente")) {
+                    Color cor = new Color(144, 238, 144);
                     setBackground(cor);
-                } 
+                } else {
+                    setBackground(Color.WHITE);
+                }
+                comp.setForeground(Color.black);
+                
+                
                 return this;
             }
         });
@@ -242,40 +248,40 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
-        if(tfMat.getText().equals("")){
+
+        if (tfMat.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Informe a Matrícula!");
             tfMat.requestFocus();
             return;
         }
-        if(tfName.getText().equals("")){
+        if (tfName.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Informe o Nome!");
             tfName.requestFocus();
             return;
         }
-        
+
         student.setName(tfName.getText());
         try {
             student.setMat(Integer.valueOf(tfMat.getText()));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, "Matrícula incorreta! Informe apenas números");
         }
-        if(chbBlock.isSelected()){
+        if (chbBlock.isSelected()) {
             student.setBlock(true);
         } else {
             student.setBlock(false);
         }
-        if(cbCourse.getSelectedIndex()>0){
+        if (cbCourse.getSelectedIndex() > 0) {
             student.setCourse((Course) cbCourse.getSelectedItem());
-            
+
         }
-        
+
         StudentDAO sDAO = new StudentDAO();
 
-        if(student.getId()==null){
-            if(sDAO.checkExists("mat", Integer.valueOf(tfMat.getText())).size()>0){
+        if (student.getId() == null) {
+            if (sDAO.checkExists("mat", Integer.valueOf(tfMat.getText())).size() > 0) {
                 JOptionPane.showMessageDialog(rootPane, "Matrícula ja foi informada!");
-                return ;
+                return;
             }
             student.setActive(true);
             sDAO.add(student);

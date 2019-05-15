@@ -137,7 +137,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         jPanel3.add(jLabel23);
         jLabel23.setBounds(0, 0, 460, 30);
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 40));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 730, 40));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(432, 177));
@@ -165,7 +165,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tbStudents);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 560, 170));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 710, 230));
 
         jButton3.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/exit_icon-icons.com_48304.png"))); // NOI18N
@@ -176,7 +176,7 @@ public class AgendaFrm extends javax.swing.JDialog {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(520, 390, 57, 40));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 440, 57, 40));
 
         edtMat.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         edtMat.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -188,11 +188,11 @@ public class AgendaFrm extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Refeições:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 20, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, -1, -1));
 
         lblAgendamentos.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblAgendamentos.setText("0 agendamentos.");
-        jPanel1.add(lblAgendamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 390, 180, -1));
+        jPanel1.add(lblAgendamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 180, -1));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel2.setText("Data:");
@@ -204,11 +204,11 @@ public class AgendaFrm extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 140, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 130, -1, -1));
 
         jScrollPane2.setViewportView(listRefeicao);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 40, 270, 90));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 40, 270, 90));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Matrícula ou Código:");
@@ -217,7 +217,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel4.setText("Matrícula ou Código:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 570, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 710, -1));
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel5.setText("Aluno:");
@@ -225,13 +225,13 @@ public class AgendaFrm extends javax.swing.JDialog {
 
         lblStudent.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblStudent.setText("-");
-        jPanel1.add(lblStudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 280, -1));
+        jPanel1.add(lblStudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 430, -1));
 
         lblData.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblData.setText("jLabel3");
         jPanel1.add(lblData, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 180, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 600, 440));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 730, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -309,9 +309,9 @@ public class AgendaFrm extends javax.swing.JDialog {
         }
         if(JOptionPane.showConfirmDialog(rootPane, "Deseja agendar as refeições para "+student.getName()+"?", 
                 "IFCE", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-            
+            SchedulingDAO sDAO = new SchedulingDAO();
             for(Meal m : meals){     
-                SchedulingDAO sDAO = new SchedulingDAO();
+                
                 
                 List listStudentDateMeal = sDAO.schedulingDateStudentMeal(new Date(), student, m);
                 //se já foi cadastrado a refeição para o estudante, passa para o próximo
@@ -323,6 +323,7 @@ public class AgendaFrm extends javax.swing.JDialog {
                 scheduling.setMeal(m);
                 scheduling.setStudent(student);
                 scheduling.setDate(new Date());
+                scheduling.setDateInsert(new Date());
                 scheduling.setTime(new Date());
                 scheduling.setWasPresent(false);
                 scheduling.setUser(UserActive.retornaUsuarioAtivo());

@@ -48,7 +48,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value,
                     boolean isSelected, boolean hasFocus, int row, int column) {
-                super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+                Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 //A coluna do status é 3
                 Object ref = table.getValueAt(row, 4);//Coluna Status
                 //Coloca cor em todas as linhas,COLUNA(3) que tem o valor "Aberto"
@@ -56,8 +56,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
                     Color cor = new Color(255, 127, 80);
                     setBackground(cor);
                 } else {
-                    Color cor = new Color(144,238,144);
-                    setBackground(cor);
+                    setBackground(Color.WHITE);
                 } 
                 //se inativo
                 ref = table.getValueAt(row, 5);//Coluna Status
@@ -66,6 +65,8 @@ public class StudentFrmFind extends javax.swing.JDialog {
                     Color cor = new Color(112,128,144);
                     setBackground(cor);
                 }
+                
+                comp.setForeground(Color.black);
                 return this;
             }
         });
@@ -106,7 +107,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
         jPanel3.add(jLabel23);
         jLabel23.setBounds(0, 0, 460, 30);
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 600, 40));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 40));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(432, 177));
@@ -134,7 +135,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tbStudents);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 580, 220));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 720, 220));
 
         jButton3.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/exit_icon-icons.com_48304.png"))); // NOI18N
@@ -145,7 +146,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 300, 57, 40));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 300, 57, 40));
 
         jButton1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/search.png"))); // NOI18N
@@ -171,7 +172,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
                 btnDeleteActionPerformed(evt);
             }
         });
-        jPanel1.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 300, -1, -1));
+        jPanel1.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 300, -1, -1));
 
         btnNew.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btnNew.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/new-file_40454.png"))); // NOI18N
@@ -181,7 +182,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
                 btnNewActionPerformed(evt);
             }
         });
-        jPanel1.add(btnNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 300, -1, -1));
+        jPanel1.add(btnNew, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 300, -1, -1));
 
         btnEdit.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btnEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/edit_icon-icons.com_52382.png"))); // NOI18N
@@ -191,9 +192,9 @@ public class StudentFrmFind extends javax.swing.JDialog {
                 btnEditActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 300, -1, -1));
+        jPanel1.add(btnEdit, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 300, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 600, 350));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 740, 350));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
