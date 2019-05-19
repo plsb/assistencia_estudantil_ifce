@@ -17,8 +17,10 @@ import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
 import br.util.OnlyNumberField;
 import br.util.UserActive;
+import br.util.Util;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -42,7 +44,9 @@ public class AgendaFrm extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         preencheTabela();
         insertListMeals();
-        edtMat.setDocument(new OnlyNumberField());
+        //edtMat.setDocument(new OnlyNumberField());
+        lblData.setText(returnDate());
+        edtMat.requestFocus();
     }
     
     /*public AgendaFrm(Set<Meal> meals) {
@@ -89,7 +93,7 @@ public class AgendaFrm extends javax.swing.JDialog {
     
     public void clearFields(){
         student = null;
-        lblStudent.setText("");
+        taStudent.setText("");
         edtMat.setText("");
         preencheTabela();
         edtMat.requestFocus();
@@ -114,18 +118,24 @@ public class AgendaFrm extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         lblAgendamentos = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btAddStudentMeal = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         listRefeicao = new javax.swing.JList();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
-        lblStudent = new javax.swing.JLabel();
         lblData = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        taStudent = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
+        addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                formKeyPressed(evt);
+            }
+        });
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jPanel3.setBackground(new java.awt.Color(0, 100, 0));
@@ -141,6 +151,11 @@ public class AgendaFrm extends javax.swing.JDialog {
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(432, 177));
+        jPanel1.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                jPanel1KeyPressed(evt);
+            }
+        });
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tbStudents.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
@@ -198,14 +213,19 @@ public class AgendaFrm extends javax.swing.JDialog {
         jLabel2.setText("Data:");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/new-file_40454.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btAddStudentMeal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/new-file_40454.png"))); // NOI18N
+        btAddStudentMeal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btAddStudentMealActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 130, -1, -1));
+        jPanel1.add(btAddStudentMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 130, -1, -1));
 
+        listRefeicao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                listRefeicaoKeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(listRefeicao);
 
         jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 40, 270, 90));
@@ -223,13 +243,17 @@ public class AgendaFrm extends javax.swing.JDialog {
         jLabel5.setText("Aluno:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
 
-        lblStudent.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
-        lblStudent.setText("-");
-        jPanel1.add(lblStudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 430, -1));
-
         lblData.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblData.setText("jLabel3");
         jPanel1.add(lblData, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 180, -1));
+
+        taStudent.setEditable(false);
+        taStudent.setColumns(20);
+        taStudent.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        taStudent.setRows(5);
+        jScrollPane3.setViewportView(taStudent);
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 420, 70));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 730, 500));
 
@@ -251,7 +275,17 @@ public class AgendaFrm extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
+    public void verifyF2(java.awt.event.KeyEvent evt){
+        if (evt.getKeyCode() == 113) {//F2
+            if(this.student!=null){
+                btAddStudentMealActionPerformed(null);
+                return ;
+            }
+        }
+    }
+    
     private void edtMatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtMatKeyPressed
+        verifyF2(evt);
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) { 
             if(edtMat.getText().equals("")){
                 JOptionPane.showMessageDialog(rootPane, "Informe a matrícula!");
@@ -259,18 +293,18 @@ public class AgendaFrm extends javax.swing.JDialog {
                 
                 StudentDAO sDAO = new StudentDAO();
                 
-                Integer mat= 0;
-                try {
-                    mat = Integer.parseInt(edtMat.getText());
-                } catch (Exception e) {
-                    clearFields();
-                    JOptionPane.showMessageDialog(rootPane, "Informe uma matrícula válida!");
-                    return ;
+                String mat = edtMat.getText();
+                if(mat.equals("")){
+                    JOptionPane.showMessageDialog(rootPane, "Informe uma matrícula!");
                 }
                 
                 List<Student> list = sDAO.checkExists("mat", mat);
                 if(list.size()==0){
-                    list = sDAO.checkExists("id", mat);
+                    try {
+                        list = sDAO.checkExists("id", Integer.parseInt(mat));
+                    } catch (Exception e) {
+                        list = new ArrayList<Student>();
+                    }
                     if(list.size()==0){
                         clearFields();
                         JOptionPane.showMessageDialog(rootPane, "Matrícula/Código não encontrado!"); 
@@ -280,22 +314,20 @@ public class AgendaFrm extends javax.swing.JDialog {
                 
                 student = new Student();
                 student = list.get(0);
-                lblStudent.setText(student.getName());
+                taStudent.setText(br.util.Util.decimalFormat().format(student.getId())
+                        +" - "+student.getName() 
+                        +"\n"+student.getCourse().getDescription()
+                        +"\nData da Próxima Atualização Cadastral: "+new SimpleDateFormat("dd/MM/yyyy").format(student.getDateValid()));
                     
-                if(student.isActive()==false){
-                    JOptionPane.showMessageDialog(rootPane, "O aluno está inativo!"); 
+                if(!Util.verifyStudent(rootPane,this.student)){
                     clearFields();
-                } else if(student.isBlock()){
-                    JOptionPane.showMessageDialog(rootPane, "O aluno está bloqueado!"); 
-                    clearFields();
-                }  
-                
+                }
                 
             }
         }
     }//GEN-LAST:event_edtMatKeyPressed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btAddStudentMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddStudentMealActionPerformed
         
         List<Meal> meals = (List<Meal>) listRefeicao.getSelectedValuesList();
         
@@ -332,7 +364,19 @@ public class AgendaFrm extends javax.swing.JDialog {
             clearFields();
             
         }
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btAddStudentMealActionPerformed
+
+    private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
+        
+    }//GEN-LAST:event_formKeyPressed
+
+    private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed
+        
+    }//GEN-LAST:event_jPanel1KeyPressed
+
+    private void listRefeicaoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listRefeicaoKeyPressed
+        verifyF2(evt);
+    }//GEN-LAST:event_listRefeicaoKeyPressed
 
     /**
      * @param args the command line arguments
@@ -385,8 +429,8 @@ public class AgendaFrm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btAddStudentMeal;
     private javax.swing.JTextField edtMat;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -398,11 +442,12 @@ public class AgendaFrm extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAgendamentos;
     private javax.swing.JLabel lblData;
-    private javax.swing.JLabel lblStudent;
     private javax.swing.JList listRefeicao;
+    private javax.swing.JTextArea taStudent;
     private javax.swing.JTable tbStudents;
     // End of variables declaration//GEN-END:variables
 }

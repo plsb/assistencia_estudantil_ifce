@@ -147,7 +147,7 @@ public class Scheduling implements Comparable<Scheduling> {
 
     @Override
     public int compareTo(Scheduling o) {
-        return o.getDate().compareTo(getDate());
+        return o.getId().compareTo(getId());
     }
 
     /**

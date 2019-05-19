@@ -5,6 +5,8 @@
  */
 package br.util;
 
+import br.student.Student;
+import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -281,5 +283,26 @@ public class Util {
             return false;
         }
     }
-    
+
+    public static boolean verifyStudent(Component component, Student student) {
+        if (student.isActive() == false) {
+            JOptionPane.showMessageDialog(component, "O cadastro de "+student.getName()
+                    +" está inativo!", "IFCE", JOptionPane.ERROR_MESSAGE); 
+            return false;
+        } else if (student.isBlock()) {
+            JOptionPane.showMessageDialog(component, "O cadastro de "+student.getName()
+                    +" está bloqueado!", "IFCE", JOptionPane.ERROR_MESSAGE); 
+            return false;
+        } else if(student.getDateValid()!=null){
+            
+            if((new Date()).after(student.getDateValid())){
+                JOptionPane.showMessageDialog(component, "O cadastro de "+student.getName()
+                    +" está desatualizado!", "IFCE", JOptionPane.ERROR_MESSAGE); 
+            return false;
+            }
+        }
+
+        return true;
+    }
+
 }

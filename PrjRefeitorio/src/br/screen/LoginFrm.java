@@ -114,7 +114,7 @@ public class LoginFrm extends javax.swing.JFrame {
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/logo-vertical-ifce.png"))); // NOI18N
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, 130));
 
-        jLabel5.setText("Assistência Estudantil - IFCE Campus Cedro");
+        jLabel5.setText("Assistência Estudantil - IFCE Campus Cedro2");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
 
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 460, 160));

@@ -37,6 +37,7 @@ public class MainFrm extends javax.swing.JFrame {
             smCursos.setEnabled(true);
             smUsers.setEnabled(true);
             smPermissionMeal.setEnabled(false);
+            smShift.setEnabled(true);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("ASSIS_ESTU")){
         //Assistência Estudantil
             btStudent1.setEnabled(true);
@@ -46,6 +47,7 @@ public class MainFrm extends javax.swing.JFrame {
             smCursos.setEnabled(true);
             smUsers.setEnabled(false);
             smPermissionMeal.setEnabled(true);
+            smShift.setEnabled(true);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")){
         //Recepção
             btStudent1.setEnabled(false);
@@ -56,6 +58,7 @@ public class MainFrm extends javax.swing.JFrame {
             smCursos.setEnabled(false);
             smUsers.setEnabled(false);
             smPermissionMeal.setEnabled(false);
+            smShift.setEnabled(false);
         }
     }
 
@@ -84,6 +87,7 @@ public class MainFrm extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         smmCursos = new javax.swing.JMenu();
         smCursos = new javax.swing.JMenuItem();
+        smShift = new javax.swing.JMenuItem();
         smUsers = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         smPermissionMeal = new javax.swing.JMenuItem();
@@ -181,6 +185,14 @@ public class MainFrm extends javax.swing.JFrame {
         });
         smmCursos.add(smCursos);
 
+        smShift.setText("Turnos");
+        smShift.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smShiftActionPerformed(evt);
+            }
+        });
+        smmCursos.add(smShift);
+
         smUsers.setText("Usuários");
         smUsers.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -252,6 +264,11 @@ public class MainFrm extends javax.swing.JFrame {
         amsf.setVisible(true);
     }//GEN-LAST:event_smPermissionMealActionPerformed
 
+    private void smShiftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smShiftActionPerformed
+        ShiftFrmFind sff = new ShiftFrmFind();
+        sff.setVisible(true);
+    }//GEN-LAST:event_smShiftActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -306,6 +323,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JLabel lblUserActive;
     private javax.swing.JMenuItem smCursos;
     private javax.swing.JMenuItem smPermissionMeal;
+    private javax.swing.JMenuItem smShift;
     private javax.swing.JMenuItem smUsers;
     private javax.swing.JMenu smmCursos;
     // End of variables declaration//GEN-END:variables

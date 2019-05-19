@@ -7,6 +7,7 @@ package br.util;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -148,7 +149,7 @@ public abstract class GenericDAO<T> {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(classe).add(Restrictions.eq(campo, valor)).list();
-            
+            //Hibernate.initialize(lista);
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
                 getTransacao().rollback();

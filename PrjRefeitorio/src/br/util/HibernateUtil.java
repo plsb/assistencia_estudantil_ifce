@@ -16,14 +16,17 @@ public class HibernateUtil {
 
     private static SessionFactory buildSessionFactory() {
         try {
-            AnnotationConfiguration cfg = 
+            /*AnnotationConfiguration cfg = 
 			new AnnotationConfiguration();
+            cfg.configure("hibernate.cfg.xml");*/
+            Configuration cfg
+                    = new Configuration();
             cfg.configure("hibernate.cfg.xml");
             return cfg.buildSessionFactory();
         } catch (Throwable e) {
             // TODO: handle exception
             JOptionPane.showMessageDialog(null,"Criação inicial do objeto"
-                    + " SessionFactory falhou. Erro: " + e);
+                    + " SessionFactory falhou. Erro: " + e.getMessage());
             throw new ExceptionInInitializerError(e);
         }
     }

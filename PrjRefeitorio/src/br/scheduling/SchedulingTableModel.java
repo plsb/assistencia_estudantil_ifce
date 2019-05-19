@@ -77,7 +77,7 @@ public class SchedulingTableModel extends AbstractTableModel {
             case 0:
                 return Util.decimalFormat().format(s.getId());
             case 1:
-                return s.getStudent().getName();
+                return Util.decimalFormat(1).format(s.getStudent().getId())+" - "+s.getStudent().getName();
             case 2:
                 return s.getStudent().getCourse()!=null ? s.getStudent().getCourse().getInitials() : "";
             case 3:

@@ -12,6 +12,7 @@ import br.scheduling.SchedulingDAO;
 import br.student.Student;
 import br.student.StudentDAO;
 import br.util.UserActive;
+import br.util.Util;
 import java.awt.event.KeyEvent;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -66,7 +67,7 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
 
     public void clearFields() {
         student = null;
-        lblStudent.setText("");
+        taStudent.setText("");
         edtMat.setText("");
         edtMat.requestFocus();
         cbMeal.setSelectedIndex(0);
@@ -87,11 +88,12 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
         cbMeal = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        lblStudent = new javax.swing.JLabel();
         jButton1 = new javax.swing.JButton();
         edDate = new javax.swing.JFormattedTextField();
         jLabel4 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        taStudent = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -113,27 +115,23 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
 
         cbMeal.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         cbMeal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cbMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 280, -1));
+        jPanel1.add(cbMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 280, -1));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Refeição:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, -1));
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel5.setText("Aluno:");
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
-        lblStudent.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
-        lblStudent.setText("-");
-        jPanel1.add(lblStudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, 270, 20));
-
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/new-file_40454.png"))); // NOI18N
+        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/Save_37110.png"))); // NOI18N
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 190, 50, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, 50, -1));
 
         edDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
         jPanel1.add(edDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, 170, -1));
@@ -149,9 +147,17 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 190, -1, -1));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 220, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 350, 240));
+        taStudent.setEditable(false);
+        taStudent.setColumns(20);
+        taStudent.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        taStudent.setRows(5);
+        jScrollPane3.setViewportView(taStudent);
+
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 420, 70));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 440, 330));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -164,18 +170,18 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
 
                 StudentDAO sDAO = new StudentDAO();
 
-                Integer mat = 0;
-                try {
-                    mat = Integer.parseInt(edtMat.getText());
-                } catch (Exception e) {
-                    clearFields();
-                    JOptionPane.showMessageDialog(rootPane, "Informe uma matrícula válida!");
-                    return;
+                String mat = edtMat.getText();
+                if(mat.equals("")){
+                    JOptionPane.showMessageDialog(rootPane, "Informe uma matrícula!");
                 }
 
                 List<Student> list = sDAO.checkExists("mat", mat);
                 if (list.size() == 0) {
-                    list = sDAO.checkExists("id", mat);
+                    try {
+                        list = sDAO.checkExists("id", Integer.parseInt(mat));
+                    } catch (Exception e) {
+                        list = new ArrayList<Student>();
+                    }
                     if (list.size() == 0) {
                         clearFields();
                         JOptionPane.showMessageDialog(rootPane, "Matrícula/Código não encontrado!");
@@ -185,11 +191,13 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
 
                 student = new Student();
                 student = list.get(0);
-                lblStudent.setText(student.getName());
+                taStudent.setText(br.util.Util.decimalFormat().format(student.getId())
+                        +" - "+student.getName() 
+                        +"\n"+student.getCourse().getDescription()
+                        +"\nData da Próxima Atualização Cadastral: "+new SimpleDateFormat("dd/MM/yyyy").format(student.getDateValid()));
 
-                if (student.isActive() == false) {
-                    JOptionPane.showMessageDialog(rootPane, "O aluno está inativo!");
-                    clearFields();
+                if(!Util.verifyStudent(rootPane,this.student)){
+                        clearFields();
                 }
 
             }
@@ -299,7 +307,8 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JLabel lblStudent;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTextArea taStudent;
     // End of variables declaration//GEN-END:variables
 
 }

@@ -6,6 +6,7 @@
 package br.meal;
 
 
+import br.shift.Shift;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -63,7 +64,27 @@ public class Meal implements Comparable<Meal> {
         return this.description;
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Meal other = (Meal) obj;
+        if (this.getId() != other.getId()) {
+            return false;
+        }
+        
+        return true;
+    }
     
-
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + this.getId();
+        return hash;
+    }
     
 }

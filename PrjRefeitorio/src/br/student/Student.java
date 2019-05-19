@@ -5,13 +5,22 @@
  */
 package br.student;
 
+import br.allowsmd.StudentAllowMealDay;
 import br.course.Course;
+import br.screen.AllowMealStudentFrm;
+import br.shift.Shift;
 import java.math.BigInteger;
+import java.util.Date;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "student")
@@ -21,7 +30,7 @@ public class Student implements Comparable<Student> {
     @GeneratedValue
     private Integer id;
     
-    private Integer mat;
+    private String mat;
     
     private String name;
     
@@ -29,9 +38,17 @@ public class Student implements Comparable<Student> {
     
     private boolean active;
     
+    private boolean semRegular;
+    
     @ManyToOne
     private Course course;
-
+    
+    @ManyToOne
+    private Shift shift;
+    
+    @Temporal(TemporalType.DATE)
+    private Date dateValid;
+    
     /**
      * @return the id
      */
@@ -49,14 +66,14 @@ public class Student implements Comparable<Student> {
     /**
      * @return the mat
      */
-    public Integer getMat() {
+    public String getMat() {
         return mat;
     }
 
     /**
      * @param mat the mat to set
      */
-    public void setMat(Integer mat) {
+    public void setMat(String mat) {
         this.mat = mat;
     }
 
@@ -136,6 +153,72 @@ public class Student implements Comparable<Student> {
     public void setActive(boolean active) {
         this.active = active;
     }
+
+    /**
+     * @return the shift
+     */
+    public Shift getShift() {
+        return shift;
+    }
+
+    /**
+     * @param shift the shift to set
+     */
+    public void setShift(Shift shift) {
+        this.shift = shift;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Student other = (Student) obj;
+        if (this.getId() != other.getId()) {
+            return false;
+        }
+        
+        return true;
+    }
+    
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + this.getId();
+        return hash;
+    }
+
+    /**
+     * @return the dateValid
+     */
+    public Date getDateValid() {
+        return dateValid;
+    }
+
+    /**
+     * @param dateValid the dateValid to set
+     */
+    public void setDateValid(Date dateValid) {
+        this.dateValid = dateValid;
+    }
+
+    /**
+     * @return the semRegular
+     */
+    public boolean isSemRegular() {
+        return semRegular;
+    }
+
+    /**
+     * @param semRegular the semRegular to set
+     */
+    public void setSemRegular(boolean semRegular) {
+        this.semRegular = semRegular;
+    }
+
     
     
 }

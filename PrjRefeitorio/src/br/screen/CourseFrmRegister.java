@@ -7,6 +7,9 @@ package br.screen;
 
 import br.course.Course;
 import br.course.CourseDAO;
+import br.shift.Shift;
+import br.shift.ShiftDAO;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -36,6 +39,7 @@ public class CourseFrmRegister extends javax.swing.JDialog {
         tfDesc.setText(course.getDescription());
         tfSigla.setText(course.getInitials());
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -71,7 +75,7 @@ public class CourseFrmRegister extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 130, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/forceexit_103817.png"))); // NOI18N
@@ -81,7 +85,7 @@ public class CourseFrmRegister extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 140, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 130, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Sigla: *");
@@ -107,6 +111,8 @@ public class CourseFrmRegister extends javax.swing.JDialog {
             tfSigla.requestFocus();
             return;
         }
+        
+        
        
         course.setDescription(tfDesc.getText());
         course.setInitials(tfSigla.getText());

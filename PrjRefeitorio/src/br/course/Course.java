@@ -5,9 +5,11 @@
  */
 package br.course;
 
+import br.shift.Shift;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -70,12 +72,12 @@ public class Course implements Comparable<Course>{
 
     @Override
     public int compareTo(Course o) {
-        return this.description.compareTo(o.description);
+        return this.getDescription().compareTo(o.getDescription());
     }
 
     @Override
     public String toString() {
-        return this.description;
+        return this.getDescription();
     }
     
     @Override
@@ -87,7 +89,7 @@ public class Course implements Comparable<Course>{
             return false;
         }
         final Course other = (Course) obj;
-        if (this.id != other.id) {
+        if (this.getId() != other.getId()) {
             return false;
         }
         
@@ -97,7 +99,7 @@ public class Course implements Comparable<Course>{
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 89 * hash + this.id;
+        hash = 89 * hash + this.getId();
         return hash;
     }
     

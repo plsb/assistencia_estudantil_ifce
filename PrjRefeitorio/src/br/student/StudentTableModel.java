@@ -13,6 +13,7 @@
 package br.student;
 
 import br.util.Util;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -25,7 +26,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class StudentTableModel extends AbstractTableModel {
 
-    private String[] nomeColunas = {"Código", "Matrícula", "Nome", "Curso","Situação", ""};
+    private String[] nomeColunas = {"Código", "Matrícula", "Nome", "Curso", "Turno", "Válidade","", ""};
     private List<Student> students;
 
     /**
@@ -81,8 +82,12 @@ public class StudentTableModel extends AbstractTableModel {
             case 3:
                 return s.getCourse() == null ? "" : s.getCourse().getDescription();
             case 4:
-                return (s.getBlock());
+                return (s.getShift());
             case 5:
+                return s.getDateValid()!=null ? new SimpleDateFormat("dd/MM/yyyy").format( s.getDateValid()) : "";
+            case 6:
+                return (s.getBlock());
+            case 7:
                 return (s.getActive());
 
         }
@@ -113,6 +118,8 @@ public class StudentTableModel extends AbstractTableModel {
                 return nomeColunas[4];
             case 5:
                 return nomeColunas[5];
+            case 6:
+                return nomeColunas[6];
         }
         return null;
     }
