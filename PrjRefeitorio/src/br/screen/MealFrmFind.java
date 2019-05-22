@@ -13,6 +13,7 @@ import br.student.Student;
 import br.student.StudentDAO;
 import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
 /**
@@ -59,7 +60,7 @@ public class MealFrmFind extends javax.swing.JDialog {
         jScrollPane1 = new javax.swing.JScrollPane();
         tbMeals = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        btSearch = new javax.swing.JButton();
         tfPesquisarNome = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         btnDelete = new javax.swing.JButton();
@@ -120,16 +121,21 @@ public class MealFrmFind extends javax.swing.JDialog {
         });
         jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(540, 300, 57, 40));
 
-        jButton1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/search.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btSearch.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        btSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/search.png"))); // NOI18N
+        btSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btSearchActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, -1, -1));
+        jPanel1.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, -1, -1));
 
         tfPesquisarNome.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        tfPesquisarNome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfPesquisarNomeKeyPressed(evt);
+            }
+        });
         jPanel1.add(tfPesquisarNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 280, -1));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
@@ -186,9 +192,9 @@ public class MealFrmFind extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
         preencheTabela(tfPesquisarNome.getText().toString());
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btSearchActionPerformed
 
     private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
         if (tbMeals.getSelectedRow() < 0) {
@@ -228,6 +234,12 @@ public class MealFrmFind extends javax.swing.JDialog {
             preencheTabela(tfPesquisarNome.getText().toString());
         }
     }//GEN-LAST:event_btnEditActionPerformed
+
+    private void tfPesquisarNomeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfPesquisarNomeKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) { 
+            btSearchActionPerformed(null);
+        }
+    }//GEN-LAST:event_tfPesquisarNomeKeyPressed
 
     /**
      * @param args the command line arguments
@@ -280,10 +292,10 @@ public class MealFrmFind extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btSearch;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnEdit;
     private javax.swing.JButton btnNew;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel23;

@@ -4,11 +4,14 @@
  */
 package br.util;
 
+import java.sql.Time;
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.MatchMode;
@@ -40,9 +43,9 @@ public abstract class GenericDAO<T> {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             this.setTransacao(getSessao().beginTransaction());
             this.getSessao().save(entity);
-            this.getTransacao().commit();           
+            this.getTransacao().commit();
         } catch (HibernateException e) {
-            System.out.println(e.getMessage()+" | "+e.getCause());
+            System.out.println(e.getMessage() + " | " + e.getCause());
             JOptionPane.showMessageDialog(null, "Não foi possível inserir " + entity.getClass()
                     + ". Erro: " + e.getMessage());
             return false;
@@ -71,17 +74,17 @@ public abstract class GenericDAO<T> {
 
     public boolean remove(T entity) {
 //        try {
-            this.setSessao(HibernateUtil.getSessionFactory().openSession());
-            this.setTransacao(getSessao().beginTransaction());
-            this.getSessao().delete(entity);
-            this.getTransacao().commit();
-            
+        this.setSessao(HibernateUtil.getSessionFactory().openSession());
+        this.setTransacao(getSessao().beginTransaction());
+        this.getSessao().delete(entity);
+        this.getTransacao().commit();
+
 //        } catch (HibernateException e) {
 //            JOptionPane.showMessageDialog(null, "Não foi possível remover " + entity.getClass()
 //                    + ". Erro: " + e.getMessage());
 //            return false;
 //        } finally {
-            getSessao().close();
+        getSessao().close();
 
 //        }
         return true;
@@ -93,7 +96,7 @@ public abstract class GenericDAO<T> {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(classe).list();
-            
+
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
                 getTransacao().rollback();
@@ -104,15 +107,14 @@ public abstract class GenericDAO<T> {
         }
         return lista;
     }
-    
-    
+
     public List<T> list(String orderBy) {
         List<T> lista = null;
         try {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(classe).addOrder(Order.asc(orderBy)).list();
-            
+
         } catch (Throwable e) {
             JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
             if (getTransacao().isActive()) {
@@ -124,8 +126,7 @@ public abstract class GenericDAO<T> {
         }
         return lista;
     }
-    
-    
+
     /*
      * ao passar uma chave primária
      * ele retorna um objeto referente a chave primária
@@ -168,7 +169,7 @@ public abstract class GenericDAO<T> {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(classe).add(Restrictions.like(campo, valor, MatchMode.ANYWHERE)).list();
-            
+
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
                 getTransacao().rollback();
@@ -180,8 +181,7 @@ public abstract class GenericDAO<T> {
         return lista;
 
     }
-    
-    
+
     /**
      * @return the sessao
      */
@@ -209,14 +209,14 @@ public abstract class GenericDAO<T> {
     public void setTransacao(Transaction transacao) {
         this.transacao = transacao;
     }
-    
-    public List<T> listar (String campo, Object valor){
-     
-    List<T> lista = null;
-        try{
-           sessao = HibernateUtil.getSessionFactory().openSession();
-           lista = sessao.createCriteria(classe).add(Restrictions.eq(campo, valor)).list();
-            
+
+    public List<T> listar(String campo, Object valor) {
+
+        List<T> lista = null;
+        try {
+            sessao = HibernateUtil.getSessionFactory().openSession();
+            lista = sessao.createCriteria(classe).add(Restrictions.eq(campo, valor)).list();
+
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, ex.getMessage());
             return lista;
@@ -224,7 +224,37 @@ public abstract class GenericDAO<T> {
             sessao.close();
         }
         return lista;
-    
-    
+    }
+
+    public Time getServerTime() {
+        try {
+            sessao = HibernateUtil.getSessionFactory().openSession();;
+            sessao.beginTransaction();
+            SQLQuery query = sessao.createSQLQuery("SELECT CURTIME()");
+            Time time = (Time) query.uniqueResult();
+            return time;
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            return null;
+        } finally {
+            sessao.close();
+        }
+
+    }
+
+    public Date getServerDate() {
+        try {
+            sessao = HibernateUtil.getSessionFactory().openSession();;
+            SQLQuery query = sessao.createSQLQuery("SELECT CURDATE()");
+            Date date = (Date) query.uniqueResult();
+            return date;
+
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+            return null;
+        } finally {
+            sessao.close();
+        }
     }
 }

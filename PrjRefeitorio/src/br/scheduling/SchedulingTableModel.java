@@ -27,7 +27,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class SchedulingTableModel extends AbstractTableModel {
 
-    private String[] nomeColunas = {"Código", "Estudante", "Curso","Refeição", "Data", "Situação"};
+    private String[] nomeColunas = {"Id Ref", "Cód Est", "Estudante", "Curso", "Refeição", "Data", "Situação"};
     private List<Scheduling> schedulings;
 
     /**
@@ -77,14 +77,16 @@ public class SchedulingTableModel extends AbstractTableModel {
             case 0:
                 return Util.decimalFormat().format(s.getId());
             case 1:
-                return Util.decimalFormat(1).format(s.getStudent().getId())+" - "+s.getStudent().getName();
+                return Util.decimalFormat(1).format(s.getStudent().getId());
             case 2:
-                return s.getStudent().getCourse()!=null ? s.getStudent().getCourse().getInitials() : "";
+                return s.getStudent().getName();
             case 3:
-                return s.getMeal().getDescription();
+                return s.getStudent().getCourse()!=null ? s.getStudent().getCourse().getInitials() : "";
             case 4:
-                return new SimpleDateFormat("dd/MM/yyyy").format( s.getDate());
+                return s.getMeal().getDescription();
             case 5:
+                return new SimpleDateFormat("dd/MM/yyyy").format( s.getDate());
+            case 6:
                 return s.getSituaction(); 
                
 
@@ -116,6 +118,8 @@ public class SchedulingTableModel extends AbstractTableModel {
                 return nomeColunas[4];
             case 5:
                 return nomeColunas[5];
+            case 6:
+                return nomeColunas[6];
         }
         return null;
     }

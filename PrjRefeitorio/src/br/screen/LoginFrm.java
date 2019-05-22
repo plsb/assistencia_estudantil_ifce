@@ -4,11 +4,27 @@
  */
 package br.screen;
 
+import br.config.Config;
+import br.config.ConfigDAO;
+import br.student.StudentDAO;
 import br.user.User;
 import br.user.UserDAO;
+import br.util.GenericDAO;
+import br.util.LoadPropriedade;
 import br.util.UserActive;
 import br.util.Util;
 import java.awt.Toolkit;
+import java.awt.event.KeyEvent;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.List;
+import java.util.Properties;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
@@ -19,7 +35,7 @@ import javax.swing.UnsupportedLookAndFeelException;
  * @author Pedro Saraiva
  */
 public class LoginFrm extends javax.swing.JFrame {
-    
+
     Util utilidades = new Util();
 
     /**
@@ -30,7 +46,42 @@ public class LoginFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         //tfLogin.grabFocus();
         //Util.setIcon(LoginFrm.class, this);
-       
+        String versao = Double.toString(Util.getVersionSystem());
+        lblVersion.setText("Versão " + versao);
+        verifyUpdateJar();
+    }
+
+    public void verifyUpdateJar() {
+        ConfigDAO dao = new ConfigDAO();
+        List<Config> list = dao.list();
+        Config config = null;
+        if (list != null) {
+            if (list.size() > 0) {
+                config = list.get(0);
+
+            } else {
+                return;
+            }
+        }
+        Double versionServer = config.getVersion();
+        if (versionServer > Util.getVersionSystem()) {
+            if (JOptionPane.showConfirmDialog(rootPane, "Deseja atualizar o sistema?",
+                    "Atualização", JOptionPane.YES_NO_OPTION)
+                    == JOptionPane.YES_OPTION) {
+                try {
+                    URLConnection connection = new URL(LoadPropriedade.loadProperty("path_server_verify_online")).openConnection();
+                    connection.connect();
+
+                    Process p = Runtime.getRuntime().exec("java -jar " + Util.retornaCaminhoApp() + "/" + LoadPropriedade.loadProperty("name_software_update"));
+
+                    System.exit(0);
+
+                } catch (IOException ioexcp) {
+                    JOptionPane.showMessageDialog(null, "Sem conexão com Internet", "IFCE", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+            }
+        }
     }
 
     /**
@@ -54,7 +105,8 @@ public class LoginFrm extends javax.swing.JFrame {
         btLogar = new javax.swing.JButton();
         btCancelar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
+        lblVersion = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 255));
@@ -88,9 +140,19 @@ public class LoginFrm extends javax.swing.JFrame {
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, -1, 36));
 
         tfLogin.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfLogin.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfLoginKeyPressed(evt);
+            }
+        });
         jPanel1.add(tfLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 226, 29));
 
         tfSenha.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfSenhaKeyPressed(evt);
+            }
+        });
         jPanel1.add(tfSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 226, 29));
 
         btLogar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
@@ -112,10 +174,15 @@ public class LoginFrm extends javax.swing.JFrame {
         jPanel1.add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, -1, -1));
 
         jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/logo-vertical-ifce.png"))); // NOI18N
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 90, 130));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 90, 130));
 
-        jLabel5.setText("Assistência Estudantil - IFCE Campus Cedro2");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
+        lblVersion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        lblVersion.setText("Versão 0.0");
+        jPanel1.add(lblVersion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
+
+        jLabel6.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        jLabel6.setText("Assistência Estudantil - IFCE Campus Cedro ");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
         jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 460, 160));
 
@@ -158,15 +225,15 @@ public class LoginFrm extends javax.swing.JFrame {
 
     private void btLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLogarActionPerformed
         // TODO add your handling code here:
-        
-        if((tfLogin.getText().toString().equals("adminmaster"))&&
-                (tfSenha.getText().toString().equals("adminmaster"))){
+
+        if ((tfLogin.getText().toString().equals("adminmaster"))
+                && (tfSenha.getText().toString().equals("adminmaster"))) {
             UserActive.setLogin(tfLogin.getText());
             UserActive.setAdministrador(true);
             MainFrm tp = new MainFrm();
             dispose();
             tp.setVisible(true);
-                        
+
         } else if (verificaCampos()) {
             /*
              * Se os campos estiverem todos preenchidos
@@ -178,22 +245,22 @@ public class LoginFrm extends javax.swing.JFrame {
              */
             User usuario = new User();
             usuario.setLogin(tfLogin.getText());
-            usuario.setSenha(tfSenha.getText());           
+            usuario.setSenha(tfSenha.getText());
             UserDAO uDAO = new UserDAO();
-            if (uDAO.searchUser(usuario.getLogin(), usuario.getSenha())!=null) {
+            if (uDAO.searchUser(usuario.getLogin(), usuario.getSenha()) != null) {
                 dispose();
-                usuario = uDAO.checkExists("login",tfLogin.getText()).get(0);
+                usuario = uDAO.checkExists("login", tfLogin.getText()).get(0);
                 UserActive.setLogin(usuario.getLogin());
                 MainFrm tp = new MainFrm();
                 tp.setVisible(true);
-                
+
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Login ou Senha Incorretos!",
                         "Informação", JOptionPane.ERROR_MESSAGE);
             }
         }
     }//GEN-LAST:event_btLogarActionPerformed
-    
+
     private void btCancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btCancelarActionPerformed
         // TODO add your handling code here:
         /*
@@ -201,7 +268,21 @@ public class LoginFrm extends javax.swing.JFrame {
          */
         System.exit(0);
     }//GEN-LAST:event_btCancelarActionPerformed
-    
+
+    private void tfLoginKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfLoginKeyPressed
+        verifyPressedEnter(evt);
+    }//GEN-LAST:event_tfLoginKeyPressed
+
+    private void tfSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfSenhaKeyPressed
+        verifyPressedEnter(evt);
+    }//GEN-LAST:event_tfSenhaKeyPressed
+
+    public void verifyPressedEnter(java.awt.event.KeyEvent evt) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btLogarActionPerformed(null);
+        }
+    }
+
     public boolean verificaCampos() {
         /*
          * Verifica se os campos estão vazios
@@ -254,13 +335,13 @@ public class LoginFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JLabel lblVersion;
     private javax.swing.JTextField tfLogin;
     private javax.swing.JPasswordField tfSenha;
     // End of variables declaration//GEN-END:variables
 
-    
 }

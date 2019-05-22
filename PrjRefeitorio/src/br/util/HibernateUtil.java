@@ -16,11 +16,14 @@ public class HibernateUtil {
 
     private static SessionFactory buildSessionFactory() {
         try {
-            /*AnnotationConfiguration cfg = 
-			new AnnotationConfiguration();
-            cfg.configure("hibernate.cfg.xml");*/
             Configuration cfg
                     = new Configuration();
+//            JOptionPane.showMessageDialog(null, LoadPropriedade.loadProperty("servidor"));
+            cfg.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5InnoDBDialect");
+            cfg.setProperty("hibernate.connection.driver_class", "com.mysql.jdbc.Driver");
+            cfg.setProperty("hibernate.connection.url", "jdbc:mysql://" + LoadPropriedade.loadProperty("server") + "/" + LoadPropriedade.loadProperty("bd_name"));
+            cfg.setProperty("hibernate.connection.username", LoadPropriedade.loadProperty("user"));
+            cfg.setProperty("hibernate.connection.password", LoadPropriedade.loadProperty("pass"));
             cfg.configure("hibernate.cfg.xml");
             return cfg.buildSessionFactory();
         } catch (Throwable e) {

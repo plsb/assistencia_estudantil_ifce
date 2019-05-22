@@ -47,6 +47,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         //edtMat.setDocument(new OnlyNumberField());
         lblData.setText(returnDate());
         edtMat.requestFocus();
+        tbStudents.setAutoCreateRowSorter(true);
     }
     
     /*public AgendaFrm(Set<Meal> meals) {
@@ -83,7 +84,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         
         List<Scheduling> list = sDAO.schedulingNotPresent(new Date());
         
-        lblAgendamentos.setText(list.size()+" agendamentos.");
+        lblAgendamentos.setText("Total do dia: "+list.size()+" agendamentos.");
         
         SchedulingTableModel ptm = new SchedulingTableModel(list);
         tbStudents.setModel(ptm);
@@ -207,7 +208,7 @@ public class AgendaFrm extends javax.swing.JDialog {
 
         lblAgendamentos.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblAgendamentos.setText("0 agendamentos.");
-        jPanel1.add(lblAgendamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 180, -1));
+        jPanel1.add(lblAgendamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 460, 590, -1));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel2.setText("Data:");
@@ -354,9 +355,9 @@ public class AgendaFrm extends javax.swing.JDialog {
                 Scheduling scheduling = new Scheduling();
                 scheduling.setMeal(m);
                 scheduling.setStudent(student);
-                scheduling.setDate(new Date());
+                scheduling.setDate(sDAO.getServerDate());
                 scheduling.setDateInsert(new Date());
-                scheduling.setTime(new Date());
+                scheduling.setTime(sDAO.getServerTime());
                 scheduling.setWasPresent(false);
                 scheduling.setUser(UserActive.retornaUsuarioAtivo());
                 sDAO.add(scheduling);

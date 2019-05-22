@@ -44,6 +44,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         insertMeals();
         lblData.setText(returnDate());
         //edtMat.setDocument(new OnlyNumberField());
+        tbStudents.setAutoCreateRowSorter(true);
                 
     }
     
@@ -73,7 +74,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         
         List<Scheduling> list = sDAO.schedulingWasPresent(new Date());
         
-        lblAgendamentos.setText(list.size()+" confirmações.");
+        lblAgendamentos.setText("Total do dia: "+list.size()+" confirmações.");
         
         SchedulingTableModel ptm = new SchedulingTableModel(list);
         tbStudents.setModel(ptm);
@@ -182,7 +183,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
 
         lblAgendamentos.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblAgendamentos.setText("0 agendamentos.");
-        jPanel1.add(lblAgendamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 180, -1));
+        jPanel1.add(lblAgendamentos, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 560, -1));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel2.setText("Data:");

@@ -23,11 +23,9 @@ public class LoadPropriedade {
             config.load(f);
 
             return config.getProperty(property);
-//                        System.out.println(config.getProperty("param1"));
-//                        System.out.println(config.getProperty("final"));
 
         } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, ex.getMessage() + "\n Endere: " + enderecoDoJar);
+            JOptionPane.showMessageDialog(null, ex.getMessage() + "\n Endereço: " + enderecoDoJar);
             return null;
         }
 

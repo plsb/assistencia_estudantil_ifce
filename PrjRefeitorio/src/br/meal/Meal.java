@@ -7,10 +7,14 @@ package br.meal;
 
 
 import br.shift.Shift;
+import java.sql.Time;
+import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
@@ -25,6 +29,12 @@ public class Meal implements Comparable<Meal> {
     private Integer id;
     
     private String description;
+    
+    @Temporal(TemporalType.TIME)
+    private Date timeStart;
+    
+    @Temporal(TemporalType.TIME)
+    private Date timeEnd;
     
     /**
      * @return the id
@@ -56,12 +66,12 @@ public class Meal implements Comparable<Meal> {
 
     @Override
     public int compareTo(Meal o) {
-        return description.compareTo(o.description);
+        return getDescription().compareTo(o.getDescription());
     }
 
     @Override
     public String toString() {
-        return this.description;
+        return this.getDescription();
     }
     
     @Override
@@ -85,6 +95,34 @@ public class Meal implements Comparable<Meal> {
         int hash = 7;
         hash = 89 * hash + this.getId();
         return hash;
+    }
+
+    /**
+     * @return the timeStart
+     */
+    public Date getTimeStart() {
+        return timeStart;
+    }
+
+    /**
+     * @param timeStart the timeStart to set
+     */
+    public void setTimeStart(Date timeStart) {
+        this.timeStart = timeStart;
+    }
+
+    /**
+     * @return the timeEnd
+     */
+    public Date getTimeEnd() {
+        return timeEnd;
+    }
+
+    /**
+     * @param timeEnd the timeEnd to set
+     */
+    public void setTimeEnd(Date timeEnd) {
+        this.timeEnd = timeEnd;
     }
     
 }

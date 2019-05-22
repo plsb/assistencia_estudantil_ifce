@@ -157,7 +157,7 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
 
         jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 420, 70));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 440, 330));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 440, 280));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -240,8 +240,8 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
             scheduling.setMeal(meal);
             scheduling.setStudent(student);
             scheduling.setDate(date);
-            scheduling.setDateInsert(new Date());
-            scheduling.setTime(new Date());
+            scheduling.setDateInsert(sDAO.getServerDate());
+            scheduling.setTime(sDAO.getServerTime());
             scheduling.setWasPresent(false);
             scheduling.setUser(UserActive.retornaUsuarioAtivo());
             sDAO.add(scheduling);

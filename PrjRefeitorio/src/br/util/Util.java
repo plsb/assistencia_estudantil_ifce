@@ -10,7 +10,17 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.math.BigInteger;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
+import java.net.URL;
+import java.net.URLConnection;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -27,10 +37,17 @@ import java.util.regex.Pattern;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
+import javax.swing.JTable;
 import javax.swing.KeyStroke;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
 
 /**
  *
@@ -39,10 +56,6 @@ import javax.swing.KeyStroke;
 public class Util {
 
     JRootPane meurootpane;
-
-    public static String getVersao() {
-        return "1.0";
-    }
 
     /**
      * Realiza a validaÃ§Ã£o do CPF.
@@ -266,8 +279,8 @@ public class Util {
     }
 
     public static String retornaCaminhoApp() {
-        String EnderecoDoJar = System.getProperty("java.class.path");
-        String end = EnderecoDoJar.substring(0, EnderecoDoJar.length() - 9);
+        File path = new File(".");
+        String end = path.getAbsolutePath();
         return end;
     }
 
@@ -286,23 +299,128 @@ public class Util {
 
     public static boolean verifyStudent(Component component, Student student) {
         if (student.isActive() == false) {
-            JOptionPane.showMessageDialog(component, "O cadastro de "+student.getName()
-                    +" está inativo!", "IFCE", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(component, "O cadastro de " + student.getName()
+                    + " está inativo!", "IFCE", JOptionPane.ERROR_MESSAGE);
             return false;
         } else if (student.isBlock()) {
-            JOptionPane.showMessageDialog(component, "O cadastro de "+student.getName()
-                    +" está bloqueado!", "IFCE", JOptionPane.ERROR_MESSAGE); 
+            JOptionPane.showMessageDialog(component, "O cadastro de " + student.getName()
+                    + " está bloqueado!", "IFCE", JOptionPane.ERROR_MESSAGE);
             return false;
-        } else if(student.getDateValid()!=null){
-            
-            if((new Date()).after(student.getDateValid())){
-                JOptionPane.showMessageDialog(component, "O cadastro de "+student.getName()
-                    +" está desatualizado!", "IFCE", JOptionPane.ERROR_MESSAGE); 
-            return false;
+        } else if (student.getDateValid() != null) {
+
+            if ((new Date()).after(student.getDateValid())) {
+                JOptionPane.showMessageDialog(component, "O cadastro de " + student.getName()
+                        + " está desatualizado!", "IFCE", JOptionPane.ERROR_MESSAGE);
+                return false;
             }
         }
 
         return true;
+    }
+
+    public static double getVersionSystem() {
+        return 1.3;
+    }
+
+    public static File gravaArquivoDeURL(String stringUrl, String pathLocal) {
+        try {
+
+            //Encapsula a URL num objeto java.net.URL
+            URL url = new URL(stringUrl);
+
+            //Queremos o arquivo local com o mesmo nome descrito na URL
+            //Lembrando que o URL.getPath() ira retornar a estrutura 
+            //completa de diretorios e voce deve tratar esta String
+            //caso nao deseje preservar esta estrutura no seu disco local.
+            String nomeArquivoLocal = "aeifce.jar";
+
+            //Cria streams de leitura (este metodo ja faz a conexao)...
+            InputStream is = url.openStream();
+
+            //... e de escrita.
+            FileOutputStream fos = new FileOutputStream(pathLocal + nomeArquivoLocal);
+
+            //Le e grava byte a byte. Voce pode (e deve) usar buffers para
+            //melhor performance (BufferedReader).
+            int umByte = 0;
+            while ((umByte = is.read()) != -1) {
+                fos.write(umByte);
+            }
+
+            //Nao se esqueca de sempre fechar as streams apos seu uso!
+            is.close();
+            fos.close();
+
+            //apos criar o arquivo fisico, retorna referencia para o mesmo
+            return new File(pathLocal + nomeArquivoLocal);
+
+        } catch (Exception e) {
+            //Lembre-se de tratar bem suas excecoes, ou elas tambem lhe tratarão mal!
+            //Aqui so vamos mostrar o stack no stderr.
+            e.printStackTrace();
+        }
+
+        return null;
+    }
+
+    public static void exportJTableToExcel(JTable table) {
+        Integer rows = table.getModel().getRowCount();
+        if (rows > 0) {
+
+            JFileChooser seleccionar = new JFileChooser();
+
+            File arquivo;
+
+            if (seleccionar.showDialog(null, "Exportar Excel") == JFileChooser.APPROVE_OPTION) {
+
+                arquivo = seleccionar.getSelectedFile();
+                int cantFila = table.getRowCount();
+                int cantColumna = table.getColumnCount();
+
+                Workbook wb;
+                wb = new HSSFWorkbook();
+                Sheet folha = wb.createSheet("  ");
+
+                try {
+                    for (int i = -1; i < cantFila; i++) {
+
+                        Row fila = folha.createRow(i + 1);
+
+                        for (int j = 0; j < cantColumna; j++) {
+
+                            Cell celda = fila.createCell(j);
+
+                            if (i == -1) {
+
+                                celda.setCellValue(String.valueOf(table.getColumnName(j)));
+
+                            } else {
+
+                                celda.setCellValue(String.valueOf(table.getValueAt(i, j)));
+
+                            }
+
+                            wb.write(new FileOutputStream(arquivo + ".xls"));
+
+                        }
+                    }
+
+                    JOptionPane.showMessageDialog(null, "Planilha exportada com sucesso.");
+
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "Por favor tente novamente" + e);
+                }
+
+            } else {
+                JOptionPane.showMessageDialog(null, "Erro ao Exportar Planilha....");
+            }
+
+        } else {
+
+            JOptionPane.showMessageDialog(null, "A tabela não possui linhas!!");
+
+        }   // fim do if
+
     }
 
 }

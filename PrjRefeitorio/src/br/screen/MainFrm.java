@@ -7,6 +7,7 @@ package br.screen;
 
 import br.user.User;
 import br.util.UserActive;
+import br.util.Util;
 
 /**
  *
@@ -22,7 +23,9 @@ public class MainFrm extends javax.swing.JFrame {
 //        setModal(true);
         setLocationRelativeTo(null);
         setTitle("Refeitório");
-        lblUserActive.setText("Usuário ativo: "+UserActive.getLogin());
+        String versao = Double.toString(Util.getVersionSystem());
+        lblUserActive.setText("Usuário ativo: "+UserActive.getLogin()
+                +" | Versão "+versao);
         verifyMenuByUser();
     }
     
@@ -34,31 +37,34 @@ public class MainFrm extends javax.swing.JFrame {
             btRegisterMeal.setEnabled(false);
             btAgenda.setEnabled(false);
             btVerifyMeal.setEnabled(false);
-            smCursos.setEnabled(true);
-            smUsers.setEnabled(true);
-            smPermissionMeal.setEnabled(false);
-            smShift.setEnabled(true);
+            smCursos.setVisible(true);
+            smUsers.setVisible(true);
+            smPermissionMeal.setVisible(false);
+            smShift.setVisible(true);
+            smiConfig.setVisible(true);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("ASSIS_ESTU")){
         //Assistência Estudantil
             btStudent1.setEnabled(true);
             btMeal.setEnabled(true);
             btRegisterMeal.setEnabled(true);
             btAgenda.setEnabled(true);
-            smCursos.setEnabled(true);
-            smUsers.setEnabled(false);
-            smPermissionMeal.setEnabled(true);
-            smShift.setEnabled(true);
+            smCursos.setVisible(true);
+            smUsers.setVisible(false);
+            smPermissionMeal.setVisible(true);
+            smShift.setVisible(true);
+            smiConfig.setVisible(false);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")){
         //Recepção
             btStudent1.setEnabled(false);
             btMeal.setEnabled(false);
             btRegisterMeal.setEnabled(true);
             btAgenda.setEnabled(true);
-            btVerifyMeal.setEnabled(false);
-            smCursos.setEnabled(false);
-            smUsers.setEnabled(false);
-            smPermissionMeal.setEnabled(false);
-            smShift.setEnabled(false);
+            btVerifyMeal.setEnabled(true);
+            smCursos.setVisible(false);
+            smUsers.setVisible(false);
+            smPermissionMeal.setVisible(false);
+            smShift.setVisible(false);
+            smiConfig.setVisible(false);
         }
     }
 
@@ -87,6 +93,7 @@ public class MainFrm extends javax.swing.JFrame {
         jMenuBar2 = new javax.swing.JMenuBar();
         smmCursos = new javax.swing.JMenu();
         smCursos = new javax.swing.JMenuItem();
+        smiConfig = new javax.swing.JMenuItem();
         smShift = new javax.swing.JMenuItem();
         smUsers = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
@@ -185,6 +192,14 @@ public class MainFrm extends javax.swing.JFrame {
         });
         smmCursos.add(smCursos);
 
+        smiConfig.setText("Configurações");
+        smiConfig.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smiConfigActionPerformed(evt);
+            }
+        });
+        smmCursos.add(smiConfig);
+
         smShift.setText("Turnos");
         smShift.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -269,6 +284,11 @@ public class MainFrm extends javax.swing.JFrame {
         sff.setVisible(true);
     }//GEN-LAST:event_smShiftActionPerformed
 
+    private void smiConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smiConfigActionPerformed
+        ConfigFrmRegister cfr = new ConfigFrmRegister();
+        cfr.setVisible(true);
+    }//GEN-LAST:event_smiConfigActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -325,6 +345,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem smPermissionMeal;
     private javax.swing.JMenuItem smShift;
     private javax.swing.JMenuItem smUsers;
+    private javax.swing.JMenuItem smiConfig;
     private javax.swing.JMenu smmCursos;
     // End of variables declaration//GEN-END:variables
 }

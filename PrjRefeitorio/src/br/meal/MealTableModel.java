@@ -14,6 +14,7 @@ package br.meal;
 
 import br.student.*;
 import br.util.Util;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -26,7 +27,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class MealTableModel extends AbstractTableModel {
 
-    private String[] nomeColunas = {"Código", "Descrição"};
+    private String[] nomeColunas = {"Código", "Descrição", "Hora Início", "Hora Fim"};
     private List<Meal> meals;
 
     /**
@@ -77,6 +78,10 @@ public class MealTableModel extends AbstractTableModel {
                 return Util.decimalFormat().format(s.getId());
             case 1:
                 return s.getDescription();
+            case 2:
+                return s.getTimeStart()!=null ? new SimpleDateFormat("hh:mm").format( s.getTimeStart()) : "";
+            case 3:
+                return s.getTimeEnd()!=null ? new SimpleDateFormat("hh:mm").format( s.getTimeEnd()) : "";
         }
         return null;
     }
@@ -97,6 +102,10 @@ public class MealTableModel extends AbstractTableModel {
                 return nomeColunas[0];
             case 1:
                 return nomeColunas[1];
+            case 2:
+                return nomeColunas[2];
+            case 3:
+                return nomeColunas[3];
         }
         return null;
     }
