@@ -32,6 +32,8 @@ public class ConfigFrmRegister extends javax.swing.JDialog {
             if(list.size()>0){
                 config = list.get(0);
                 tfVersionSystem.setText(Double.toString(config.getVersion()));
+                tfPathPhotoUser.setText(config.getPathPhotoStudent());
+                tfPathReport.setText(config.getPathReport());
             } else {
                 config = new Config();
             }
@@ -54,6 +56,10 @@ public class ConfigFrmRegister extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
+        tfPathPhotoUser = new javax.swing.JTextField();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        tfPathReport = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -73,7 +79,7 @@ public class ConfigFrmRegister extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 140, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 200, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/forceexit_103817.png"))); // NOI18N
@@ -83,7 +89,21 @@ public class ConfigFrmRegister extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 140, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 200, -1, -1));
+
+        tfPathPhotoUser.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        getContentPane().add(tfPathPhotoUser, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 371, -1));
+
+        jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel3.setText("Caminho fotos alunos: ");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
+
+        jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel4.setText("Caminho relatórios:");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
+
+        tfPathReport.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        getContentPane().add(tfPathReport, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 371, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -104,6 +124,8 @@ public class ConfigFrmRegister extends javax.swing.JDialog {
                     "Versão inválida.", "IFCE", JOptionPane.ERROR_MESSAGE);
             return ;
         }
+        config.setPathPhotoStudent(tfPathPhotoUser.getText());
+        config.setPathReport(tfPathReport.getText());
       
         if (config.getId() == null) {
             dao.add(config);
@@ -189,6 +211,10 @@ public class ConfigFrmRegister extends javax.swing.JDialog {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JTextField tfPathPhotoUser;
+    private javax.swing.JTextField tfPathReport;
     private javax.swing.JTextField tfVersionSystem;
     // End of variables declaration//GEN-END:variables
 }

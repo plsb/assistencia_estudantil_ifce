@@ -6,13 +6,18 @@
 package br.util;
 
 import br.student.Student;
+import br.student.StudentDAO;
 import java.awt.Component;
+import java.awt.Graphics2D;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -21,6 +26,7 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.nio.channels.FileChannel;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -30,10 +36,16 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.IIOImage;
+import javax.imageio.ImageIO;
+import javax.imageio.ImageWriteParam;
+import javax.imageio.ImageWriter;
+import javax.imageio.stream.FileImageOutputStream;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -281,6 +293,7 @@ public class Util {
     public static String retornaCaminhoApp() {
         File path = new File(".");
         String end = path.getAbsolutePath();
+        end = end.substring(0, end.length() - 1);
         return end;
     }
 
@@ -319,45 +332,40 @@ public class Util {
     }
 
     public static double getVersionSystem() {
-        return 1.3;
+        return 2.2;
     }
 
-    public static File gravaArquivoDeURL(String stringUrl, String pathLocal) {
+    public static File copyArquivo(String source, String destination, int w, int h) {
         try {
+            File file = new File(source);
+            BufferedImage imagem = ImageIO.read(file);
+            int new_w = w, new_h = h;
+            BufferedImage new_img = new BufferedImage(new_w, new_h, BufferedImage.TYPE_INT_RGB);
+            Graphics2D g = new_img.createGraphics();
+            g.drawImage(imagem, 0, 0, new_w, new_h, null);
+            ImageIO.write(new_img, "PNG", new File(destination));
 
-            //Encapsula a URL num objeto java.net.URL
-            URL url = new URL(stringUrl);
+            /*FileChannel sourceChannel = null;
+            FileChannel destinationChannel = null;
 
-            //Queremos o arquivo local com o mesmo nome descrito na URL
-            //Lembrando que o URL.getPath() ira retornar a estrutura 
-            //completa de diretorios e voce deve tratar esta String
-            //caso nao deseje preservar esta estrutura no seu disco local.
-            String nomeArquivoLocal = "aeifce.jar";
-
-            //Cria streams de leitura (este metodo ja faz a conexao)...
-            InputStream is = url.openStream();
-
-            //... e de escrita.
-            FileOutputStream fos = new FileOutputStream(pathLocal + nomeArquivoLocal);
-
-            //Le e grava byte a byte. Voce pode (e deve) usar buffers para
-            //melhor performance (BufferedReader).
-            int umByte = 0;
-            while ((umByte = is.read()) != -1) {
-                fos.write(umByte);
-            }
-
-            //Nao se esqueca de sempre fechar as streams apos seu uso!
-            is.close();
-            fos.close();
-
-            //apos criar o arquivo fisico, retorna referencia para o mesmo
-            return new File(pathLocal + nomeArquivoLocal);
+            try {
+                sourceChannel = new FileInputStream(source).getChannel();
+                destinationChannel = new FileOutputStream(destination).getChannel();
+                sourceChannel.transferTo(0, sourceChannel.size(),
+                        destinationChannel);
+            } finally {
+                if (sourceChannel != null && sourceChannel.isOpen()) {
+                    sourceChannel.close();
+                }
+                if (destinationChannel != null && destinationChannel.isOpen()) {
+                    destinationChannel.close();
+                }
+            }*/
 
         } catch (Exception e) {
             //Lembre-se de tratar bem suas excecoes, ou elas tambem lhe tratarão mal!
             //Aqui so vamos mostrar o stack no stderr.
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, e.getMessage());
         }
 
         return null;
@@ -423,4 +431,13 @@ public class Util {
 
     }
 
+    /*public static void backup() {
+        try {
+            StudentDAO dao = new StudentDAO();
+            File bck = new File(retornaCaminhoApp() + "/bkp/assestifce"+ dao.getServerDate() + dao.getServerTime() + ".sql");
+            Runtime.getRuntime().exec("cmd /c mysqldump -u root -p 040908 ass_est > " + bck);
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }*/
 }

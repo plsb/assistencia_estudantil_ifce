@@ -35,7 +35,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         preencheTabela("");
         
-        tbStudents.setAutoCreateRowSorter(true);
+        //tbStudents.setAutoCreateRowSorter(true);
        
     }
 

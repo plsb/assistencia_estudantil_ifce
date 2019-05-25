@@ -50,8 +50,8 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         insertMeals();
         edDate.setText(returnDate());
         tbStudents.setAutoCreateRowSorter(true);
-        preencheTabela(null);
-        if(UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")){
+        preencheTabela(null, 0, "");
+        if (UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")) {
             btBlock.setEnabled(false);
             btDelete.setEnabled(false);
         }
@@ -76,21 +76,40 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         }
     }
 
-    public void preencheTabela(Date date) {
+    public void preencheTabela(Date date, int opcao, String nameStudent) {
         if (date == null) {
             SchedulingTableModel ptm = new SchedulingTableModel(new ArrayList<Scheduling>());
             tbStudents.setModel(ptm);
         } else {
             SchedulingDAO sDAO = new SchedulingDAO();
-
-            list = sDAO.schedulingDateMeal(date, (Meal) cbMeal.getSelectedItem());
+            if (!nameStudent.equals("")) {
+                StudentDAO studentDAO = new StudentDAO();
+                List<Student> students = studentDAO.checkExistsLike("name", nameStudent);
+                list = sDAO.checkExistsin("student", students, date, (Meal) cbMeal.getSelectedItem());
+            } else {
+                switch (opcao) {
+                    case 0:
+                        list = sDAO.schedulingDateMeal(date, (Meal) cbMeal.getSelectedItem());
+                        break;
+                    case 1:
+                        list = sDAO.schedulingDateMealWasPresent(date, (Meal) cbMeal.getSelectedItem(), true);
+                        break;
+                    case 2:
+                        list = sDAO.schedulingDateMealWasPresent(date, (Meal) cbMeal.getSelectedItem(), false);
+                        break;
+                }
+            }
 
             List<Scheduling> listPres = sDAO.schedulingDateMealWasPresent(date, (Meal) cbMeal.getSelectedItem(), true);
 
             List<Scheduling> listNoPres = sDAO.schedulingDateMealWasPresent(date, (Meal) cbMeal.getSelectedItem(), false);
 
             if (list.size() > 0) {
-                lblInfo.setText(list.size() + " refeições ("+cbMeal.getSelectedItem().toString()+"). " + listPres.size() + " presentes. " + listNoPres.size() + " ausentes.");
+                if(!nameStudent.equals("")){
+                    lblInfo.setText("Pesquisa por aluno.");
+                } else {
+                    lblInfo.setText(list.size() + " refeições (" + cbMeal.getSelectedItem().toString() + "). " + listPres.size() + " presentes. " + listNoPres.size() + " ausentes.");
+                }
             }
 
             SchedulingTableModel ptm = new SchedulingTableModel(list);
@@ -138,15 +157,18 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         tbStudents = new javax.swing.JTable();
         jButton3 = new javax.swing.JButton();
         lblInfo = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btSearch = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
-        cbMeal = new javax.swing.JComboBox();
+        cbOpcao = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
         btBlock = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         edDate = new javax.swing.JFormattedTextField();
         btExcel = new javax.swing.JButton();
+        cbMeal = new javax.swing.JComboBox();
+        tfNameStudent = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -189,7 +211,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tbStudents);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 790, 270));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 790, 280));
 
         jButton3.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/exit_icon-icons.com_48304.png"))); // NOI18N
@@ -200,32 +222,37 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 380, 57, 40));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 430, 57, 40));
 
         lblInfo.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblInfo.setText("0 refeições.");
-        jPanel1.add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 400, 530, -1));
+        jPanel1.add(lblInfo, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 450, 530, -1));
 
-        jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/search.png"))); // NOI18N
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btSearch.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/search.png"))); // NOI18N
+        btSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btSearchActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 30, -1, -1));
+        jPanel1.add(btSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 80, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Data:");
         jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 20, -1, -1));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, 790, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 790, -1));
 
-        cbMeal.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        cbMeal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        jPanel1.add(cbMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 40, 280, -1));
+        cbOpcao.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
+        cbOpcao.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Todos", "Presentes", "Ausentes" }));
+        cbOpcao.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cbOpcaoKeyPressed(evt);
+            }
+        });
+        jPanel1.add(cbOpcao, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 40, 170, 30));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Refeição:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 20, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, -1, -1));
 
         btBlock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/pinkblock_6304.png"))); // NOI18N
         btBlock.addActionListener(new java.awt.event.ActionListener() {
@@ -233,7 +260,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 btBlockActionPerformed(evt);
             }
         });
-        jPanel1.add(btBlock, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 380, -1, -1));
+        jPanel1.add(btBlock, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 430, -1, -1));
 
         btDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/ic_delete_128_28267.png"))); // NOI18N
         btDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -241,7 +268,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 btDeleteActionPerformed(evt);
             }
         });
-        jPanel1.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 380, -1, -1));
+        jPanel1.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 430, -1, -1));
 
         try {
             edDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -250,7 +277,12 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         }
         edDate.setToolTipText("Informe a data de nascimento");
         edDate.setFocusLostBehavior(javax.swing.JFormattedTextField.PERSIST);
-        edDate.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        edDate.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
+        edDate.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                edDateKeyPressed(evt);
+            }
+        });
         jPanel1.add(edDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, 150, -1));
 
         btExcel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/excel.png"))); // NOI18N
@@ -259,9 +291,30 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 btExcelActionPerformed(evt);
             }
         });
-        jPanel1.add(btExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 380, -1, -1));
+        jPanel1.add(btExcel, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 430, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 820, 440));
+        cbMeal.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
+        cbMeal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbMeal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                cbMealKeyPressed(evt);
+            }
+        });
+        jPanel1.add(cbMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, 280, 30));
+
+        tfNameStudent.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        tfNameStudent.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tfNameStudentKeyPressed(evt);
+            }
+        });
+        jPanel1.add(tfNameStudent, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 620, -1));
+
+        jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel2.setText("Nome: ");
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 70, -1, -1));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 820, 490));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -281,9 +334,9 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void btSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btSearchActionPerformed
 
-        if (edDate.getText().equals("")) {
+        if (edDate.getText().equals("  /  /    ")) {
             JOptionPane.showMessageDialog(rootPane, "Informe a data.");
             return;
         }
@@ -302,9 +355,9 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
             return;
         }
 
-        preencheTabela(data);
+        preencheTabela(data, cbOpcao.getSelectedIndex(), tfNameStudent.getText());
 
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_btSearchActionPerformed
 
     private void btBlockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBlockActionPerformed
         if (JOptionPane.showConfirmDialog(rootPane, "Deseja Bloquear todos os alunos que não compareceram nesse dia?",
@@ -333,11 +386,13 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         if (tbStudents.getSelectedRow() < 0) {
             JOptionPane.showMessageDialog(rootPane, "Selecione uma linha da tabela!");
         } else {
-            if (JOptionPane.showConfirmDialog(rootPane, "Deseja Excluir a refeição?",
+            SchedulingTableModel ptm = (SchedulingTableModel) tbStudents.getModel();
+                Scheduling select = ptm.getScheduling(tbStudents.getSelectedRow());
+            if (JOptionPane.showConfirmDialog(rootPane, "Deseja Excluir a refeição de "+
+                    select.getStudent().getName()+"?",
                     "Excluir Refeição", JOptionPane.YES_NO_OPTION)
                     == JOptionPane.YES_OPTION) {
-                SchedulingTableModel ptm = (SchedulingTableModel) tbStudents.getModel();
-                Scheduling select = ptm.getScheduling(tbStudents.getSelectedRow());
+                
 
                 if (select.isWasPresent()) {
                     JOptionPane.showMessageDialog(rootPane,
@@ -357,7 +412,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(rootPane, "Data inválida.");
                     return;
                 }
-                preencheTabela(data);
+                preencheTabela(data, cbOpcao.getSelectedIndex(), "");
             }
         }
     }//GEN-LAST:event_btDeleteActionPerformed
@@ -365,6 +420,28 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
     private void btExcelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btExcelActionPerformed
         Util.exportJTableToExcel(tbStudents);
     }//GEN-LAST:event_btExcelActionPerformed
+
+    public void verifyPressedEnter(java.awt.event.KeyEvent evt) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            btSearchActionPerformed(null);
+        }
+    }
+
+    private void edDateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edDateKeyPressed
+        verifyPressedEnter(evt);
+    }//GEN-LAST:event_edDateKeyPressed
+
+    private void cbMealKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbMealKeyPressed
+        verifyPressedEnter(evt);
+    }//GEN-LAST:event_cbMealKeyPressed
+
+    private void cbOpcaoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbOpcaoKeyPressed
+        verifyPressedEnter(evt);
+    }//GEN-LAST:event_cbOpcaoKeyPressed
+
+    private void tfNameStudentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tfNameStudentKeyPressed
+        verifyPressedEnter(evt);
+    }//GEN-LAST:event_tfNameStudentKeyPressed
 
     /**
      * @param args the command line arguments
@@ -532,11 +609,13 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
     private javax.swing.JButton btBlock;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btExcel;
+    private javax.swing.JButton btSearch;
     private javax.swing.JComboBox cbMeal;
+    private javax.swing.JComboBox cbOpcao;
     private javax.swing.JFormattedTextField edDate;
-    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
@@ -545,5 +624,6 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblInfo;
     private javax.swing.JTable tbStudents;
+    private javax.swing.JTextField tfNameStudent;
     // End of variables declaration//GEN-END:variables
 }

@@ -6,6 +6,8 @@
 package br.screen;
 
 
+import br.config.Config;
+import br.config.ConfigDAO;
 import br.meal.Meal;
 import br.meal.MealDAO;
 import br.scheduling.Scheduling;
@@ -16,6 +18,7 @@ import br.student.StudentDAO;
 import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
 import br.util.OnlyNumberField;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -23,6 +26,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -44,12 +48,13 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         insertMeals();
         lblData.setText(returnDate());
         //edtMat.setDocument(new OnlyNumberField());
-        tbStudents.setAutoCreateRowSorter(true);
+        
                 
     }
     
     public String returnDate(){
-        Date dataAtual = new Date();
+        SchedulingDAO dao = new SchedulingDAO();
+        Date dataAtual = dao.getServerDate();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String data = sdf.format(dataAtual);
         return data;
@@ -88,6 +93,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         edtMat.setText("");
         preencheTabela();
         edtMat.requestFocus();
+        insertImage("/br/imagens/photo.png");
     }
 
     /**
@@ -118,6 +124,8 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         taStudent = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
+        lblPhoto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -132,7 +140,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         jPanel3.add(jLabel23);
         jLabel23.setBounds(0, 0, 460, 30);
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 40));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 800, 40));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(432, 177));
@@ -160,7 +168,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tbStudents);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 710, 210));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 210, 780, 210));
 
         jButton3.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/exit_icon-icons.com_48304.png"))); // NOI18N
@@ -171,9 +179,9 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 430, 57, 40));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(730, 430, 57, 40));
 
-        edtMat.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        edtMat.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
         edtMat.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 edtMatKeyPressed(evt);
@@ -195,7 +203,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
                 btConfirmStudentMealActionPerformed(evt);
             }
         });
-        jPanel1.add(btConfirmStudentMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 130, -1, -1));
+        jPanel1.add(btConfirmStudentMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 140, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Matrícula ou Código:");
@@ -204,7 +212,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel4.setText("Matrícula ou Código:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 710, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 780, -1));
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel5.setText("Aluno:");
@@ -214,14 +222,14 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         lblData.setText("jLabel3");
         jPanel1.add(lblData, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 20, 180, -1));
 
-        cbMeal.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        cbMeal.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
         cbMeal.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbMeal.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 cbMealKeyPressed(evt);
             }
         });
-        jPanel1.add(cbMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 280, -1));
+        jPanel1.add(cbMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 360, 30));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Refeição:");
@@ -229,13 +237,28 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
 
         taStudent.setEditable(false);
         taStudent.setColumns(20);
-        taStudent.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        taStudent.setFont(new java.awt.Font("Verdana", 1, 16)); // NOI18N
         taStudent.setRows(5);
         jScrollPane3.setViewportView(taStudent);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 420, 70));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 550, 80));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 740, 480));
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblPhoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPhoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/photo.png"))); // NOI18N
+        lblPhoto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblPhotoMouseClicked(evt);
+            }
+        });
+        jPanel4.add(lblPhoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 150));
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, 150, 170));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 800, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -297,10 +320,34 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
                         +" - "+student.getName() 
                         +"\n"+student.getCourse().getDescription()
                         +"\nData da Próxima Atualização Cadastral: "+new SimpleDateFormat("dd/MM/yyyy").format(student.getDateValid()));
+                //pega foto
+                if (student.getPhoto() != null) {
+                    try {
+                        ConfigDAO cDAO = new ConfigDAO();
+                        List<Config> listConfig = cDAO.list();
+                        if (list != null) {
+                            if (list.size() > 0) {
+                                Config config = listConfig.get(0);
+                                insertImage(config.getPathPhotoStudent() + "/" + student.getPhoto());
+                            }
+                        }
+                    } catch (Exception e) {
+                    }
+                }else {
+                    insertImage("/br/imagens/photo.png");
+                }
             }
         }
     }//GEN-LAST:event_edtMatKeyPressed
 
+    
+    private void insertImage(String path) {
+        ImageIcon image = new ImageIcon(path);
+        lblPhoto.setIcon(new ImageIcon(
+                image.getImage().getScaledInstance(lblPhoto.getWidth(), lblPhoto.getHeight(),
+                        Image.SCALE_DEFAULT)));
+    }
+    
     private void btConfirmStudentMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConfirmStudentMealActionPerformed
         
         
@@ -337,6 +384,10 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
     private void cbMealKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbMealKeyPressed
         verifyF2(evt);
     }//GEN-LAST:event_cbMealKeyPressed
+
+    private void lblPhotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPhotoMouseClicked
+
+    }//GEN-LAST:event_lblPhotoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -449,11 +500,13 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAgendamentos;
     private javax.swing.JLabel lblData;
+    private javax.swing.JLabel lblPhoto;
     private javax.swing.JTextArea taStudent;
     private javax.swing.JTable tbStudents;
     // End of variables declaration//GEN-END:variables

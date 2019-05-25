@@ -14,6 +14,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -181,6 +182,8 @@ public abstract class GenericDAO<T> {
         return lista;
 
     }
+    
+    
 
     /**
      * @return the sessao

@@ -8,6 +8,8 @@ package br.screen;
 import br.allowsmd.StudentAllowMealDay;
 import br.allowsmd.StudentAllowMealDayDAO;
 import br.allowsmd.StudentAllowMealDayTableModel;
+import br.config.Config;
+import br.config.ConfigDAO;
 import br.course.Course;
 import br.course.CourseDAO;
 import br.meal.Meal;
@@ -26,6 +28,10 @@ import br.util.OnlyNumberField;
 import br.util.Util;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.math.BigInteger;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -34,8 +40,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
 
 /**
@@ -45,6 +55,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class StudentFrmRegister extends javax.swing.JDialog {
 
     private Student student;
+    private File file;
 
     /**
      * Creates new form RegisterStudent
@@ -93,14 +104,28 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         }
         lblCodigo.setText(String.valueOf(Util.decimalFormat().format(student.getId())));
         tbbPanStudente.setEnabledAt(1, true);
-        if(student.getDateValid()!=null){
+        if (student.getDateValid() != null) {
             Date date = student.getDateValid();
             SimpleDateFormat dfdtDate;
             dfdtDate = new SimpleDateFormat("dd/MM/yyyy");
             tfDateValid.setText(dfdtDate.format(date));
         }
+        //pega foto
+        if (student.getPhoto() != null) {
+            try {
+                ConfigDAO cDAO = new ConfigDAO();
+                List<Config> list = cDAO.list();
+                if (list != null) {
+                    if (list.size() > 0) {
+                        Config config = list.get(0);
+                        insertImage(config.getPathPhotoStudent() + "/" + student.getPhoto());
+                    }
+                }
+            } catch (Exception e) {
+            }
+        }
         preencheTabelaHist();
-       
+
         preencheTabelaAllowMeal();
     }
 
@@ -115,7 +140,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             cbCourse.addItem(list.get(i));
         }
     }
-    
+
     public void insertShift() {
         cbShift.removeAllItems();
         cbShift.addItem("-");
@@ -127,8 +152,8 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             cbShift.addItem(list.get(i));
         }
     }
-    
-    public void preencheTabelaAllowMeal(){
+
+    public void preencheTabelaAllowMeal() {
         StudentAllowMealDayDAO samDAO = new StudentAllowMealDayDAO();
         List<StudentAllowMealDay> list = samDAO.checkExists("student", this.student);
         StudentAllowMealDayTableModel atm = new StudentAllowMealDayTableModel(list);
@@ -163,8 +188,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                     setBackground(Color.WHITE);
                 }
                 comp.setForeground(Color.black);
-                
-                
+
                 return this;
             }
         });
@@ -197,6 +221,8 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         tfDateValid = new javax.swing.JFormattedTextField();
         chbAlunoSemRegu = new javax.swing.JCheckBox();
+        jPanel3 = new javax.swing.JPanel();
+        lblPhoto = new javax.swing.JLabel();
         pnlMeals = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbStudentMeals = new javax.swing.JTable();
@@ -222,14 +248,14 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         pnlDIni.add(lblCodigo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
 
         tfMat.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        pnlDIni.add(tfMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 100, 220, -1));
+        pnlDIni.add(tfMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, 220, -1));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Nome: *");
-        pnlDIni.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, -1, -1));
+        pnlDIni.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
 
         tfName.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        pnlDIni.add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 150, 620, -1));
+        pnlDIni.add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 450, -1));
 
         chbBlock.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         chbBlock.setText("Bloqueado");
@@ -237,7 +263,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Matrícula: *");
-        pnlDIni.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 80, -1, -1));
+        pnlDIni.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, -1, -1));
 
         jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel4.setText("Código:");
@@ -245,11 +271,11 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
         cbCourse.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         cbCourse.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        pnlDIni.add(cbCourse, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 620, -1));
+        pnlDIni.add(cbCourse, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 450, -1));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel2.setText("Curso:*");
-        pnlDIni.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, -1, -1));
+        pnlDIni.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, -1));
 
         cbActive.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         cbActive.setText("Ativo");
@@ -262,15 +288,15 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
         cbShift.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         cbShift.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        pnlDIni.add(cbShift, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 250, 320, -1));
+        pnlDIni.add(cbShift, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 290, -1));
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel5.setText("Turno:*");
-        pnlDIni.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 230, -1, -1));
+        pnlDIni.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel6.setText("Data de Validade *:");
-        pnlDIni.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 230, -1, -1));
+        pnlDIni.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 220, -1, -1));
 
         try {
             tfDateValid.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -280,11 +306,25 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         tfDateValid.setToolTipText("Informe a data de nascimento");
         tfDateValid.setFocusLostBehavior(javax.swing.JFormattedTextField.PERSIST);
         tfDateValid.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        pnlDIni.add(tfDateValid, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 250, 150, -1));
+        pnlDIni.add(tfDateValid, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 150, -1));
 
         chbAlunoSemRegu.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         chbAlunoSemRegu.setText("Aluno do Semestre Regular");
         pnlDIni.add(chbAlunoSemRegu, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 50, -1, -1));
+
+        jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblPhoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPhoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/photo.png"))); // NOI18N
+        lblPhoto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblPhotoMouseClicked(evt);
+            }
+        });
+        jPanel3.add(lblPhoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 150));
+
+        pnlDIni.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, 150, 170));
 
         tbbPanStudente.addTab("Dados Inicias", pnlDIni);
 
@@ -390,19 +430,19 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             tfName.requestFocus();
             return;
         }
-        
-        if (cbCourse.getSelectedIndex()==0) {
+
+        if (cbCourse.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(rootPane, "Informe o Curso!");
             cbCourse.requestFocus();
             return;
         }
-        
-        if (cbShift.getSelectedIndex()==0) {
+
+        if (cbShift.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(rootPane, "Informe o Turno!");
             cbShift.requestFocus();
             return;
         }
-        
+
         if (tfDateValid.getText().equals("  /  /    ")) {
             JOptionPane.showMessageDialog(rootPane, "Informe a Data de Validade do Cadastro!");
             tfDateValid.requestFocus();
@@ -415,7 +455,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(rootPane, "Matrícula incorreta! Informe apenas números");
         }
-        
+
         student.setBlock(chbBlock.isSelected());
         student.setSemRegular(chbAlunoSemRegu.isSelected());
         if (cbCourse.getSelectedIndex() > 0) {
@@ -426,21 +466,44 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             student.setShift((Shift) cbShift.getSelectedItem());
 
         }
-        
+
         String date = tfDateValid.getText();
+        try {
+            DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+            java.util.Date data;
+            data = new java.util.Date(fmt.parse(date).getTime());
+            student.setDateValid(data);
+        } catch (ParseException ex) {
+            System.out.println(ex.getMessage());
+        }
+
+        //foto
+        if (file != null) {
             try {
-                DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
-                java.util.Date data;
-                data = new java.util.Date(fmt.parse(date).getTime());
-                student.setDateValid(data);
-            } catch (ParseException ex) {
-                System.out.println(ex.getMessage());
+                String extensao = file.getName().substring(file.getName().lastIndexOf("."), file.getName().length());
+                String namePhoto = student.getId() + extensao;
+                ConfigDAO cDAO = new ConfigDAO();
+                List<Config> list = cDAO.list();
+                if (list != null) {
+                    if (list.size() > 0) {
+                        Config config = list.get(0);
+                        Util.copyArquivo(file.getAbsolutePath(),
+                                config.getPathPhotoStudent() + "/" + namePhoto,
+                                300, 350); 
+                         
+                        student.setPhoto(namePhoto);
+                    }
+                }
+            } catch (Exception e) {
             }
+
+        }
 
         StudentDAO sDAO = new StudentDAO();
 
-        if (student.getId() == null) {
-            if (sDAO.checkExists("mat", Integer.valueOf(tfMat.getText())).size() > 0) {
+        if (student.getId()
+                == null) {
+            if (sDAO.checkExists("mat", tfMat.getText()).size() > 0) {
                 JOptionPane.showMessageDialog(rootPane, "Matrícula ja foi informada!");
                 return;
             }
@@ -450,7 +513,9 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             student.setActive(cbActive.isSelected());
             sDAO.update(student);
         }
-        setVisible(false);
+
+        setVisible(
+                false);
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -464,7 +529,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     }//GEN-LAST:event_cbActiveActionPerformed
 
     private void cbAddStudentAllowMealDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAddStudentAllowMealDayActionPerformed
-        StudentAllowMealDay stdAmd = new StudentAllowMealDay(); 
+        StudentAllowMealDay stdAmd = new StudentAllowMealDay();
         stdAmd.setStudent(student);
         StudentAllowMealRegisterFrm samd = new StudentAllowMealRegisterFrm(stdAmd);
         samd.setVisible(true);
@@ -499,6 +564,25 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_cbDeletarAllowStudentDayActionPerformed
 
+    private void lblPhotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPhotoMouseClicked
+        JFileChooser chooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("jpg", "png");
+        chooser.setFileFilter(filter);
+        int returnVal = chooser.showOpenDialog(this);
+        if (returnVal == JFileChooser.APPROVE_OPTION) {
+            file = chooser.getSelectedFile();
+            insertImage(file.getAbsolutePath());
+        }
+
+    }//GEN-LAST:event_lblPhotoMouseClicked
+
+    private void insertImage(String path) {
+        ImageIcon image = new ImageIcon(path);
+        lblPhoto.setIcon(new ImageIcon(
+                image.getImage().getScaledInstance(lblPhoto.getWidth(), lblPhoto.getHeight(),
+                        Image.SCALE_DEFAULT)));
+    }
+
     /**
      * @param args the command line arguments
      */
@@ -513,16 +597,24 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                 if ("Nimbus".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
+
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(StudentFrmRegister.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StudentFrmRegister.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(StudentFrmRegister.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StudentFrmRegister.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(StudentFrmRegister.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StudentFrmRegister.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(StudentFrmRegister.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(StudentFrmRegister.class
+                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
         //</editor-fold>
@@ -554,9 +646,11 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JLabel lblCodigo;
+    private javax.swing.JLabel lblPhoto;
     private javax.swing.JPanel pnlDIni;
     private javax.swing.JPanel pnlMeals;
     private javax.swing.JTable tbAllowMeal;

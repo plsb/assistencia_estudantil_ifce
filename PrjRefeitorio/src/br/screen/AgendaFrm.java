@@ -5,7 +5,8 @@
  */
 package br.screen;
 
-
+import br.config.Config;
+import br.config.ConfigDAO;
 import br.meal.Meal;
 import br.meal.MealDAO;
 import br.scheduling.Scheduling;
@@ -18,6 +19,7 @@ import br.util.FormatSizeColJTable;
 import br.util.OnlyNumberField;
 import br.util.UserActive;
 import br.util.Util;
+import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -35,6 +38,7 @@ public class AgendaFrm extends javax.swing.JDialog {
 
     private Set<Meal> meals;
     private Student student;
+
     /**
      * Creates new form FindPersonFrm
      */
@@ -47,9 +51,9 @@ public class AgendaFrm extends javax.swing.JDialog {
         //edtMat.setDocument(new OnlyNumberField());
         lblData.setText(returnDate());
         edtMat.requestFocus();
-        tbStudents.setAutoCreateRowSorter(true);
+        //tbStudents.setAutoCreateRowSorter(true);
     }
-    
+
     /*public AgendaFrm(Set<Meal> meals) {
         initComponents();
         setModal(true);
@@ -60,15 +64,15 @@ public class AgendaFrm extends javax.swing.JDialog {
         lblData.setText(returnDate());
         edtMat.setDocument(new OnlyNumberField());
     }*/
-    
-    public String returnDate(){
-        Date dataAtual = new Date();
+    public String returnDate() {
+        SchedulingDAO dao = new SchedulingDAO();
+        Date dataAtual = dao.getServerDate();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String data = sdf.format(dataAtual);
         return data;
     }
-    
-    public void insertListMeals(){
+
+    public void insertListMeals() {
         MealDAO dao = new MealDAO();
         List<Meal> list = dao.list();
         DefaultListModel model = new DefaultListModel();
@@ -81,23 +85,24 @@ public class AgendaFrm extends javax.swing.JDialog {
 
     public void preencheTabela() {
         SchedulingDAO sDAO = new SchedulingDAO();
-        
+
         List<Scheduling> list = sDAO.schedulingNotPresent(new Date());
-        
-        lblAgendamentos.setText("Total do dia: "+list.size()+" agendamentos.");
-        
+
+        lblAgendamentos.setText("Total do dia: " + list.size() + " agendamentos.");
+
         SchedulingTableModel ptm = new SchedulingTableModel(list);
         tbStudents.setModel(ptm);
 
         FormatSizeColJTable.packColumns(tbStudents, 1);
     }
-    
-    public void clearFields(){
+
+    public void clearFields() {
         student = null;
         taStudent.setText("");
         edtMat.setText("");
         preencheTabela();
         edtMat.requestFocus();
+        insertImage("/br/imagens/photo.png");
     }
 
     /**
@@ -129,6 +134,8 @@ public class AgendaFrm extends javax.swing.JDialog {
         lblData = new javax.swing.JLabel();
         jScrollPane3 = new javax.swing.JScrollPane();
         taStudent = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
+        lblPhoto = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -148,7 +155,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         jPanel3.add(jLabel23);
         jLabel23.setBounds(0, 0, 460, 30);
 
-        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 730, 40));
+        getContentPane().add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 790, 40));
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
         jPanel1.setPreferredSize(new java.awt.Dimension(432, 177));
@@ -181,7 +188,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         });
         jScrollPane1.setViewportView(tbStudents);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, 710, 230));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 760, 190));
 
         jButton3.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/exit_icon-icons.com_48304.png"))); // NOI18N
@@ -192,9 +199,9 @@ public class AgendaFrm extends javax.swing.JDialog {
                 jButton3ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(660, 440, 57, 40));
+        jPanel1.add(jButton3, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 440, 57, 40));
 
-        edtMat.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        edtMat.setFont(new java.awt.Font("Verdana", 0, 16)); // NOI18N
         edtMat.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 edtMatKeyPressed(evt);
@@ -204,7 +211,7 @@ public class AgendaFrm extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Refeições:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 20, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 40, -1));
 
         lblAgendamentos.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblAgendamentos.setText("0 agendamentos.");
@@ -220,8 +227,9 @@ public class AgendaFrm extends javax.swing.JDialog {
                 btAddStudentMealActionPerformed(evt);
             }
         });
-        jPanel1.add(btAddStudentMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 130, -1, -1));
+        jPanel1.add(btAddStudentMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 170, -1, -1));
 
+        listRefeicao.setFont(new java.awt.Font("Lucida Grande", 0, 13)); // NOI18N
         listRefeicao.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 listRefeicaoKeyPressed(evt);
@@ -229,7 +237,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         });
         jScrollPane2.setViewportView(listRefeicao);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 40, 270, 90));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, 240, 80));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Matrícula ou Código:");
@@ -238,11 +246,11 @@ public class AgendaFrm extends javax.swing.JDialog {
         jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel4.setText("Matrícula ou Código:");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
-        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 180, 710, -1));
+        jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 760, -1));
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel5.setText("Aluno:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 90, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, -1));
 
         lblData.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblData.setText("jLabel3");
@@ -250,13 +258,28 @@ public class AgendaFrm extends javax.swing.JDialog {
 
         taStudent.setEditable(false);
         taStudent.setColumns(20);
-        taStudent.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        taStudent.setFont(new java.awt.Font("Verdana", 1, 16)); // NOI18N
         taStudent.setRows(5);
         jScrollPane3.setViewportView(taStudent);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, 420, 70));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 130, 530, 80));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 730, 500));
+        jPanel4.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        lblPhoto.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblPhoto.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/photo.png"))); // NOI18N
+        lblPhoto.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                lblPhotoMouseClicked(evt);
+            }
+        });
+        jPanel4.add(lblPhoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 150));
+
+        jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 40, 150, 170));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 790, 500));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -276,82 +299,104 @@ public class AgendaFrm extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    public void verifyF2(java.awt.event.KeyEvent evt){
+    public void verifyF2(java.awt.event.KeyEvent evt) {
         if (evt.getKeyCode() == 113) {//F2
-            if(this.student!=null){
+            if (this.student != null) {
                 btAddStudentMealActionPerformed(null);
-                return ;
+                return;
             }
         }
     }
-    
+
     private void edtMatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtMatKeyPressed
         verifyF2(evt);
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) { 
-            if(edtMat.getText().equals("")){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            if (edtMat.getText().equals("")) {
                 JOptionPane.showMessageDialog(rootPane, "Informe a matrícula!");
             } else {
-                
+
                 StudentDAO sDAO = new StudentDAO();
-                
+
                 String mat = edtMat.getText();
-                if(mat.equals("")){
+                if (mat.equals("")) {
                     JOptionPane.showMessageDialog(rootPane, "Informe uma matrícula!");
                 }
-                
+
                 List<Student> list = sDAO.checkExists("mat", mat);
-                if(list.size()==0){
+                if (list.size() == 0) {
                     try {
                         list = sDAO.checkExists("id", Integer.parseInt(mat));
                     } catch (Exception e) {
                         list = new ArrayList<Student>();
                     }
-                    if(list.size()==0){
+                    if (list.size() == 0) {
                         clearFields();
-                        JOptionPane.showMessageDialog(rootPane, "Matrícula/Código não encontrado!"); 
-                        return ;
+                        JOptionPane.showMessageDialog(rootPane, "Matrícula/Código não encontrado!");
+                        return;
                     }
-                } 
-                
+                }
+
                 student = new Student();
                 student = list.get(0);
                 taStudent.setText(br.util.Util.decimalFormat().format(student.getId())
-                        +" - "+student.getName() 
-                        +"\n"+student.getCourse().getDescription()
-                        +"\nData da Próxima Atualização Cadastral: "+new SimpleDateFormat("dd/MM/yyyy").format(student.getDateValid()));
-                    
-                if(!Util.verifyStudent(rootPane,this.student)){
+                        + " - " + student.getName()
+                        + "\n" + student.getCourse().getDescription()
+                        + "\nData da Próxima Atualização Cadastral: " + new SimpleDateFormat("dd/MM/yyyy").format(student.getDateValid()));
+                //pega foto
+                if (student.getPhoto() != null) {
+                    try {
+                        ConfigDAO cDAO = new ConfigDAO();
+                        List<Config> listConfig = cDAO.list();
+                        if (list != null) {
+                            if (list.size() > 0) {
+                                Config config = listConfig.get(0);
+                                insertImage(config.getPathPhotoStudent() + "/" + student.getPhoto());
+                            }
+                        }
+                    } catch (Exception e) {
+                    }
+                } else {
+                    insertImage("/br/imagens/photo.png");
+                }
+
+                if (!Util.verifyStudent(rootPane, this.student)) {
                     clearFields();
                 }
-                
+
             }
         }
     }//GEN-LAST:event_edtMatKeyPressed
 
+    private void insertImage(String path) {
+        ImageIcon image = new ImageIcon(path);
+        lblPhoto.setIcon(new ImageIcon(
+                image.getImage().getScaledInstance(lblPhoto.getWidth(), lblPhoto.getHeight(),
+                        Image.SCALE_DEFAULT)));
+    }
+    
     private void btAddStudentMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddStudentMealActionPerformed
-        
+
         List<Meal> meals = (List<Meal>) listRefeicao.getSelectedValuesList();
-        
+
         if (student == null) {
             JOptionPane.showMessageDialog(rootPane, "Informe o Aluno.");
-            return ;
+            return;
         }
-        if(meals.size()==0){
+        if (meals.size() == 0) {
             JOptionPane.showMessageDialog(rootPane, "Informe as refeições.");
-            return ;
+            return;
         }
-        if(JOptionPane.showConfirmDialog(rootPane, "Deseja agendar as refeições para "+student.getName()+"?", 
-                "IFCE", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
+        if (JOptionPane.showConfirmDialog(rootPane, "Deseja agendar as refeições para " + student.getName() + "?",
+                "IFCE", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             SchedulingDAO sDAO = new SchedulingDAO();
-            for(Meal m : meals){     
-                
-                
+            for (Meal m : meals) {
+
                 List listStudentDateMeal = sDAO.schedulingDateStudentMeal(new Date(), student, m);
                 //se já foi cadastrado a refeição para o estudante, passa para o próximo
-                if(listStudentDateMeal.size()>0){
+                if (listStudentDateMeal.size() > 0) {
                     continue;
                 }
-                
+
                 Scheduling scheduling = new Scheduling();
                 scheduling.setMeal(m);
                 scheduling.setStudent(student);
@@ -363,21 +408,25 @@ public class AgendaFrm extends javax.swing.JDialog {
                 sDAO.add(scheduling);
             }
             clearFields();
-            
+
         }
     }//GEN-LAST:event_btAddStudentMealActionPerformed
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
-        
+
     }//GEN-LAST:event_formKeyPressed
 
     private void jPanel1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPanel1KeyPressed
-        
+
     }//GEN-LAST:event_jPanel1KeyPressed
 
     private void listRefeicaoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_listRefeicaoKeyPressed
         verifyF2(evt);
     }//GEN-LAST:event_listRefeicaoKeyPressed
+
+    private void lblPhotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPhotoMouseClicked
+        
+    }//GEN-LAST:event_lblPhotoMouseClicked
 
     /**
      * @param args the command line arguments
@@ -441,12 +490,14 @@ public class AgendaFrm extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JLabel lblAgendamentos;
     private javax.swing.JLabel lblData;
+    private javax.swing.JLabel lblPhoto;
     private javax.swing.JList listRefeicao;
     private javax.swing.JTextArea taStudent;
     private javax.swing.JTable tbStudents;

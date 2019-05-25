@@ -44,11 +44,11 @@ public class LoginFrm extends javax.swing.JFrame {
     public LoginFrm() {
         initComponents();
         setLocationRelativeTo(null);
-        //tfLogin.grabFocus();
+        tfLogin.requestFocus();
         //Util.setIcon(LoginFrm.class, this);
         String versao = Double.toString(Util.getVersionSystem());
         lblVersion.setText("Versão " + versao);
-        verifyUpdateJar();
+        verifyUpdateJar();  
     }
 
     public void verifyUpdateJar() {

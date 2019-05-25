@@ -24,6 +24,10 @@ public class Config {
     
     private double version;
     
+    private String pathPhotoStudent;
+    
+    private String pathReport;
+    
     /**
      * @return the id
      */
@@ -50,6 +54,34 @@ public class Config {
      */
     public void setVersion(double version) {
         this.version = version;
+    }
+
+    /**
+     * @return the pathPhotoStudent
+     */
+    public String getPathPhotoStudent() {
+        return pathPhotoStudent;
+    }
+
+    /**
+     * @param pathPhotoStudent the pathPhotoStudent to set
+     */
+    public void setPathPhotoStudent(String pathPhotoStudent) {
+        this.pathPhotoStudent = pathPhotoStudent;
+    }
+
+    /**
+     * @return the pathRelatorio
+     */
+    public String getPathReport() {
+        return pathReport;
+    }
+
+    /**
+     * @param pathRelatorio the pathRelatorio to set
+     */
+    public void setPathReport(String pathReport) {
+        this.pathReport = pathReport;
     }
 
     

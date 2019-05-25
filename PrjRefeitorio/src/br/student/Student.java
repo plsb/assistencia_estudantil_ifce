@@ -49,6 +49,8 @@ public class Student implements Comparable<Student> {
     @Temporal(TemporalType.DATE)
     private Date dateValid;
     
+    private String photo;
+    
     /**
      * @return the id
      */
@@ -217,6 +219,20 @@ public class Student implements Comparable<Student> {
      */
     public void setSemRegular(boolean semRegular) {
         this.semRegular = semRegular;
+    }
+
+    /**
+     * @return the foto
+     */
+    public String getPhoto() {
+        return photo;
+    }
+
+    /**
+     * @param foto the foto to set
+     */
+    public void setPhoto(String foto) {
+        this.photo = foto;
     }
 
     

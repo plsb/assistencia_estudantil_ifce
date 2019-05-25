@@ -12,6 +12,7 @@ import br.util.HibernateUtil;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -127,4 +128,26 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
 
     }
     
+    
+    public List<Scheduling> checkExistsin(String campo, List<Student> valor, Date date, Meal meal) {
+        List<Scheduling> lista = null;
+        try {
+            this.setSessao(HibernateUtil.getSessionFactory().openSession());
+            setTransacao(getSessao().beginTransaction());
+            lista = this.getSessao().createCriteria(Scheduling.class)
+                    .add(Restrictions.eq("date", date))
+                    .add(Expression.in(campo, valor))
+                    .add(Restrictions.eq("meal", meal)).list();
+
+        } catch (Throwable e) {
+            if (getTransacao().isActive()) {
+                getTransacao().rollback();
+            }
+            JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
+        } finally {
+            getSessao().close();
+        }
+        return lista;
+
+    }
 }

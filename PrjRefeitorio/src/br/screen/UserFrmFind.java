@@ -34,7 +34,7 @@ public class UserFrmFind extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         preencheTabela("");
         
-        tbUser.setAutoCreateRowSorter(true);
+        //tbUser.setAutoCreateRowSorter(true);
     }
 
     public void preencheTabela(String texto) {
