@@ -9,6 +9,7 @@ import br.meal.Meal;
 import br.meal.MealDAO;
 import br.student.Student;
 import br.student.StudentDAO;
+import br.util.UserActive;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.text.DateFormat;
@@ -172,7 +173,7 @@ public class MealFrmRegister extends javax.swing.JDialog {
         meal.setDescription(tfDesc.getText());
 
         MealDAO mDAO = new MealDAO();
-
+        meal.setCampus(UserActive.returnCampus());
         if (meal.getId() == null) {
             mDAO.add(meal);
         } else {

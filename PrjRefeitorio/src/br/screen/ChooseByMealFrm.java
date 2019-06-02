@@ -69,7 +69,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         cbMeal.addItem("-");
 
         MealDAO mdao = new MealDAO();
-        List<Meal> list = mdao.list("description");
+        List<Meal> list = mdao.list("campus", UserActive.returnCampus(),"description");
 
         for (int i = 0; i < list.size(); i++) {
             cbMeal.addItem(list.get(i));
@@ -110,6 +110,8 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 } else {
                     lblInfo.setText(list.size() + " refeições (" + cbMeal.getSelectedItem().toString() + "). " + listPres.size() + " presentes. " + listNoPres.size() + " ausentes.");
                 }
+            } else {
+                lblInfo.setText("0 refeições.");
             }
 
             SchedulingTableModel ptm = new SchedulingTableModel(list);

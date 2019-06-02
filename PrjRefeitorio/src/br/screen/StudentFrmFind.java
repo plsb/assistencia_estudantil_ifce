@@ -10,6 +10,7 @@ import br.student.Student;
 import br.student.StudentDAO;
 import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
+import br.util.UserActive;
 import br.util.Util;
 import java.awt.Color;
 import java.awt.Component;
@@ -42,11 +43,13 @@ public class StudentFrmFind extends javax.swing.JDialog {
     public void preencheTabela(String texto) {
         StudentDAO sDAO = new StudentDAO();
         if (texto.equals("")) {
-            StudentTableModel ptm = new StudentTableModel(new ArrayList(new HashSet(sDAO.list())));
+            StudentTableModel ptm = new StudentTableModel(new ArrayList(
+                    new HashSet(sDAO.checkExists("campus", UserActive.returnCampus()))));
             tbStudents.setModel(ptm);
         } else {
             StudentTableModel ptm = new StudentTableModel(
-                    new ArrayList(new HashSet(sDAO.checkExistsLike("name", texto)))
+                    new ArrayList(new HashSet(sDAO.checkExistsLike("name", texto,
+                            "campus", UserActive.returnCampus())))
                     );
             tbStudents.setModel(ptm);
         }

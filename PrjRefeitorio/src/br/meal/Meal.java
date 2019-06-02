@@ -6,12 +6,14 @@
 package br.meal;
 
 
+import br.campus.Campus;
 import br.shift.Shift;
 import java.sql.Time;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -35,6 +37,9 @@ public class Meal implements Comparable<Meal> {
     
     @Temporal(TemporalType.TIME)
     private Date timeEnd;
+    
+    @ManyToOne
+    private Campus campus;
     
     /**
      * @return the id
@@ -124,5 +129,20 @@ public class Meal implements Comparable<Meal> {
     public void setTimeEnd(Date timeEnd) {
         this.timeEnd = timeEnd;
     }
+
+    /**
+     * @return the campus
+     */
+    public Campus getCampus() {
+        return campus;
+    }
+
+    /**
+     * @param campus the campus to set
+     */
+    public void setCampus(Campus campus) {
+        this.campus = campus;
+    }
+    
     
 }

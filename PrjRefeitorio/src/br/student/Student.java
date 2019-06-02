@@ -6,6 +6,7 @@
 package br.student;
 
 import br.allowsmd.StudentAllowMealDay;
+import br.campus.Campus;
 import br.course.Course;
 import br.screen.AllowMealStudentFrm;
 import br.shift.Shift;
@@ -50,6 +51,9 @@ public class Student implements Comparable<Student> {
     private Date dateValid;
     
     private String photo;
+    
+    @ManyToOne
+    private Campus campus;
     
     /**
      * @return the id
@@ -170,6 +174,8 @@ public class Student implements Comparable<Student> {
         this.shift = shift;
     }
     
+    
+    
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -233,6 +239,20 @@ public class Student implements Comparable<Student> {
      */
     public void setPhoto(String foto) {
         this.photo = foto;
+    }
+
+    /**
+     * @return the campus
+     */
+    public Campus getCampus() {
+        return campus;
+    }
+
+    /**
+     * @param campus the campus to set
+     */
+    public void setCampus(Campus campus) {
+        this.campus = campus;
     }
 
     

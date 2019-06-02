@@ -5,6 +5,7 @@
  */
 package br.course;
 
+import br.campus.Campus;
 import br.shift.Shift;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -27,6 +28,9 @@ public class Course implements Comparable<Course>{
     private String description;
     
     private String initials;
+    
+    @ManyToOne
+    private Campus campus;
 
     /**
      * @return the id
@@ -101,6 +105,20 @@ public class Course implements Comparable<Course>{
         int hash = 7;
         hash = 89 * hash + this.getId();
         return hash;
+    }
+
+    /**
+     * @return the campus
+     */
+    public Campus getCampus() {
+        return campus;
+    }
+
+    /**
+     * @param campus the campus to set
+     */
+    public void setCampus(Campus campus) {
+        this.campus = campus;
     }
     
 }

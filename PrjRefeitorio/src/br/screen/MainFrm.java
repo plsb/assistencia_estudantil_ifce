@@ -24,8 +24,14 @@ public class MainFrm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         setTitle("Refeitório");
         String versao = Double.toString(Util.getVersionSystem());
-        lblUserActive.setText("Usuário ativo: "+UserActive.getLogin()
-                +" | Versão "+versao);
+        if(UserActive.isAdministrador()){
+            lblUserActive.setText("Usuário ativo: "+UserActive.getLogin()
+                +" | Administrador | Versão "+versao);
+        } else {
+            lblUserActive.setText("Usuário ativo: "+UserActive.retornaUsuarioAtivo().getName()
+                +" | Campus: "+UserActive.retornaUsuarioAtivo().getCampus().getDescription()
+                    +" | Versão "+versao);
+        }
         verifyMenuByUser();
     }
     
@@ -37,11 +43,14 @@ public class MainFrm extends javax.swing.JFrame {
             btRegisterMeal.setEnabled(false);
             btAgenda.setEnabled(false);
             btVerifyMeal.setEnabled(false);
-            smCursos.setVisible(true);
-            smUsers.setVisible(true);
             smPermissionMeal.setVisible(false);
-            smShift.setVisible(true);
+            smChangePass.setVisible(false);
+            smCursos.setVisible(false);
+            smUsers.setVisible(true);
+            smShift.setVisible(false);
             smiConfig.setVisible(true);
+            mmReport.setVisible(true);
+            smCampi.setVisible(true);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("ASSIS_ESTU")){
         //Assistência Estudantil
             btStudent1.setEnabled(true);
@@ -53,6 +62,8 @@ public class MainFrm extends javax.swing.JFrame {
             smPermissionMeal.setVisible(true);
             smShift.setVisible(true);
             smiConfig.setVisible(false);
+            mmReport.setVisible(true);
+            smCampi.setVisible(false);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")){
         //Recepção
             btStudent1.setEnabled(false);
@@ -65,6 +76,8 @@ public class MainFrm extends javax.swing.JFrame {
             smPermissionMeal.setVisible(false);
             smShift.setVisible(false);
             smiConfig.setVisible(false);
+            mmReport.setVisible(false);
+            smCampi.setVisible(false);
         }
     }
 
@@ -84,6 +97,7 @@ public class MainFrm extends javax.swing.JFrame {
         jMenuBar3 = new javax.swing.JMenuBar();
         jMenu5 = new javax.swing.JMenu();
         jMenu6 = new javax.swing.JMenu();
+        jMenu7 = new javax.swing.JMenu();
         jPanel1 = new javax.swing.JPanel();
         btAgenda = new javax.swing.JButton();
         btVerifyMeal = new javax.swing.JButton();
@@ -95,12 +109,16 @@ public class MainFrm extends javax.swing.JFrame {
         btExit = new javax.swing.JButton();
         jMenuBar2 = new javax.swing.JMenuBar();
         smmCursos = new javax.swing.JMenu();
+        smCampi = new javax.swing.JMenuItem();
         smCursos = new javax.swing.JMenuItem();
         smiConfig = new javax.swing.JMenuItem();
         smShift = new javax.swing.JMenuItem();
         smUsers = new javax.swing.JMenuItem();
+        mmReport = new javax.swing.JMenu();
+        jMenuItem1 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         smPermissionMeal = new javax.swing.JMenuItem();
+        smChangePass = new javax.swing.JMenuItem();
 
         jMenu1.setText("File");
         jMenuBar1.add(jMenu1);
@@ -115,6 +133,8 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenu6.setText("Edit");
         jMenuBar3.add(jMenu6);
+
+        jMenu7.setText("jMenu7");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
@@ -193,6 +213,14 @@ public class MainFrm extends javax.swing.JFrame {
 
         smmCursos.setText("Cadastros");
 
+        smCampi.setText("Campi");
+        smCampi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smCampiActionPerformed(evt);
+            }
+        });
+        smmCursos.add(smCampi);
+
         smCursos.setText("Cursos");
         smCursos.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -227,6 +255,18 @@ public class MainFrm extends javax.swing.JFrame {
 
         jMenuBar2.add(smmCursos);
 
+        mmReport.setText("Relatórios");
+
+        jMenuItem1.setText("Total de Refeições");
+        jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem1ActionPerformed(evt);
+            }
+        });
+        mmReport.add(jMenuItem1);
+
+        jMenuBar2.add(mmReport);
+
         jMenu4.setText("Outros");
 
         smPermissionMeal.setText("Permissão para Refeição");
@@ -236,6 +276,14 @@ public class MainFrm extends javax.swing.JFrame {
             }
         });
         jMenu4.add(smPermissionMeal);
+
+        smChangePass.setText("Mudar Senha");
+        smChangePass.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smChangePassActionPerformed(evt);
+            }
+        });
+        jMenu4.add(smChangePass);
 
         jMenuBar2.add(jMenu4);
 
@@ -298,6 +346,21 @@ public class MainFrm extends javax.swing.JFrame {
         cfr.setVisible(true);
     }//GEN-LAST:event_smiConfigActionPerformed
 
+    private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
+        ReportTotalMealsByPeriod rt = new ReportTotalMealsByPeriod();
+        rt.setVisible(true);
+    }//GEN-LAST:event_jMenuItem1ActionPerformed
+
+    private void smChangePassActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smChangePassActionPerformed
+        ChangePasswordFrm cpf = new ChangePasswordFrm();
+        cpf.setVisible(true);
+    }//GEN-LAST:event_smChangePassActionPerformed
+
+    private void smCampiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smCampiActionPerformed
+        CampusFrmFind cff = new CampusFrmFind();
+        cff.setVisible(true);
+    }//GEN-LAST:event_smCampiActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -348,11 +411,16 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenu jMenu5;
     private javax.swing.JMenu jMenu6;
+    private javax.swing.JMenu jMenu7;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuBar jMenuBar2;
     private javax.swing.JMenuBar jMenuBar3;
+    private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblUserActive;
+    private javax.swing.JMenu mmReport;
+    private javax.swing.JMenuItem smCampi;
+    private javax.swing.JMenuItem smChangePass;
     private javax.swing.JMenuItem smCursos;
     private javax.swing.JMenuItem smPermissionMeal;
     private javax.swing.JMenuItem smShift;

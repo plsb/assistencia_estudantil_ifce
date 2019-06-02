@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.8.0.final using JasperReports Library version 6.8.0-2ed8dfabb690ff337a5797129f2cd92902b0c87b  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="carteirinhas_permission_meals" pageWidth="595" pageHeight="842" columnWidth="574" leftMargin="1" rightMargin="20" topMargin="1" bottomMargin="1" uuid="0abe0d77-f4e6-4f7f-8852-aa83e7a5502a">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<parameter name="idStudent" class="java.lang.Integer">
+		<defaultValueExpression><![CDATA[1]]></defaultValueExpression>
+	</parameter>
+	<queryString language="SQL">
+		<![CDATA[select asmd.*, m.description from allowstudenmealday asmd
+inner join meal m on m.id=asmd.meal_id
+where asmd.student_id= $P{idStudent}]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="friday" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="friday"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="monday" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="monday"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="saturday" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="saturday"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="thursday" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="thursday"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="tuesday" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="tuesday"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="wednesday" class="java.lang.Boolean">
+		<property name="com.jaspersoft.studio.field.label" value="wednesday"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="meal_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="meal_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="student_id" class="java.lang.Integer">
+		<property name="com.jaspersoft.studio.field.label" value="student_id"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="allowstudenmealday"/>
+	</field>
+	<field name="description" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="description"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="meal"/>
+	</field>
+	<group name="student_id">
+		<groupExpression><![CDATA[$F{student_id}]]></groupExpression>
+	</group>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="17">
+			<staticText>
+				<reportElement x="0" y="0" width="90" height="12" uuid="20f040dc-15c7-4e63-ae68-053e0abbe538"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Refeição]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="92" y="0" width="30" height="12" uuid="749d6baa-3d72-4877-b8fd-62c51da6e493"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Seg]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="122" y="0" width="30" height="12" uuid="d3e3f3ae-da85-4ce7-a286-1c327c891881"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ter]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="152" y="0" width="30" height="12" uuid="d0f87125-cedb-4916-a2da-2d11d8a13fd4"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qua]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="182" y="0" width="30" height="12" uuid="4d5a054d-0ba2-46e7-bb99-483e381ea106"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Qui]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="242" y="0" width="30" height="12" uuid="7c0c1bbd-43c4-46ac-bc79-fe4734f762cb"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sab]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="212" y="0" width="30" height="12" uuid="ae39f124-e864-4198-a9e0-263cffbd9315"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sex]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="12" width="272" height="1" uuid="843c23bc-3ebe-4d7e-bcaf-274a42904112">
+					<property name="com.jaspersoft.studio.unit.height" value="px"/>
+				</reportElement>
+			</line>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="16" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="90" height="12" uuid="15b35195-b9cb-402c-bcdb-7c49cab3040a">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="0a44efff-a2a5-424b-8de3-f59ef9063777"/>
+				</reportElement>
+				<textElement textAlignment="Left">
+					<font fontName="Arial" size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{description}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="92" y="0" width="30" height="12" uuid="db9a0fb1-957f-4093-8074-418898293469"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{monday}==true ? "X" : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="122" y="0" width="30" height="12" uuid="d4d61f90-b67b-4fab-b12c-94825b1f1f00"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tuesday}==true ? "X" : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="182" y="0" width="30" height="12" uuid="612bd26e-7c19-4fce-9947-53e2048d0a6c"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{thursday}==true ? "X" : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="152" y="0" width="30" height="12" uuid="34e02be0-8104-444c-8d57-1e11d29d1733"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{wednesday}==true ? "X" : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="242" y="0" width="30" height="12" uuid="58898b25-470a-474a-a4d7-c8a7ae6f7187"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{saturday}==true ? "X" : "-"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="212" y="0" width="30" height="12" uuid="74cade54-a9ec-4f93-afa9-8d3b0f549c8d"/>
+				<textElement textAlignment="Center">
+					<font size="9"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{friday}==true ? "X" : "-"]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

@@ -26,7 +26,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class StudentTableModel extends AbstractTableModel {
 
-    private String[] nomeColunas = {"Código", "Matrícula", "Nome", "Curso", "Turno", "Válidade","", ""};
+    private String[] nomeColunas = {"Código", "Matrícula", "Nome", "Curso", "Turno", "Validade","", ""};
     private List<Student> students;
 
     /**

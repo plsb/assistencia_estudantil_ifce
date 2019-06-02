@@ -18,6 +18,7 @@ import br.student.StudentDAO;
 import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
 import br.util.OnlyNumberField;
+import br.util.UserActive;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
@@ -65,7 +66,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         cbMeal.addItem("-");
 
         MealDAO mdao = new MealDAO();
-        List<Meal> list = mdao.list("description");
+        List<Meal> list = mdao.list("campus", UserActive.returnCampus(), "description");
 
         for (int i = 0; i < list.size(); i++) {
             cbMeal.addItem(list.get(i));
@@ -301,10 +302,10 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(rootPane, "Informe uma matrícula!");
                 }
                 
-                List<Student> list = sDAO.checkExists("mat", mat);
+                List<Student> list = sDAO.checkExists("mat", mat, "campus", UserActive.returnCampus());
                 if(list.size()==0){
                     try {
-                        list = sDAO.checkExists("id", Integer.parseInt(mat));
+                        list = sDAO.checkExists("id", Integer.parseInt(mat), "campus", UserActive.returnCampus());
                     } catch (Exception e) {
                         list = new ArrayList<Student>();
                     }

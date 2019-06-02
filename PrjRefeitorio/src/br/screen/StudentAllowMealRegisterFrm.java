@@ -11,6 +11,7 @@ import br.meal.Meal;
 import br.meal.MealDAO;
 import br.student.Student;
 import br.student.StudentDAO;
+import br.util.UserActive;
 import java.math.BigInteger;
 import java.sql.Time;
 import java.text.SimpleDateFormat;
@@ -61,7 +62,7 @@ public class StudentAllowMealRegisterFrm extends javax.swing.JDialog {
         cbMeal.addItem("-");
 
         MealDAO mdao = new MealDAO();
-        List<Meal> list = mdao.list("description");
+        List<Meal> list = mdao.list("campus", UserActive.returnCampus(),"description");
 
         for (int i = 0; i < list.size(); i++) {
             cbMeal.addItem(list.get(i));

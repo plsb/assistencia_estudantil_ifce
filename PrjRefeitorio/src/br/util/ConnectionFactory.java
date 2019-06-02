@@ -7,6 +7,7 @@ package br.util;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 public class ConnectionFactory {
 
@@ -18,6 +19,7 @@ public class ConnectionFactory {
             /*return DriverManager.getConnection("jdbc:mysql://localhost/refeitorio",  //192.168.3.38
                     "root", "");*/
         } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage(), "", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e);
         }
     }

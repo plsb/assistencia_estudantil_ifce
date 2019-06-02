@@ -5,10 +5,13 @@
  */
 package br.screen;
 
+import br.campus.Campus;
+import br.campus.CampusDAO;
 import br.course.Course;
 import br.course.CourseDAO;
 import br.user.User;
 import br.user.UserDAO;
+import java.util.List;
 import javax.swing.JOptionPane;
 
 /**
@@ -18,6 +21,7 @@ import javax.swing.JOptionPane;
 public class UserFrmRegister extends javax.swing.JDialog {
 
     private User user;
+
     /**
      * Creates new form RegisterStudent
      */
@@ -26,21 +30,37 @@ public class UserFrmRegister extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setModal(true);
         setTitle("Cadastro de Usuário");
+        insertCampus();
         this.user = new User();
         cbActive.setSelected(true);
         cmbType.setSelectedIndex(0);
     }
-    
+
     public UserFrmRegister(User user) {
         initComponents();
         setLocationRelativeTo(null);
         setModal(true);
         setTitle("Edição de Usuário");
+        insertCampus();
         this.user = user;
         tfName.setText(user.getName());
         tfLogin.setText(user.getLogin());
+        tfLogin.setEnabled(false);
         cbActive.setSelected(user.isActive());
         cmbType.setSelectedItem(user.getTipo());
+        cmbCampus.setSelectedItem(user.getCampus());
+    }
+
+    public void insertCampus() {
+        cmbCampus.removeAllItems();
+        cmbCampus.addItem("-");
+
+        CampusDAO mdao = new CampusDAO();
+        List<Campus> list = mdao.list("description");
+
+        for (int i = 0; i < list.size(); i++) {
+            cmbCampus.addItem(list.get(i));
+        }
     }
 
     /**
@@ -65,13 +85,15 @@ public class UserFrmRegister extends javax.swing.JDialog {
         cbActive = new javax.swing.JCheckBox();
         jLabel6 = new javax.swing.JLabel();
         cmbType = new javax.swing.JComboBox();
+        cmbCampus = new javax.swing.JComboBox();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tfName.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        getContentPane().add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 371, -1));
+        getContentPane().add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 500, -1));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel2.setText("Nome: *");
@@ -84,7 +106,7 @@ public class UserFrmRegister extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 320, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 370, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/forceexit_103817.png"))); // NOI18N
@@ -94,20 +116,20 @@ public class UserFrmRegister extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 320, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(450, 370, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Tipo: *");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
 
         tfLogin.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        getContentPane().add(tfLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 371, -1));
+        getContentPane().add(tfLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, 500, -1));
 
         tfPass.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        getContentPane().add(tfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 370, -1));
+        getContentPane().add(tfPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, 500, -1));
 
         tfConPass.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        getContentPane().add(tfConPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 370, -1));
+        getContentPane().add(tfConPass, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 500, -1));
 
         jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel4.setText("Login: *");
@@ -119,7 +141,7 @@ public class UserFrmRegister extends javax.swing.JDialog {
 
         cbActive.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         cbActive.setText("Ativo");
-        getContentPane().add(cbActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 20, -1, -1));
+        getContentPane().add(cbActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(440, 20, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel6.setText("Confirmar Senha: *");
@@ -129,57 +151,81 @@ public class UserFrmRegister extends javax.swing.JDialog {
         cmbType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--", "ASSIS_ESTU", "RECEPCAO" }));
         getContentPane().add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 280, -1));
 
+        cmbCampus.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        cmbCampus.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--", "ASSIS_ESTU", "RECEPCAO" }));
+        getContentPane().add(cmbCampus, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 320, 280, -1));
+
+        jLabel7.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel7.setText("Campus: *");
+        getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 300, -1, -1));
+
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        
-        if(tfName.getText().equals("")){
+
+        if (tfName.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Informe o Nome!");
             tfName.requestFocus();
             return;
         }
-        
-        if(tfLogin.getText().equals("")){
+
+        if (tfLogin.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Informe o Login!");
             tfLogin.requestFocus();
             return;
         }
-        
-        if(tfPass.getText().equals("")){
+
+        if (tfPass.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Informe a senha!");
             tfPass.requestFocus();
             return;
         }
-        
-        if(tfConPass.getText().equals("")){
+
+        if (tfConPass.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Informe a confirmação da senha!");
             tfConPass.requestFocus();
             return;
         }
-        
-        if(!tfConPass.getText().equals(tfPass.getText())){
+
+        if (!tfConPass.getText().equals(tfPass.getText())) {
             JOptionPane.showMessageDialog(rootPane, "Senhas não conferem!");
             tfPass.requestFocus();
             return;
         }
-        
-        if(cmbType.getSelectedIndex()==0){
+
+        if (cmbType.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(rootPane, "Selecine o tipo!");
             cmbType.requestFocus();
             return;
         }
-       
+
+        if (cmbCampus.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(rootPane, "Selecine o Campus!");
+            cmbCampus.requestFocus();
+            return;
+        }
+        UserDAO uDAO = new UserDAO();
+
         user.setName(tfName.getText());
         user.setLogin(tfLogin.getText());
         user.setSenha(tfPass.getText());
         user.setTipo(cmbType.getSelectedItem().toString());
+        user.setCampus((Campus) cmbCampus.getSelectedItem());
         user.setActive(cbActive.isSelected());
-        
-        UserDAO uDAO = new UserDAO();
 
-        if(user.getId()==null){
+        
+        if (user.getId() == null) {
+            //verifica se ja possui login cadastrado
+            List<User> userExists = uDAO.checkExists("login", tfLogin.getText());
+            if (userExists != null) {
+                if (userExists.size() > 0) {
+                    JOptionPane.showMessageDialog(rootPane, "Login já cadastrado!");
+                    tfLogin.requestFocus();
+                    return;
+                }
+            }
             user.setActive(true);
             uDAO.add(user);
         } else {
@@ -246,6 +292,7 @@ public class UserFrmRegister extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JCheckBox cbActive;
+    private javax.swing.JComboBox cmbCampus;
     private javax.swing.JComboBox cmbType;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -254,6 +301,7 @@ public class UserFrmRegister extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPasswordField tfConPass;
     private javax.swing.JTextField tfLogin;
     private javax.swing.JTextField tfName;

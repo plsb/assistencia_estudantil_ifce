@@ -5,6 +5,7 @@
  */
 package br.scheduling;
 
+import br.campus.Campus;
 import br.meal.Meal;
 import br.student.Student;
 import br.user.User;
@@ -48,6 +49,11 @@ public class Scheduling implements Comparable<Scheduling> {
 
     @ManyToOne
     private User user;
+    
+    @ManyToOne
+    private Campus campus;
+    
+    private String absenceJustification;
 
     /**
      * @return the id
@@ -135,7 +141,10 @@ public class Scheduling implements Comparable<Scheduling> {
 
     public String getSituaction() {
         Date date = new Date();
-        if (this.date.before(date)) {
+        if (this.getDate().before(date)) {
+            if(getAbsenceJustification()!=null){
+                return "Justificado";
+            }
             if (isWasPresent()) {
                 return "Presente";
             } else {
@@ -178,4 +187,33 @@ public class Scheduling implements Comparable<Scheduling> {
         this.dateInsert = dateInsert;
     }
 
+    /**
+     * @return the campus
+     */
+    public Campus getCampus() {
+        return campus;
+    }
+
+    /**
+     * @param campus the campus to set
+     */
+    public void setCampus(Campus campus) {
+        this.campus = campus;
+    }
+
+    /**
+     * @return the absenceJustification
+     */
+    public String getAbsenceJustification() {
+        return absenceJustification;
+    }
+
+    /**
+     * @param absenceJustification the absenceJustification to set
+     */
+    public void setAbsenceJustification(String absenceJustification) {
+        this.absenceJustification = absenceJustification;
+    }
+
+    
 }

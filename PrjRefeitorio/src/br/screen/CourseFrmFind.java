@@ -16,6 +16,7 @@ import br.student.Student;
 import br.student.StudentDAO;
 import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
+import br.util.UserActive;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
@@ -38,10 +39,11 @@ public class CourseFrmFind extends javax.swing.JDialog {
     public void preencheTabela(String texto) {
         CourseDAO cDAO = new CourseDAO();
         if (texto.equals("")) {
-            CourseTableModel ptm = new CourseTableModel(cDAO.list());
+            CourseTableModel ptm = new CourseTableModel(cDAO.checkExists("campus", UserActive.returnCampus()));
             tbCourse.setModel(ptm);
         } else {
-            CourseTableModel ptm = new CourseTableModel(cDAO.checkExistsLike("description", texto));
+            CourseTableModel ptm = new CourseTableModel(cDAO.checkExistsLike("description", texto,
+                    "campus", UserActive.returnCampus()));
             tbCourse.setModel(ptm);
         }
 

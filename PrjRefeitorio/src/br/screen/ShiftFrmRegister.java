@@ -11,6 +11,7 @@ import br.meal.Meal;
 import br.meal.MealDAO;
 import br.shift.Shift;
 import br.shift.ShiftDAO;
+import br.util.UserActive;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -58,7 +59,7 @@ public class ShiftFrmRegister extends javax.swing.JDialog {
         cbMeal.addItem("-");
 
         MealDAO mdao = new MealDAO();
-        List<Meal> list = mdao.list("description");
+        List<Meal> list = mdao.list("campus", UserActive.returnCampus(),"description");
 
         for (int i = 0; i < list.size(); i++) {
             cbMeal.addItem(list.get(i));
@@ -177,7 +178,7 @@ public class ShiftFrmRegister extends javax.swing.JDialog {
         shift.setDescription(tfDesc.getText());
 
         ShiftDAO cDAO = new ShiftDAO();
-
+        shift.setCampus(UserActive.returnCampus());
         if (shift.getId() == null) {
             cDAO.add(shift);
         } else {

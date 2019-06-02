@@ -58,7 +58,7 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
         cbMeal.addItem("-");
 
         MealDAO mdao = new MealDAO();
-        List<Meal> list = mdao.list("description");
+        List<Meal> list = mdao.list("campus", UserActive.returnCampus(),"description");
 
         for (int i = 0; i < list.size(); i++) {
             cbMeal.addItem(list.get(i));
@@ -237,6 +237,7 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
             }
             
             Scheduling scheduling = new Scheduling();
+            scheduling.setCampus(UserActive.returnCampus());
             scheduling.setMeal(meal);
             scheduling.setStudent(student);
             scheduling.setDate(date);

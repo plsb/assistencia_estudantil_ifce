@@ -74,7 +74,7 @@ public class AgendaFrm extends javax.swing.JDialog {
 
     public void insertListMeals() {
         MealDAO dao = new MealDAO();
-        List<Meal> list = dao.list();
+        List<Meal> list = dao.checkExists("campus", UserActive.returnCampus());
         DefaultListModel model = new DefaultListModel();
         model.removeAllElements();
         for (Meal m : list) {
@@ -211,7 +211,7 @@ public class AgendaFrm extends javax.swing.JDialog {
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Refeições:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 40, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 20, 160, -1));
 
         lblAgendamentos.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblAgendamentos.setText("0 agendamentos.");
@@ -322,10 +322,10 @@ public class AgendaFrm extends javax.swing.JDialog {
                     JOptionPane.showMessageDialog(rootPane, "Informe uma matrícula!");
                 }
 
-                List<Student> list = sDAO.checkExists("mat", mat);
+                List<Student> list = sDAO.checkExists("mat", mat, "campus", UserActive.returnCampus());
                 if (list.size() == 0) {
                     try {
-                        list = sDAO.checkExists("id", Integer.parseInt(mat));
+                        list = sDAO.checkExists("id", Integer.parseInt(mat), "campus", UserActive.returnCampus());
                     } catch (Exception e) {
                         list = new ArrayList<Student>();
                     }
@@ -398,6 +398,7 @@ public class AgendaFrm extends javax.swing.JDialog {
                 }
 
                 Scheduling scheduling = new Scheduling();
+                scheduling.setCampus(UserActive.returnCampus());
                 scheduling.setMeal(m);
                 scheduling.setStudent(student);
                 scheduling.setDate(sDAO.getServerDate());

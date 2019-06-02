@@ -9,6 +9,7 @@ import br.course.Course;
 import br.course.CourseDAO;
 import br.shift.Shift;
 import br.shift.ShiftDAO;
+import br.util.UserActive;
 import java.util.List;
 import javax.swing.JOptionPane;
 
@@ -118,7 +119,7 @@ public class CourseFrmRegister extends javax.swing.JDialog {
         course.setInitials(tfSigla.getText());
         
         CourseDAO cDAO = new CourseDAO();
-
+        course.setCampus(UserActive.returnCampus());
         if(course.getId()==null){
             cDAO.add(course);
         } else {

@@ -9,6 +9,7 @@ import br.meal.Meal;
 import br.student.Student;
 import br.util.GenericDAO;
 import br.util.HibernateUtil;
+import br.util.UserActive;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -31,7 +32,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(Scheduling.class).add(Restrictions.eq("date", valor))
-                    .add(Restrictions.eq("wasPresent", false)).list();
+                    .add(Restrictions.eq("wasPresent", false))
+                    .add(Restrictions.eq("campus", UserActive.returnCampus())).list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -51,7 +53,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(Scheduling.class).add(Restrictions.eq("date", valor))
-                    .add(Restrictions.eq("wasPresent", true)).list();
+                    .add(Restrictions.eq("wasPresent", true))
+                    .add(Restrictions.eq("campus", UserActive.returnCampus())).list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -137,7 +140,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             lista = this.getSessao().createCriteria(Scheduling.class)
                     .add(Restrictions.eq("date", date))
                     .add(Expression.in(campo, valor))
-                    .add(Restrictions.eq("meal", meal)).list();
+                    .add(Restrictions.eq("meal", meal))
+                    .add(Restrictions.eq("campus", UserActive.returnCampus())).list();
 
         } catch (Throwable e) {
             if (getTransacao().isActive()) {

@@ -25,6 +25,7 @@ import br.student.StudentDAO;
 import br.student.StudentSchedulingTableModel;
 import br.util.FormatSizeColJTable;
 import br.util.OnlyNumberField;
+import br.util.UserActive;
 import br.util.Util;
 import java.awt.Color;
 import java.awt.Component;
@@ -134,7 +135,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         cbCourse.addItem("-");
 
         CourseDAO cdao = new CourseDAO();
-        List<Course> list = cdao.list("description");
+        List<Course> list = cdao.list("campus", UserActive.returnCampus(),"description");
 
         for (int i = 0; i < list.size(); i++) {
             cbCourse.addItem(list.get(i));
@@ -146,7 +147,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         cbShift.addItem("-");
 
         ShiftDAO cdao = new ShiftDAO();
-        List<Shift> list = new ArrayList(new HashSet(cdao.list("description")));
+        List<Shift> list = new ArrayList(new HashSet(cdao.list("campus", UserActive.returnCampus(), "description")));
 
         for (int i = 0; i < list.size(); i++) {
             cbShift.addItem(list.get(i));
@@ -184,7 +185,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                 } else if (ref != null && ref.equals("Presente")) {
                     Color cor = new Color(144, 238, 144);
                     setBackground(cor);
-                } else {
+                } else if(ref != null && ref.equals("Justificado")) {
                     setBackground(Color.WHITE);
                 }
                 comp.setForeground(Color.black);
@@ -226,6 +227,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         pnlMeals = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbStudentMeals = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jScrollPane2 = new javax.swing.JScrollPane();
         tbAllowMeal = new javax.swing.JTable();
@@ -341,9 +343,17 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbStudentMeals.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbStudentMealsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbStudentMeals);
 
-        pnlMeals.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 5, 610, 320));
+        pnlMeals.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(16, 5, 610, 290));
+
+        jLabel7.setText("** Clique duas vezes para justificar ausência");
+        pnlMeals.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 300, 600, -1));
 
         tbbPanStudente.addTab("Histórico de Refeições", pnlMeals);
 
@@ -500,7 +510,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         }
 
         StudentDAO sDAO = new StudentDAO();
-
+        student.setCampus(UserActive.returnCampus());
         if (student.getId()
                 == null) {
             if (sDAO.checkExists("mat", tfMat.getText()).size() > 0) {
@@ -576,6 +586,19 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
     }//GEN-LAST:event_lblPhotoMouseClicked
 
+    private void tbStudentMealsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbStudentMealsMouseClicked
+        if(evt.getClickCount() == 2){
+            StudentSchedulingTableModel ptm = (StudentSchedulingTableModel) tbStudentMeals.getModel();
+            Scheduling select = ptm.getScheduling(tbStudentMeals.getSelectedRow());
+            if(select.isWasPresent()){
+                JOptionPane.showMessageDialog(rootPane, "O Estudante esteve presente!", "IFCE", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JustificationFrmRegister jfr = new JustificationFrmRegister(select);
+                jfr.setVisible(true);
+            }
+        }
+    }//GEN-LAST:event_tbStudentMealsMouseClicked
+
     private void insertImage(String path) {
         ImageIcon image = new ImageIcon(path);
         lblPhoto.setIcon(new ImageIcon(
@@ -644,6 +667,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;

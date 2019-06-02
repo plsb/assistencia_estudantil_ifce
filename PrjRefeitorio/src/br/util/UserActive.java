@@ -4,6 +4,7 @@
  */
 package br.util;
 
+import br.campus.Campus;
 import br.user.User;
 import br.user.UserDAO;
 import org.dom4j.util.UserDataAttribute;
@@ -52,5 +53,11 @@ public class UserActive {
         User user = usuDAO.checkExists("login", login).get(0);
         return user;
         
+    }
+    
+    public static Campus returnCampus(){
+        UserDAO usuDAO = new UserDAO();
+        User user = usuDAO.checkExists("login", login).get(0);
+        return user.getCampus();
     }
 }

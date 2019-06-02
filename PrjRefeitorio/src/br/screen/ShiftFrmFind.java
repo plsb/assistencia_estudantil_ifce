@@ -19,6 +19,7 @@ import br.student.Student;
 import br.student.StudentDAO;
 import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
+import br.util.UserActive;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -43,12 +44,14 @@ public class ShiftFrmFind extends javax.swing.JDialog {
     public void preencheTabela(String texto) {
         ShiftDAO sDAO = new ShiftDAO();
         if (texto.equals("")) {
-            ShiftTableModel ptm = new ShiftTableModel(new ArrayList(new HashSet(sDAO.list())));
+            ShiftTableModel ptm = new ShiftTableModel(new ArrayList(new HashSet(
+                    sDAO.checkExists("campus", UserActive.returnCampus()))));
             tbShift.setModel(ptm);
         } else {
             ShiftTableModel ptm = 
                     new ShiftTableModel(
-                            new ArrayList(new HashSet(sDAO.checkExistsLike("description", texto))));
+                            new ArrayList(new HashSet(sDAO.checkExistsLike("description", texto,
+                            "campus", UserActive.returnCampus()))));
             tbShift.setModel(ptm);
         }
 

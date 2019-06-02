@@ -13,6 +13,7 @@ import br.student.Student;
 import br.student.StudentDAO;
 import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
+import br.util.UserActive;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 
@@ -35,10 +36,11 @@ public class MealFrmFind extends javax.swing.JDialog {
     public void preencheTabela(String texto) {
         MealDAO mDAO = new MealDAO();
         if (texto.equals("")) {
-            MealTableModel ptm = new MealTableModel(mDAO.list());
+            MealTableModel ptm = new MealTableModel(mDAO.checkExists("campus", UserActive.returnCampus()));
             tbMeals.setModel(ptm);
         } else {
-            MealTableModel ptm = new MealTableModel(mDAO.checkExistsLike("description", texto));
+            MealTableModel ptm = new MealTableModel(mDAO.checkExistsLike("description", texto,
+                    "campus", UserActive.returnCampus()));
             tbMeals.setModel(ptm);
         }
 

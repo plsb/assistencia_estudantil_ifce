@@ -14,6 +14,7 @@ import br.meal.MealDAO;
 import br.shift.Shift;
 import br.shift.ShiftDAO;
 import br.util.ConnectionFactory;
+import br.util.UserActive;
 import br.util.Util;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
@@ -165,9 +166,8 @@ public class ReportTotalMealsByPeriod extends javax.swing.JDialog {
             e.printStackTrace();
         }
 
-        sql += "where s.date between '" + dataInicial + "' and '"
-                + dataFinal + "' group by s.date, m.id "
-                + "order by date";
+        sql +="where s.date between '" + dataInicial + "' and '"
+                + dataFinal + "' and s.campus_id="+UserActive.returnCampus().getId();
 
         //pega dados das configurações
         Config config = null;
@@ -183,16 +183,18 @@ public class ReportTotalMealsByPeriod extends javax.swing.JDialog {
         JasperReport pathjrxml;
         HashMap parametros = new HashMap();
         parametros.put("sql", sql);
+        parametros.put("campus", UserActive.returnCampus().getDescription());
+        
         Connection connection = new ConnectionFactory().getConnection();
         try {
             JDialog viewer = new JDialog(new javax.swing.JFrame(), "Visualização do Relatório", true);
             viewer.setSize(1200, 600);
             viewer.setLocationRelativeTo(null);
             viewer.setModal(true);
-            //String caminho = Util.retornaCaminhoApp()+ config.getPathReport() + "summaryMeals.jrxml";
+            String caminho = config.getPathReport() + "summaryMeals.jasper";
             //JOptionPane.showMessageDialog(rootPane, caminho);
-            pathjrxml = JasperCompileManager.compileReport("src/br/report/summaryMeals.jasper");
-            JasperPrint printReport = JasperFillManager.fillReport(pathjrxml, parametros,
+            //pathjrxml = JasperCompileManager.compileReport("src/br/report/summaryMeals.jasper");
+            JasperPrint printReport = JasperFillManager.fillReport(caminho, parametros,
                     connection);
             JasperViewer jv = new JasperViewer(printReport, false);
             viewer.getContentPane().add(jv.getContentPane());

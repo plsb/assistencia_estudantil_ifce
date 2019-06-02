@@ -12,6 +12,7 @@
  */
 package br.user;
 
+import br.campus.Campus;
 import br.util.Util;
 import java.io.Serializable;
 import java.util.Objects;
@@ -50,8 +51,9 @@ public class User implements Serializable, Comparable<User> {
     private String tipo;
     
     private boolean active;
-
-   
+    
+    @ManyToOne
+    private Campus campus;
 
     /**
      * @return String login.
@@ -125,7 +127,7 @@ public class User implements Serializable, Comparable<User> {
      */
     @Override
     public String toString() {
-        return this.name;
+        return this.getName();
     }
 
     /**
@@ -207,4 +209,20 @@ public class User implements Serializable, Comparable<User> {
     public void setId(Integer id) {
         this.id = id;
     }
+
+    /**
+     * @return the campus
+     */
+    public Campus getCampus() {
+        return campus;
+    }
+
+    /**
+     * @param campus the campus to set
+     */
+    public void setCampus(Campus campus) {
+        this.campus = campus;
+    }
+    
+    
 }

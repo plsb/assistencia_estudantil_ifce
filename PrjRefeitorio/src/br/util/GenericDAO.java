@@ -5,16 +5,13 @@
 package br.util;
 
 import java.sql.Time;
-import java.sql.Timestamp;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.MatchMode;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -108,6 +105,7 @@ public abstract class GenericDAO<T> {
         }
         return lista;
     }
+    
 
     public List<T> list(String orderBy) {
         List<T> lista = null;
@@ -115,6 +113,27 @@ public abstract class GenericDAO<T> {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(classe).addOrder(Order.asc(orderBy)).list();
+
+        } catch (Throwable e) {
+            JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
+            if (getTransacao().isActive()) {
+                getTransacao().rollback();
+            }
+
+        } finally {
+            sessao.close();
+        }
+        return lista;
+    }
+    
+    public List<T> list(String campo, Object valor,String orderBy) {
+        List<T> lista = null;
+        try {
+            this.setSessao(HibernateUtil.getSessionFactory().openSession());
+            setTransacao(getSessao().beginTransaction());
+            lista = this.getSessao().createCriteria(classe)
+                    .add(Restrictions.eq(campo, valor))
+                    .addOrder(Order.asc(orderBy)).list();
 
         } catch (Throwable e) {
             JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
@@ -163,6 +182,29 @@ public abstract class GenericDAO<T> {
         return lista;
 
     }
+    
+    public List<T> checkExists(String campo, Object valor, String campo2, Object valor2) {
+        List<T> lista = null;
+        try {
+            this.setSessao(HibernateUtil.getSessionFactory().openSession());
+            setTransacao(getSessao().beginTransaction());
+            lista = this.getSessao().createCriteria(classe)
+                    .add(Restrictions.eq(campo, valor))
+                    .add(Restrictions.eq(campo2, valor2)).list();
+            //Hibernate.initialize(lista);
+        } catch (Throwable e) {
+            if (getTransacao().isActive()) {
+                getTransacao().rollback();
+            }
+            JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
+        } finally {
+            sessao.close();
+        }
+        return lista;
+
+    }
+    
+    
 
     public List<T> checkExistsLike(String campo, String valor) {
         List<T> lista = null;
@@ -170,6 +212,27 @@ public abstract class GenericDAO<T> {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(classe).add(Restrictions.like(campo, valor, MatchMode.ANYWHERE)).list();
+
+        } catch (Throwable e) {
+            if (getTransacao().isActive()) {
+                getTransacao().rollback();
+            }
+            JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
+        } finally {
+            sessao.close();
+        }
+        return lista;
+
+    }
+    
+    public List<T> checkExistsLike(String campo, String valor, String campo2, Object valor2) {
+        List<T> lista = null;
+        try {
+            this.setSessao(HibernateUtil.getSessionFactory().openSession());
+            setTransacao(getSessao().beginTransaction());
+            lista = this.getSessao().createCriteria(classe)
+                    .add(Restrictions.eq(campo2, valor2))
+                    .add(Restrictions.like(campo, valor, MatchMode.ANYWHERE)).list();
 
         } catch (Throwable e) {
             if (getTransacao().isActive()) {

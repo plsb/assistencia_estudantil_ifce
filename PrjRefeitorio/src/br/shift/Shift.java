@@ -5,6 +5,7 @@
  */
 package br.shift;
 
+import br.campus.Campus;
 import br.course.*;
 import br.meal.Meal;
 import java.util.List;
@@ -16,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -39,6 +41,9 @@ public class Shift implements Comparable<Shift>{
             inverseJoinColumns =
             @JoinColumn(name = "idMeal"))
     private List<Meal> meals;
+    
+    @ManyToOne
+    private Campus campus;
    
     /**
      * @return the id
@@ -114,5 +119,21 @@ public class Shift implements Comparable<Shift>{
     public void setMeals(List<Meal> meals) {
         this.meals = meals;
     }
+
+    /**
+     * @return the campus
+     */
+    public Campus getCampus() {
+        return campus;
+    }
+
+    /**
+     * @param campus the campus to set
+     */
+    public void setCampus(Campus campus) {
+        this.campus = campus;
+    }
+    
+    
     
 }
