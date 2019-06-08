@@ -26,11 +26,11 @@ public class HibernateUtil {
             cfg.setProperty("hibernate.connection.password", LoadPropriedade.loadProperty("pass"));
             cfg.configure("hibernate.cfg.xml");
             return cfg.buildSessionFactory();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             // TODO: handle exception
             JOptionPane.showMessageDialog(null,"Criação inicial do objeto"
                     + " SessionFactory falhou. Erro: " + e.getMessage());
-            throw new ExceptionInInitializerError(e);
+            return null;// new ExceptionInInitializerError(e);
         }
     }
 

@@ -9,6 +9,9 @@ import br.campus.Campus;
 import br.meal.Meal;
 import br.student.Student;
 import br.user.User;
+import br.util.Util;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -49,10 +52,10 @@ public class Scheduling implements Comparable<Scheduling> {
 
     @ManyToOne
     private User user;
-    
+
     @ManyToOne
     private Campus campus;
-    
+
     private String absenceJustification;
 
     /**
@@ -138,20 +141,23 @@ public class Scheduling implements Comparable<Scheduling> {
     public void setWasPresent(boolean wasPresent) {
         this.wasPresent = wasPresent;
     }
+    
+    
 
     public String getSituaction() {
-        Date date = new Date();
-        if (this.getDate().before(date)) {
-            if(getAbsenceJustification()!=null){
-                return "Justificado";
-            }
-            if (isWasPresent()) {
-                return "Presente";
-            } else {
-                return "Ausente";
-            }
+        if (getAbsenceJustification() != null) {
+            return "Justificado";
         }
-        return "";
+        if (isWasPresent()) {
+            return "Presente";
+        } else {
+            SchedulingDAO dao = new SchedulingDAO();
+            if (Util.verityDateEquals(dao.getServerDate(), getDate())) {
+                return "";
+            }
+            return "Ausente";
+        }
+
     }
 
     @Override
@@ -215,5 +221,4 @@ public class Scheduling implements Comparable<Scheduling> {
         this.absenceJustification = absenceJustification;
     }
 
-    
 }

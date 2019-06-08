@@ -51,6 +51,7 @@ public class MainFrm extends javax.swing.JFrame {
             smiConfig.setVisible(true);
             mmReport.setVisible(true);
             smCampi.setVisible(true);
+            smRportCarteirinhas.setVisible(false);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("ASSIS_ESTU")){
         //Assistência Estudantil
             btStudent1.setEnabled(true);
@@ -64,6 +65,7 @@ public class MainFrm extends javax.swing.JFrame {
             smiConfig.setVisible(false);
             mmReport.setVisible(true);
             smCampi.setVisible(false);
+            smRportCarteirinhas.setVisible(true);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")){
         //Recepção
             btStudent1.setEnabled(false);
@@ -78,6 +80,7 @@ public class MainFrm extends javax.swing.JFrame {
             smiConfig.setVisible(false);
             mmReport.setVisible(false);
             smCampi.setVisible(false);
+            smRportCarteirinhas.setVisible(false);
         }
     }
 
@@ -115,6 +118,7 @@ public class MainFrm extends javax.swing.JFrame {
         smShift = new javax.swing.JMenuItem();
         smUsers = new javax.swing.JMenuItem();
         mmReport = new javax.swing.JMenu();
+        smRportCarteirinhas = new javax.swing.JMenuItem();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         smPermissionMeal = new javax.swing.JMenuItem();
@@ -257,6 +261,14 @@ public class MainFrm extends javax.swing.JFrame {
 
         mmReport.setText("Relatórios");
 
+        smRportCarteirinhas.setText("Carteirinhas");
+        smRportCarteirinhas.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smRportCarteirinhasActionPerformed(evt);
+            }
+        });
+        mmReport.add(smRportCarteirinhas);
+
         jMenuItem1.setText("Total de Refeições");
         jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -361,6 +373,11 @@ public class MainFrm extends javax.swing.JFrame {
         cff.setVisible(true);
     }//GEN-LAST:event_smCampiActionPerformed
 
+    private void smRportCarteirinhasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smRportCarteirinhasActionPerformed
+        ReportCarteirinhas rc = new ReportCarteirinhas();
+        rc.setVisible(true);
+    }//GEN-LAST:event_smRportCarteirinhasActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -423,6 +440,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem smChangePass;
     private javax.swing.JMenuItem smCursos;
     private javax.swing.JMenuItem smPermissionMeal;
+    private javax.swing.JMenuItem smRportCarteirinhas;
     private javax.swing.JMenuItem smShift;
     private javax.swing.JMenuItem smUsers;
     private javax.swing.JMenuItem smiConfig;

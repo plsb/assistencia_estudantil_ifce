@@ -5,6 +5,8 @@
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w1" value="479"/>
 	<property name="com.jaspersoft.studio.data.sql.SQLQueryDesigner.sash.w2" value="521"/>
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="Sample DB"/>
+	<parameter name="sql" class="java.lang.String"/>
+	<parameter name="campus" class="java.lang.String"/>
 	<queryString language="SQL">
 		<![CDATA[select 
 	s.id, 
@@ -14,7 +16,8 @@
     c.description as course
 	from student s
 inner join course c on c.id=s.course_id
-]]>
+$P!{sql}
+order by s.name]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<property name="com.jaspersoft.studio.field.label" value="id"/>
@@ -40,17 +43,17 @@ inner join course c on c.id=s.course_id
 		<band height="199" splitType="Stretch">
 			<property name="com.jaspersoft.studio.layout"/>
 			<rectangle>
-				<reportElement x="0" y="1" width="280" height="193" uuid="530de89e-8a84-4c3a-9bc6-643905a4098f"/>
+				<reportElement x="0" y="1" width="290" height="193" uuid="530de89e-8a84-4c3a-9bc6-643905a4098f"/>
 			</rectangle>
 			<textField>
-				<reportElement x="39" y="34" width="181" height="12" uuid="51842d8d-5c7e-413b-ae43-b7f16515d328"/>
+				<reportElement x="37" y="38" width="252" height="12" uuid="51842d8d-5c7e-413b-ae43-b7f16515d328"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id} + " - " +$F{name}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="35" width="35" height="12" uuid="a60c7555-c87f-43d3-a97c-6ca885e1939b"/>
+				<reportElement x="3" y="38" width="35" height="12" uuid="a60c7555-c87f-43d3-a97c-6ca885e1939b"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 					<paragraph lineSpacing="Single" lineSpacingSize="1.0" tabStopWidth="40"/>
@@ -58,48 +61,41 @@ inner join course c on c.id=s.course_id
 				<text><![CDATA[Aluno:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="39" y="49" width="181" height="12" uuid="1255a458-75ec-4e39-a28d-0c6e104127e3"/>
+				<reportElement x="37" y="52" width="181" height="12" uuid="1255a458-75ec-4e39-a28d-0c6e104127e3"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{mat}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="49" width="35" height="12" uuid="8dd0b294-2473-4c16-ba4c-963270a77781"/>
+				<reportElement x="3" y="52" width="35" height="12" uuid="8dd0b294-2473-4c16-ba4c-963270a77781"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Mat:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="66" y="76" width="80" height="12" uuid="eea8b2b7-41b8-4e96-8ce0-6552f9c6f40e"/>
+				<reportElement x="64" y="79" width="80" height="12" uuid="eea8b2b7-41b8-4e96-8ce0-6552f9c6f40e"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[new java.text.SimpleDateFormat("dd/MM/yyyy").format($F{dateValid})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="5" y="76" width="60" height="12" uuid="f7375b4c-630f-48cd-ac05-7e27eea2309f"/>
+				<reportElement x="3" y="79" width="60" height="12" uuid="f7375b4c-630f-48cd-ac05-7e27eea2309f"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Dt. Validade:]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="0" y="10" width="280" height="16" uuid="d64900ef-0959-4eeb-baa9-cbd1f0f30143"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[ASSISTÊNCIA ESTUDANTIL - IFCE CAMPUS CEDRO]]></text>
-			</staticText>
 			<line>
-				<reportElement x="0" y="32" width="280" height="1" uuid="354c955e-d5dc-4efb-b1e2-b08c776e2221"/>
+				<reportElement x="0" y="30" width="289" height="1" uuid="354c955e-d5dc-4efb-b1e2-b08c776e2221"/>
 			</line>
 			<line>
-				<reportElement x="0" y="88" width="280" height="1" uuid="9b727a8c-bd40-4969-9ee4-a916e8cd5769"/>
+				<reportElement x="0" y="106" width="290" height="1" uuid="9b727a8c-bd40-4969-9ee4-a916e8cd5769"/>
 			</line>
 			<subreport>
-				<reportElement x="0" y="94" width="280" height="100" uuid="4afb5e52-14d3-47b2-8b5f-24ea7f80d8dd"/>
+				<reportElement x="0" y="110" width="289" height="84" uuid="4afb5e52-14d3-47b2-8b5f-24ea7f80d8dd"/>
 				<subreportParameter name="idStudent">
 					<subreportParameterExpression><![CDATA[$F{id}]]></subreportParameterExpression>
 				</subreportParameter>
@@ -107,25 +103,26 @@ inner join course c on c.id=s.course_id
 				<subreportExpression><![CDATA["carteirinhas_permission_meals.jasper"]]></subreportExpression>
 			</subreport>
 			<staticText>
-				<reportElement x="6" y="62" width="35" height="12" uuid="674068e7-6802-407c-985b-6adf113ccea3"/>
+				<reportElement x="4" y="65" width="35" height="12" uuid="674068e7-6802-407c-985b-6adf113ccea3"/>
 				<textElement>
 					<font fontName="Arial" size="10"/>
 				</textElement>
 				<text><![CDATA[Curso:]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="40" y="62" width="180" height="12" uuid="09da89ad-5650-4fc9-ba58-c1a3037c4d16"/>
+				<reportElement x="38" y="65" width="180" height="12" uuid="09da89ad-5650-4fc9-ba58-c1a3037c4d16"/>
 				<textElement>
 					<font fontName="Arial" size="10" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{course}]]></textFieldExpression>
 			</textField>
-			<componentElement>
-				<reportElement x="220" y="32" width="60" height="56" uuid="2aaf817b-1021-4ee1-8809-243f19a58bbc"/>
-				<jr:QRCode xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
-					<jr:codeExpression><![CDATA[$F{id}]]></jr:codeExpression>
-				</jr:QRCode>
-			</componentElement>
+			<textField>
+				<reportElement x="0" y="10" width="289" height="21" uuid="7d4473a7-0d8b-4953-bb9e-343efeb1b281"/>
+				<textElement textAlignment="Center">
+					<font fontName="Arial" size="9" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ASSISTÊNCIA ESTUDANTIL - IFCE CAMPUS "+$P{campus}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

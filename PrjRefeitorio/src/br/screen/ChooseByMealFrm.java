@@ -52,7 +52,6 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         tbStudents.setAutoCreateRowSorter(true);
         preencheTabela(null, 0, "");
         if (UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")) {
-            btBlock.setEnabled(false);
             btDelete.setEnabled(false);
         }
     }
@@ -164,7 +163,6 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         cbOpcao = new javax.swing.JComboBox();
         jLabel1 = new javax.swing.JLabel();
-        btBlock = new javax.swing.JButton();
         btDelete = new javax.swing.JButton();
         edDate = new javax.swing.JFormattedTextField();
         btExcel = new javax.swing.JButton();
@@ -256,21 +254,13 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         jLabel1.setText("Refeição:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 20, -1, -1));
 
-        btBlock.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/pinkblock_6304.png"))); // NOI18N
-        btBlock.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btBlockActionPerformed(evt);
-            }
-        });
-        jPanel1.add(btBlock, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 430, -1, -1));
-
         btDelete.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/ic_delete_128_28267.png"))); // NOI18N
         btDelete.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btDeleteActionPerformed(evt);
             }
         });
-        jPanel1.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 430, -1, -1));
+        jPanel1.add(btDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 430, -1, -1));
 
         try {
             edDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##/##/####")));
@@ -360,29 +350,6 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         preencheTabela(data, cbOpcao.getSelectedIndex(), tfNameStudent.getText());
 
     }//GEN-LAST:event_btSearchActionPerformed
-
-    private void btBlockActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btBlockActionPerformed
-        if (JOptionPane.showConfirmDialog(rootPane, "Deseja Bloquear todos os alunos que não compareceram nesse dia?",
-                "Bloquear Aluno", JOptionPane.YES_NO_OPTION)
-                == JOptionPane.YES_OPTION) {
-            if (list != null) {
-                if (list.size() > 0) {
-                    StudentDAO dao = new StudentDAO();
-                    for (Scheduling s : list) {
-                        if (s.isWasPresent() == false && s.getSituaction().equals("Ausente")) {
-                            Student student = s.getStudent();
-                            student.setBlock(true);
-                            dao.update(student);
-                        }
-                    }
-                    JOptionPane.showMessageDialog(rootPane, "Alunos bloqueados com sucesso.");
-                } else {
-                    JOptionPane.showMessageDialog(rootPane, "A lista está vazia.");
-                }
-            }
-
-        }
-    }//GEN-LAST:event_btBlockActionPerformed
 
     private void btDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btDeleteActionPerformed
         if (tbStudents.getSelectedRow() < 0) {
@@ -608,7 +575,6 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btBlock;
     private javax.swing.JButton btDelete;
     private javax.swing.JButton btExcel;
     private javax.swing.JButton btSearch;

@@ -26,7 +26,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class StudentTableModel extends AbstractTableModel {
 
-    private String[] nomeColunas = {"Código", "Matrícula", "Nome", "Curso", "Turno", "Validade","", ""};
+    private String[] nomeColunas = {"Código", "Matrícula", "Nome", "Curso", "Turno", "Validade", ""};
     private List<Student> students;
 
     /**
@@ -86,8 +86,6 @@ public class StudentTableModel extends AbstractTableModel {
             case 5:
                 return s.getDateValid()!=null ? new SimpleDateFormat("dd/MM/yyyy").format( s.getDateValid()) : "";
             case 6:
-                return (s.getBlock());
-            case 7:
                 return (s.getActive());
 
         }

@@ -28,7 +28,7 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class StudentSchedulingTableModel extends AbstractTableModel {
 
-    private String[] nomeColunas = {"Código", "Refeição", "Data", "Situação"};
+    private String[] nomeColunas = {"Código", "Refeição", "Data", "Situação", "Justificativa"};
     private List<Scheduling> schedulings;
 
     /**
@@ -82,7 +82,9 @@ public class StudentSchedulingTableModel extends AbstractTableModel {
             case 2:
                 return new SimpleDateFormat("dd/MM/yyyy").format( s.getDate());
             case 3:
-                return s.getSituaction(); 
+                return s.getSituaction();
+            case 4:
+                return s.getAbsenceJustification();
                
 
         }
@@ -109,6 +111,8 @@ public class StudentSchedulingTableModel extends AbstractTableModel {
                 return nomeColunas[2];
             case 3:
                 return nomeColunas[3];
+            case 4:
+                return nomeColunas[4];
         }
         return null;
     }

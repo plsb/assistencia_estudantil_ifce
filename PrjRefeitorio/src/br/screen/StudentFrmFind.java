@@ -17,6 +17,7 @@ import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
@@ -47,10 +48,23 @@ public class StudentFrmFind extends javax.swing.JDialog {
                     new HashSet(sDAO.checkExists("campus", UserActive.returnCampus()))));
             tbStudents.setModel(ptm);
         } else {
+            List<Student> list = sDAO.checkExistsLike("name", texto,
+                            "campus", UserActive.returnCampus());
+            if(list.size()==0){
+                Integer codigo = 0;
+                try {
+                     codigo = Integer.parseInt(texto);
+                } catch (Exception e) {
+                }
+                if(codigo != 0){
+                    list = sDAO.checkExists("id", codigo,
+                            "campus", UserActive.returnCampus());
+                }
+                
+            }
+            
             StudentTableModel ptm = new StudentTableModel(
-                    new ArrayList(new HashSet(sDAO.checkExistsLike("name", texto,
-                            "campus", UserActive.returnCampus())))
-                    );
+                    new ArrayList(new HashSet(list)));
             tbStudents.setModel(ptm);
         }
 
@@ -62,21 +76,23 @@ public class StudentFrmFind extends javax.swing.JDialog {
                     boolean isSelected, boolean hasFocus, int row, int column) {
                 Component comp = super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
                 //A coluna do status é 3
-                Object ref = table.getValueAt(row, 6);//Coluna Status
+                //Object ref = table.getValueAt(row, 6);//Coluna Status
                 //Coloca cor em todas as linhas,COLUNA(3) que tem o valor "Aberto"
                 
-                if (ref != null && ref.equals("Bloqueado")) {//Se Status for igual a "Aberto"
+                /*if (ref != null && ref.equals("Bloqueado")) {//Se Status for igual a "Aberto"
                     Color cor = new Color(255, 127, 80);
                     setBackground(cor);
                 } else {
                     setBackground(Color.WHITE);
-                } 
+                } */
                 //se inativo
-                ref = table.getValueAt(row, 7);//Coluna Status
+                Object ref = table.getValueAt(row, 6);//Coluna Status
                 //Coloca cor em todas as linhas,COLUNA(3) que tem o valor "Aberto"
                 if (ref != null && ref.equals("Inativo")) {//Se Status for igual a "Aberto"
                     Color cor = new Color(112,128,144);
                     setBackground(cor);
+                } else {
+                    setBackground(Color.WHITE);
                 }
                 
                 comp.setForeground(Color.black);
@@ -180,7 +196,7 @@ public class StudentFrmFind extends javax.swing.JDialog {
         jPanel1.add(tfPesquisarNome, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 30, 420, -1));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jLabel1.setText("Pesquisar por nome:");
+        jLabel1.setText("Pesquisar por nome ou código:");
         jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, -1, -1));
 
         btnDelete.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N

@@ -7,37 +7,23 @@ package br.screen;
 
 import br.config.Config;
 import br.config.ConfigDAO;
-import br.course.Course;
-import br.course.CourseDAO;
-import br.meal.Meal;
-import br.meal.MealDAO;
-import br.shift.Shift;
-import br.shift.ShiftDAO;
 import br.util.ConnectionFactory;
 import br.util.UserActive;
-import br.util.Util;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.DefaultListModel;
 import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
-import org.hibernate.Hibernate;
 
 /**
  *

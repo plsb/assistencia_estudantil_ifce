@@ -23,6 +23,7 @@ import br.shift.ShiftTableModel;
 import br.student.Student;
 import br.student.StudentDAO;
 import br.student.StudentSchedulingTableModel;
+import br.util.ConnectionFactory;
 import br.util.FormatSizeColJTable;
 import br.util.OnlyNumberField;
 import br.util.UserActive;
@@ -34,20 +35,30 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigInteger;
+import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableCellRenderer;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -57,6 +68,20 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
     private Student student;
     private File file;
+    
+    public void verifyBloqueado(){
+        SchedulingDAO sDAO = new SchedulingDAO();
+        List<Scheduling> listBlock = sDAO.verifyStudentBlocked(student);
+        if(listBlock!=null){
+            //verifica se ta bloqueado
+            if(listBlock.size()>0){
+                lblBloqueado.setVisible(true);
+                return;
+            }
+        }
+        lblBloqueado.setVisible(false);
+        return;
+    }
 
     /**
      * Creates new form RegisterStudent
@@ -73,24 +98,25 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         //tfMat.setDocument(new OnlyNumberField());
         tbbPanStudente.setEnabledAt(1, false);
         tbbPanStudente.setEnabledAt(2, false);
-        this.student.setBlock(false);
         cbActive.setSelected(true);
+        btnCarteirinha.setVisible(false);
+        verifyBloqueado();
     }
 
     public StudentFrmRegister(Student student) {
         initComponents();
         setLocationRelativeTo(null);
         setModal(true);
-        setTitle("Edição de Aluno");
+        setTitle("Edição de Aluno ["+student.getName()+"]");
         insertCourse();
         insertShift();
         //tfMat.setDocument(new OnlyNumberField());
         this.student = student;
         tfName.setText(student.getName());
         tfMat.setText(student.getMat());
-        if (student.isBlock()) {
+        /*if (student.isBlock()) {
             chbBlock.setSelected(true);
-        }
+        }*/
         if (student.isSemRegular()) {
             chbAlunoSemRegu.setSelected(true);
         }
@@ -128,6 +154,8 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         preencheTabelaHist();
 
         preencheTabelaAllowMeal();
+        
+        verifyBloqueado();
     }
 
     public void insertCourse() {
@@ -159,6 +187,8 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         List<StudentAllowMealDay> list = samDAO.checkExists("student", this.student);
         StudentAllowMealDayTableModel atm = new StudentAllowMealDayTableModel(list);
         tbAllowMeal.setModel(atm);
+        
+        FormatSizeColJTable.packColumns(tbAllowMeal, 1);
     }
 
     public void preencheTabelaHist() {
@@ -211,7 +241,6 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         tfMat = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         tfName = new javax.swing.JTextField();
-        chbBlock = new javax.swing.JCheckBox();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         cbCourse = new javax.swing.JComboBox();
@@ -224,6 +253,8 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         chbAlunoSemRegu = new javax.swing.JCheckBox();
         jPanel3 = new javax.swing.JPanel();
         lblPhoto = new javax.swing.JLabel();
+        btnCarteirinha = new javax.swing.JButton();
+        lblBloqueado = new javax.swing.JLabel();
         pnlMeals = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbStudentMeals = new javax.swing.JTable();
@@ -258,10 +289,6 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
         tfName.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         pnlDIni.add(tfName, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, 450, -1));
-
-        chbBlock.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        chbBlock.setText("Bloqueado");
-        pnlDIni.add(chbBlock, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 20, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Matrícula: *");
@@ -327,6 +354,21 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         jPanel3.add(lblPhoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 150));
 
         pnlDIni.add(jPanel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 90, 150, 170));
+
+        btnCarteirinha.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/find_search_card_user_16713-2.png"))); // NOI18N
+        btnCarteirinha.setToolTipText("Carteirinha");
+        btnCarteirinha.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCarteirinhaActionPerformed(evt);
+            }
+        });
+        pnlDIni.add(btnCarteirinha, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 270, -1, -1));
+
+        lblBloqueado.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
+        lblBloqueado.setForeground(new java.awt.Color(255, 51, 51));
+        lblBloqueado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBloqueado.setText("CADASTRO BLOQUEADO");
+        pnlDIni.add(lblBloqueado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, 260, 30));
 
         tbbPanStudente.addTab("Dados Inicias", pnlDIni);
 
@@ -466,7 +508,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane, "Matrícula incorreta! Informe apenas números");
         }
 
-        student.setBlock(chbBlock.isSelected());
+        //student.setBlock(chbBlock.isSelected());
         student.setSemRegular(chbAlunoSemRegu.isSelected());
         if (cbCourse.getSelectedIndex() > 0) {
             student.setCourse((Course) cbCourse.getSelectedItem());
@@ -596,8 +638,51 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                 JustificationFrmRegister jfr = new JustificationFrmRegister(select);
                 jfr.setVisible(true);
             }
+            verifyBloqueado();
         }
     }//GEN-LAST:event_tbStudentMealsMouseClicked
+
+    private void btnCarteirinhaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCarteirinhaActionPerformed
+        String sql ="where s.id=" + student.getId();
+
+        //pega dados das configurações
+        Config config = null;
+        ConfigDAO dao = new ConfigDAO();
+        List<Config> list = dao.list();
+        if (list != null) {
+            if (list.size() > 0) {
+                config = list.get(0);
+            }
+        }
+
+        // TODO add your handling code here:
+        JasperReport pathjrxml;
+        HashMap parametros = new HashMap();
+        parametros.put("sql", sql);
+        parametros.put("campus", UserActive.returnCampus().getDescription());
+        
+        Connection connection = new ConnectionFactory().getConnection();
+        try {
+            JDialog viewer = new JDialog(new javax.swing.JFrame(), "Visualização do Relatório", true);
+            viewer.setSize(1200, 600);
+            viewer.setLocationRelativeTo(null);
+            viewer.setModal(true);
+            String caminho = config.getPathReport() + "carteirinhas.jasper";
+            //JOptionPane.showMessageDialog(rootPane, caminho);
+            //pathjrxml = JasperCompileManager.compileReport("src/br/report/summaryMeals.jasper");
+            JasperPrint printReport = JasperFillManager.fillReport(caminho, parametros,
+                    connection);
+            JasperViewer jv = new JasperViewer(printReport, false);
+            viewer.getContentPane().add(jv.getContentPane());
+            viewer.setVisible(true);
+            //JasperExportManager.exportReportToPdfFile(printReport, "src/relatorios/RelAcervo.pdf");
+
+            //jv.setVisible(true);
+        } catch (JRException ex) {
+            JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "IFCE", JOptionPane.ERROR_MESSAGE);
+            Logger.getLogger(ReportTotalMealsByPeriod.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_btnCarteirinhaActionPerformed
 
     private void insertImage(String path) {
         ImageIcon image = new ImageIcon(path);
@@ -652,13 +737,13 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btEditAllowStudentMeal;
+    private javax.swing.JButton btnCarteirinha;
     private javax.swing.JCheckBox cbActive;
     private javax.swing.JButton cbAddStudentAllowMealDay;
     private javax.swing.JComboBox cbCourse;
     private javax.swing.JButton cbDeletarAllowStudentDay;
     private javax.swing.JComboBox cbShift;
     private javax.swing.JCheckBox chbAlunoSemRegu;
-    private javax.swing.JCheckBox chbBlock;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
@@ -673,6 +758,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblBloqueado;
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblPhoto;
     private javax.swing.JPanel pnlDIni;

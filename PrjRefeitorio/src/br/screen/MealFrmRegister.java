@@ -41,7 +41,7 @@ public class MealFrmRegister extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         setModal(true);
-        setTitle("Edição de Refeição");
+        setTitle("Edição de Refeição ["+meal.getDescription()+"]");
         this.meal = meal;
         tfDesc.setText(meal.getDescription());
         //tfTimeInitial.setText(String.valueOf(meal.getMat()));

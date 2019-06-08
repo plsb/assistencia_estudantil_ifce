@@ -5,6 +5,8 @@
  */
 package br.util;
 
+import br.scheduling.Scheduling;
+import br.scheduling.SchedulingDAO;
 import br.student.Student;
 import br.student.StudentDAO;
 import java.awt.Component;
@@ -311,19 +313,28 @@ public class Util {
     }
 
     public static boolean verifyStudent(Component component, Student student) {
-        if (student.isActive() == false) {
-            JOptionPane.showMessageDialog(component, "O cadastro de " + student.getName()
-                    + " está inativo!", "IFCE", JOptionPane.ERROR_MESSAGE);
+        SchedulingDAO sDAO = new SchedulingDAO();
+        List<Scheduling> listBlock = sDAO.verifyStudentBlocked(student);
+        if(listBlock!=null){
+            //verifica se estar bloqueado
+            if(listBlock.size()>0){
+                JOptionPane.showMessageDialog(component, "O cadastro do estudante [" + student.getName()
+                    + "] \n está bloqueado!", "IFCE", JOptionPane.ERROR_MESSAGE);
+                return false;
+            }
+        } else if (student.isActive() == false) {
+            JOptionPane.showMessageDialog(component, "O cadastro do estudante [" + student.getName()
+                    + "]\n está inativo!", "IFCE", JOptionPane.ERROR_MESSAGE);
             return false;
-        } else if (student.isBlock()) {
+        } /*else if (student.isBlock()) {
             JOptionPane.showMessageDialog(component, "O cadastro de " + student.getName()
                     + " está bloqueado!", "IFCE", JOptionPane.ERROR_MESSAGE);
             return false;
-        } else if (student.getDateValid() != null) {
+        }*/ else if (student.getDateValid() != null) {
 
             if ((new Date()).after(student.getDateValid())) {
-                JOptionPane.showMessageDialog(component, "O cadastro de " + student.getName()
-                        + " está desatualizado!", "IFCE", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(component, "O cadastro do estudante [" + student.getName()
+                        + "]\n está desatualizado!", "IFCE", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         }
@@ -332,7 +343,7 @@ public class Util {
     }
 
     public static double getVersionSystem() {
-        return 2.2;
+        return 2.8;
     }
 
     public static File copyArquivo(String source, String destination, int w, int h) {
@@ -440,4 +451,29 @@ public class Util {
             ex.printStackTrace();
         }
     }*/
+    
+    public static boolean verityDateEquals(Date dateAct, Date dateOld){
+        
+        Date data = dateAct;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        String date1 = sdf.format(data);
+        
+        data = dateOld;
+        String data2 = sdf.format(data);
+        if (date1.equals(data2)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public static int returnDayWeek(Date date){
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);  
+        int day = cal.get(Calendar.DAY_OF_WEEK);
+        //1 Sunday ... 7 Saturday
+        return day;
+    }
+    
+    
 }

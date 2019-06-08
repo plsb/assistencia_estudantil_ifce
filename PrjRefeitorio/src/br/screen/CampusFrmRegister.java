@@ -45,7 +45,7 @@ public class CampusFrmRegister extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         setModal(true);
-        setTitle("Edição de Campus");
+        setTitle("Edição de Campus ["+campus.getDescription()+"]");
         this.campus = campus;
         tfDesc.setText(campus.getDescription());
     }

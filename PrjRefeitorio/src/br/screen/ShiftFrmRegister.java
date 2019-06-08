@@ -47,7 +47,7 @@ public class ShiftFrmRegister extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         setModal(true);
-        setTitle("Edição de Turno");
+        setTitle("Edição de Turno ["+shift.getDescription()+"");
         insertMeals();
         this.shift = shift;
         insertListMeals(shift.getMeals());

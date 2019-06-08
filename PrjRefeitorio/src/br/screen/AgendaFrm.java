@@ -5,6 +5,8 @@
  */
 package br.screen;
 
+import br.allowsmd.StudentAllowMealDay;
+import br.allowsmd.StudentAllowMealDayDAO;
 import br.config.Config;
 import br.config.ConfigDAO;
 import br.meal.Meal;
@@ -390,6 +392,16 @@ public class AgendaFrm extends javax.swing.JDialog {
                 "IFCE", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             SchedulingDAO sDAO = new SchedulingDAO();
             for (Meal m : meals) {
+                /*
+                CÓDIGO DE VERIFICAÇÃO DAS PERMISSÕES
+                */
+                if(verifyPermissionMeal(m, student)==false){
+                    JOptionPane.showMessageDialog(rootPane, "O estudante ["+
+                            student.getName()+"] \n não tem permissão para a refeição ["+
+                            m.getDescription()+"] no dia de hoje.",
+                            "IFCE", JOptionPane.ERROR_MESSAGE);
+                    continue;
+                }
 
                 List listStudentDateMeal = sDAO.schedulingDateStudentMeal(new Date(), student, m);
                 //se já foi cadastrado a refeição para o estudante, passa para o próximo
@@ -413,6 +425,56 @@ public class AgendaFrm extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btAddStudentMealActionPerformed
 
+    public boolean verifyPermissionMeal(Meal m, Student s){
+        StudentAllowMealDayDAO samDAO = new StudentAllowMealDayDAO();
+        List<StudentAllowMealDay> listPermissionStudent = samDAO.checkExists("student", s);
+        
+        int day = Util.returnDayWeek(samDAO.getServerDate());
+        
+        List<StudentAllowMealDay> amds = samDAO.checkExists("student", student, 
+                    "meal", m);
+        if(amds!=null){
+            if(amds.size()>0){
+                StudentAllowMealDay amd = amds.get(0);
+                switch(day){
+                    case 2 :
+                        if(amd.isMonday()){
+                            return true;
+                        }
+                        break;
+                    case 3 :
+                        if(amd.isTuesday()){
+                            return true;
+                        }
+                        break;
+                    case 4 :
+                        if(amd.isWednesday()){
+                            return true;
+                        }
+                        break;
+                    case 5 :
+                        if(amd.isThursday()){
+                            return true;
+                        }
+                        break;
+                    case 6 :
+                        if(amd.isFriday()){
+                            return true;
+                        }
+                        break;
+                    case 7 :
+                        if(amd.isSaturday()){
+                            return true;
+                        }
+                        break;
+                        
+                }
+            }
+        }
+       return false;
+    }
+    
+    
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
 
     }//GEN-LAST:event_formKeyPressed

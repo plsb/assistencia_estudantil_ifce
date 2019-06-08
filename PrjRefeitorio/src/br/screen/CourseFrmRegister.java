@@ -35,7 +35,7 @@ public class CourseFrmRegister extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         setModal(true);
-        setTitle("Edição de Curso");
+        setTitle("Edição de Curso ["+course.getDescription()+"]");
         this.course = course;
         tfDesc.setText(course.getDescription());
         tfSigla.setText(course.getInitials());

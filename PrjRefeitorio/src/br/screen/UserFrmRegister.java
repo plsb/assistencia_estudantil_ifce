@@ -40,7 +40,7 @@ public class UserFrmRegister extends javax.swing.JDialog {
         initComponents();
         setLocationRelativeTo(null);
         setModal(true);
-        setTitle("Edição de Usuário");
+        setTitle("Edição de Usuário ["+user.getName()+"");
         insertCampus();
         this.user = user;
         tfName.setText(user.getName());

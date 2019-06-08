@@ -35,8 +35,6 @@ public class Student implements Comparable<Student> {
     
     private String name;
     
-    private boolean block;
-    
     private boolean active;
     
     private boolean semRegular;
@@ -103,20 +101,6 @@ public class Student implements Comparable<Student> {
     }
 
     /**
-     * @return the block
-     */
-    public boolean isBlock() {
-        return block;
-    }
-
-    /**
-     * @param block the block to set
-     */
-    public void setBlock(boolean block) {
-        this.block = block;
-    }
-
-    /**
      * @return the course
      */
     public Course getCourse() {
@@ -128,14 +112,6 @@ public class Student implements Comparable<Student> {
      */
     public void setCourse(Course course) {
         this.course = course;
-    }
-
-    public String getBlock(){
-        if(isBlock()){
-            return "Bloqueado";
-        } else {
-            return "";
-        }
     }
     
     public String getActive(){

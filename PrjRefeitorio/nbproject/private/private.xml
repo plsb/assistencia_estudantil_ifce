@@ -6,9 +6,8 @@
             <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/screen/ReportTotalMealsByPeriod.java</file>
             <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/hibernate.cfg.xml</file>
             <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/util/Util.java</file>
-            <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/screen/StudentAllowMealRegisterFrm.java</file>
             <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/util/ConnectionFactory.java</file>
-            <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/screen/AllowMealStudentFrm.java</file>
+            <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/util/HibernateUtil.java</file>
         </group>
     </open-files>
 </project-private>

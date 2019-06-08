@@ -10,9 +10,11 @@ import br.student.Student;
 import br.util.GenericDAO;
 import br.util.HibernateUtil;
 import br.util.UserActive;
+import br.util.Util;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
+import org.hibernate.SQLQuery;
 import org.hibernate.criterion.Expression;
 import org.hibernate.criterion.Restrictions;
 
@@ -68,6 +70,34 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
 
     }
     
+    public List<Scheduling> verifyStudentBlocked(Student s) {
+        List<Scheduling> lista = null;
+        try {
+            this.setSessao(HibernateUtil.getSessionFactory().openSession());
+            setTransacao(getSessao().beginTransaction());
+            
+            SQLQuery query = this.getSessao().createSQLQuery("SELECT CURDATE()");
+            Date date = (Date) query.uniqueResult();
+            
+            
+            lista = this.getSessao().createCriteria(Scheduling.class)
+                    .add(Restrictions.eq("student", s))
+                    .add(Restrictions.eq("wasPresent", false))
+                    .add(Restrictions.lt("date", date))
+                    .add(Restrictions.isNull("absenceJustification")).list();
+            
+        } catch (Throwable e) {
+            if (getTransacao().isActive()) {
+                getTransacao().rollback();
+            }
+            JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
+        } finally {
+            this.getSessao().close();
+        }
+        return lista;
+
+    }
+    
     
     public List<Scheduling> schedulingDateStudentMeal(Date date, Student student, Meal meal) {
         List<Scheduling> lista = null;
@@ -84,7 +114,7 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             }
             JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
         } finally {
-            getSessao().close();
+            this.getSessao().close();
         }
         return lista;
 
@@ -104,7 +134,7 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             }
             JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
         } finally {
-            getSessao().close();
+            this.getSessao().close();
         }
         return lista;
 
@@ -125,7 +155,7 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             }
             JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
         } finally {
-            getSessao().close();
+            this.getSessao().close();
         }
         return lista;
 
@@ -149,7 +179,7 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             }
             JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
         } finally {
-            getSessao().close();
+            this.getSessao().close();
         }
         return lista;
 
