@@ -11,30 +11,27 @@ import br.allowsmd.StudentAllowMealDayTableModel;
 import br.config.Config;
 import br.config.ConfigDAO;
 import br.course.Course;
-import br.course.CourseDAO;
-import br.meal.Meal;
-import br.meal.MealDAO;
+import br.course.CourseDAO;import br.republic.ItensRepublic;
+import br.republic.ItensRepublicDAO;
+import br.republic.Republic;
+import br.republic.RepublicTableModel;
+;
 import br.scheduling.Scheduling;
 import br.scheduling.SchedulingDAO;
-import br.scheduling.SchedulingTableModel;
 import br.shift.Shift;
 import br.shift.ShiftDAO;
-import br.shift.ShiftTableModel;
 import br.student.Student;
 import br.student.StudentDAO;
 import br.student.StudentSchedulingTableModel;
 import br.util.ConnectionFactory;
 import br.util.FormatSizeColJTable;
-import br.util.OnlyNumberField;
 import br.util.UserActive;
 import br.util.Util;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import java.awt.Image;
-import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
-import java.math.BigInteger;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -46,7 +43,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -80,7 +76,6 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             }
         }
         lblBloqueado.setVisible(false);
-        return;
     }
 
     /**
@@ -98,9 +93,9 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         //tfMat.setDocument(new OnlyNumberField());
         tbbPanStudente.setEnabledAt(1, false);
         tbbPanStudente.setEnabledAt(2, false);
-        cbActive.setSelected(true);
+        tbbPanStudente.setEnabledAt(3, false);
         btnCarteirinha.setVisible(false);
-        verifyBloqueado();
+        lblBloqueado.setVisible(false);
     }
 
     public StudentFrmRegister(Student student) {
@@ -151,14 +146,27 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             } catch (Exception e) {
             }
         }
+        
+        taObs.setText(student.getObservation());
         preencheTabelaHist();
 
         preencheTabelaAllowMeal();
         
         verifyBloqueado();
+        
+        //republica
+        insertTableRepublic();
+        
+        //verifica se data data de validade
+        if(Util.verifyDateVenciment(student.getDateValid(), new Date())){
+            tfDateValid.setForeground(Color.WHITE); // altera a cor da fonte
+            tfDateValid.setBackground(Color.RED);  // altera a cor do fundo
+            tfDateValid.setFont(new Font("Verdana", Font.BOLD, 15));
+        }
+        
     }
 
-    public void insertCourse() {
+    private void insertCourse() {
         cbCourse.removeAllItems();
         cbCourse.addItem("-");
 
@@ -170,7 +178,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         }
     }
 
-    public void insertShift() {
+    private void insertShift() {
         cbShift.removeAllItems();
         cbShift.addItem("-");
 
@@ -180,6 +188,28 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         for (int i = 0; i < list.size(); i++) {
             cbShift.addItem(list.get(i));
         }
+    }
+    
+    public void insertTableRepublic() {
+        
+        ItensRepublicDAO irDAO = new ItensRepublicDAO();
+        List<ItensRepublic> republicStudentList = irDAO.checkExists("student", student);
+        if(republicStudentList!=null){
+            if(republicStudentList.size()>0){
+                List<Republic> listRepublics = new ArrayList<Republic>();
+                for (ItensRepublic itens : republicStudentList) {
+                    listRepublics.add(itens.getRepublic());
+                }
+
+                RepublicTableModel atm = new RepublicTableModel(listRepublics);
+                tbRepublic.setModel(atm);
+
+                FormatSizeColJTable.packColumns(tbRepublic, 1);
+            }
+        }
+        
+        
+        
     }
 
     public void preencheTabelaAllowMeal() {
@@ -245,7 +275,6 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         jLabel4 = new javax.swing.JLabel();
         cbCourse = new javax.swing.JComboBox();
         jLabel2 = new javax.swing.JLabel();
-        cbActive = new javax.swing.JCheckBox();
         cbShift = new javax.swing.JComboBox();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
@@ -255,6 +284,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         lblPhoto = new javax.swing.JLabel();
         btnCarteirinha = new javax.swing.JButton();
         lblBloqueado = new javax.swing.JLabel();
+        cbActive = new javax.swing.JCheckBox();
         pnlMeals = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbStudentMeals = new javax.swing.JTable();
@@ -265,6 +295,13 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         cbAddStudentAllowMealDay = new javax.swing.JButton();
         btEditAllowStudentMeal = new javax.swing.JButton();
         cbDeletarAllowStudentDay = new javax.swing.JButton();
+        lblObs = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        taObs = new javax.swing.JTextArea();
+        jPanel4 = new javax.swing.JPanel();
+        jScrollPane4 = new javax.swing.JScrollPane();
+        tbRepublic = new javax.swing.JTable();
+        jLabel8 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
@@ -306,15 +343,6 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         jLabel2.setText("Curso:*");
         pnlDIni.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 170, -1, -1));
 
-        cbActive.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        cbActive.setText("Ativo");
-        cbActive.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbActiveActionPerformed(evt);
-            }
-        });
-        pnlDIni.add(cbActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, -1, -1));
-
         cbShift.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         cbShift.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         pnlDIni.add(cbShift, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 240, 290, -1));
@@ -334,7 +362,12 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         }
         tfDateValid.setToolTipText("Informe a data de nascimento");
         tfDateValid.setFocusLostBehavior(javax.swing.JFormattedTextField.PERSIST);
-        tfDateValid.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        tfDateValid.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        tfDateValid.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                tfDateValidFocusLost(evt);
+            }
+        });
         pnlDIni.add(tfDateValid, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 240, 150, -1));
 
         chbAlunoSemRegu.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
@@ -369,6 +402,15 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         lblBloqueado.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lblBloqueado.setText("CADASTRO BLOQUEADO");
         pnlDIni.add(lblBloqueado, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 40, 260, 30));
+
+        cbActive.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        cbActive.setText("Ativo");
+        cbActive.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cbActiveActionPerformed(evt);
+            }
+        });
+        pnlDIni.add(cbActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, -1, -1));
 
         tbbPanStudente.addTab("Dados Inicias", pnlDIni);
 
@@ -412,9 +454,19 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbAllowMeal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbAllowMealMouseClicked(evt);
+            }
+        });
+        tbAllowMeal.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                tbAllowMealKeyPressed(evt);
+            }
+        });
         jScrollPane2.setViewportView(tbAllowMeal);
 
-        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 60, 630, 250));
+        jPanel2.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(4, 60, 630, 130));
 
         cbAddStudentAllowMealDay.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/new-file_40454.png"))); // NOI18N
         cbAddStudentAllowMealDay.setToolTipText("Adicionar Permissão");
@@ -442,7 +494,45 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         });
         jPanel2.add(cbDeletarAllowStudentDay, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 10, -1, -1));
 
+        lblObs.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        lblObs.setText("Observações:");
+        jPanel2.add(lblObs, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
+
+        taObs.setColumns(20);
+        taObs.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
+        taObs.setRows(5);
+        jScrollPane3.setViewportView(taObs);
+
+        jPanel2.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 220, 620, -1));
+
         tbbPanStudente.addTab("Permissão das Refeições", jPanel2);
+
+        jPanel4.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        tbRepublic.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        tbRepublic.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbRepublicMouseClicked(evt);
+            }
+        });
+        jScrollPane4.setViewportView(tbRepublic);
+
+        jPanel4.add(jScrollPane4, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 630, 80));
+
+        jLabel8.setText("** Clique duas vezes para editar.");
+        jPanel4.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 90, 320, 20));
+
+        tbbPanStudente.addTab("República", jPanel4);
 
         jPanel1.add(tbbPanStudente, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 660, 370));
 
@@ -553,6 +643,8 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
         StudentDAO sDAO = new StudentDAO();
         student.setCampus(UserActive.returnCampus());
+        
+        student.setObservation(taObs.getText());
         if (student.getId()
                 == null) {
             if (sDAO.checkExists("mat", tfMat.getText()).size() > 0) {
@@ -575,10 +667,6 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void cbActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbActiveActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbActiveActionPerformed
 
     private void cbAddStudentAllowMealDayActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbAddStudentAllowMealDayActionPerformed
         StudentAllowMealDay stdAmd = new StudentAllowMealDay();
@@ -684,6 +772,56 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_btnCarteirinhaActionPerformed
 
+    private void cbActiveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbActiveActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cbActiveActionPerformed
+
+    private void tbRepublicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbRepublicMouseClicked
+        if(evt.getClickCount() == 2){
+            RepublicTableModel ptm = (RepublicTableModel) tbRepublic.getModel();
+            Republic select = ptm.getRepublic(tbRepublic.getSelectedRow());
+            RepublicFrmRegister irfr = new RepublicFrmRegister(select);
+            irfr.setVisible(true);
+            
+            insertTableRepublic();
+            preencheTabelaAllowMeal();
+        }
+    }//GEN-LAST:event_tbRepublicMouseClicked
+
+    private void tbAllowMealKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbAllowMealKeyPressed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbAllowMealKeyPressed
+
+    private void tbAllowMealMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbAllowMealMouseClicked
+        if(evt.getClickCount() == 2){
+            btEditAllowStudentMealActionPerformed(null);
+        }
+    }//GEN-LAST:event_tbAllowMealMouseClicked
+
+    private void tfDateValidFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_tfDateValidFocusLost
+      
+        java.util.Date data;
+        String date = tfDateValid.getText();
+        try {
+            DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+            data = new java.util.Date(fmt.parse(date).getTime());
+            student.setDateValid(data);
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Data inválida!", "IFCE", JOptionPane.ERROR_MESSAGE);
+            return ;
+        }
+        
+        if(Util.verifyDateVenciment(data, new Date())){
+            tfDateValid.setForeground(Color.WHITE); // altera a cor da fonte
+            tfDateValid.setBackground(Color.RED);  // altera a cor do fundo
+            tfDateValid.setFont(new Font("Verdana", Font.BOLD, 15));
+        } else {
+            tfDateValid.setForeground(Color.BLACK); // altera a cor da fonte
+            tfDateValid.setBackground(Color.WHITE);  // altera a cor do fundo
+            tfDateValid.setFont(new Font("Verdana", Font.PLAIN, 14));
+        }
+    }//GEN-LAST:event_tfDateValidFocusLost
+
     private void insertImage(String path) {
         ImageIcon image = new ImageIcon(path);
         lblPhoto.setIcon(new ImageIcon(
@@ -753,17 +891,24 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JLabel lblBloqueado;
     private javax.swing.JLabel lblCodigo;
+    private javax.swing.JLabel lblObs;
     private javax.swing.JLabel lblPhoto;
     private javax.swing.JPanel pnlDIni;
     private javax.swing.JPanel pnlMeals;
+    private javax.swing.JTextArea taObs;
     private javax.swing.JTable tbAllowMeal;
+    private javax.swing.JTable tbRepublic;
     private javax.swing.JTable tbStudentMeals;
     private javax.swing.JTabbedPane tbbPanStudente;
     private javax.swing.JFormattedTextField tfDateValid;

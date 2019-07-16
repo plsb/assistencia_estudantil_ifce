@@ -5,7 +5,6 @@
  */
 package br.screen;
 
-
 import br.config.Config;
 import br.config.ConfigDAO;
 import br.meal.Meal;
@@ -19,8 +18,10 @@ import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
 import br.util.OnlyNumberField;
 import br.util.UserActive;
+import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -38,6 +39,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
 
     private Set<Meal> meals;
     private Student student;
+
     /**
      * Creates new form FindPersonFrm
      */
@@ -45,22 +47,21 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         initComponents();
         setModal(true);
         setLocationRelativeTo(null);
-        preencheTabela();
         insertMeals();
-        lblData.setText(returnDate());
+        lblData.setText(returnStringDate());
+        preencheTabela();
         //edtMat.setDocument(new OnlyNumberField());
-        
-                
+
     }
-    
-    public String returnDate(){
+
+    public String returnStringDate() {
         SchedulingDAO dao = new SchedulingDAO();
         Date dataAtual = dao.getServerDate();
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String data = sdf.format(dataAtual);
         return data;
     }
-    
+
     public void insertMeals() {
         cbMeal.removeAllItems();
         cbMeal.addItem("-");
@@ -72,23 +73,21 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
             cbMeal.addItem(list.get(i));
         }
     }
-    
-   
 
     public void preencheTabela() {
         SchedulingDAO sDAO = new SchedulingDAO();
-        
-        List<Scheduling> list = sDAO.schedulingWasPresent(new Date());
-        
-        lblAgendamentos.setText("Total do dia: "+list.size()+" confirmações.");
-        
+
+        List<Scheduling> list = sDAO.schedulingWasPresent(returnFormatDate());
+
+        lblAgendamentos.setText("Total do dia: " + list.size() + " confirmações.");
+
         SchedulingTableModel ptm = new SchedulingTableModel(list);
         tbStudents.setModel(ptm);
 
         FormatSizeColJTable.packColumns(tbStudents, 1);
     }
-    
-    public void clearFields(){
+
+    public void clearFields() {
         student = null;
         taStudent.setText("");
         edtMat.setText("");
@@ -117,7 +116,6 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         jLabel2 = new javax.swing.JLabel();
         btConfirmStudentMeal = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
         jSeparator1 = new javax.swing.JSeparator();
         jLabel5 = new javax.swing.JLabel();
         lblData = new javax.swing.JLabel();
@@ -127,6 +125,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         taStudent = new javax.swing.JTextArea();
         jPanel4 = new javax.swing.JPanel();
         lblPhoto = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
@@ -188,7 +187,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
                 edtMatKeyPressed(evt);
             }
         });
-        jPanel1.add(edtMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 60, 180, -1));
+        jPanel1.add(edtMat, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 70, 180, -1));
 
         lblAgendamentos.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblAgendamentos.setText("0 agendamentos.");
@@ -208,16 +207,12 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
 
         jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel3.setText("Matrícula ou Código:");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
-
-        jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jLabel4.setText("Matrícula ou Código:");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 40, -1, -1));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 50, -1, -1));
         jPanel1.add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 190, 780, -1));
 
         jLabel5.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel5.setText("Aluno:");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 90, -1, -1));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, -1, -1));
 
         lblData.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         lblData.setText("jLabel3");
@@ -230,11 +225,11 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
                 cbMealKeyPressed(evt);
             }
         });
-        jPanel1.add(cbMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 60, 360, 30));
+        jPanel1.add(cbMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 360, 30));
 
         jLabel1.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel1.setText("Refeição:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 40, -1, -1));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, -1, -1));
 
         taStudent.setEditable(false);
         taStudent.setColumns(20);
@@ -242,7 +237,7 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         taStudent.setRows(5);
         jScrollPane3.setViewportView(taStudent);
 
-        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 110, 550, 80));
+        jPanel1.add(jScrollPane3, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 550, 70));
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
         jPanel4.setBorder(javax.swing.BorderFactory.createEtchedBorder());
@@ -258,6 +253,15 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         jPanel4.add(lblPhoto, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 10, 130, 150));
 
         jPanel1.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, 150, 170));
+
+        jButton1.setFont(new java.awt.Font("Lucida Grande", 0, 5)); // NOI18N
+        jButton1.setText("Alterar Data");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 20, -1, -1));
 
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 30, 800, 480));
 
@@ -279,48 +283,48 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
         setVisible(false);
     }//GEN-LAST:event_jButton3ActionPerformed
 
-    public void verifyF2(java.awt.event.KeyEvent evt){
+    public void verifyF2(java.awt.event.KeyEvent evt) {
         if (evt.getKeyCode() == 113) {//F2
-            if(this.student!=null){
+            if (this.student != null) {
                 btConfirmStudentMealActionPerformed(null);
-                return ;
+                return;
             }
         }
     }
-    
+
     private void edtMatKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_edtMatKeyPressed
         verifyF2(evt);
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(edtMat.getText().equals("")){
+            if (edtMat.getText().equals("")) {
                 JOptionPane.showMessageDialog(rootPane, "Informe a matrícula!");
             } else {
-                
+
                 StudentDAO sDAO = new StudentDAO();
-                
+
                 String mat = edtMat.getText();
-                if(mat.equals("")){
+                if (mat.equals("")) {
                     JOptionPane.showMessageDialog(rootPane, "Informe uma matrícula!");
                 }
-                
+
                 List<Student> list = sDAO.checkExists("mat", mat, "campus", UserActive.returnCampus());
-                if(list.size()==0){
+                if (list.size() == 0) {
                     try {
                         list = sDAO.checkExists("id", Integer.parseInt(mat), "campus", UserActive.returnCampus());
                     } catch (Exception e) {
                         list = new ArrayList<Student>();
                     }
-                    if(list.size()==0){
+                    if (list.size() == 0) {
                         clearFields();
-                        JOptionPane.showMessageDialog(rootPane, "Matrícula/Código não encontrado!"); 
-                        return ;
+                        JOptionPane.showMessageDialog(rootPane, "Matrícula/Código não encontrado!");
+                        return;
                     }
-                } 
+                }
                 student = new Student();
                 student = list.get(0);
                 taStudent.setText(br.util.Util.decimalFormat().format(student.getId())
-                        +" - "+student.getName() 
-                        +"\n"+student.getCourse().getDescription()
-                        +"\nData da Próxima Atualização Cadastral: "+new SimpleDateFormat("dd/MM/yyyy").format(student.getDateValid()));
+                        + " - " + student.getName()
+                        + "\n" + student.getCourse().getDescription()
+                        + "\nData da Próxima Atualização Cadastral: " + new SimpleDateFormat("dd/MM/yyyy").format(student.getDateValid()));
                 //pega foto
                 if (student.getPhoto() != null) {
                     try {
@@ -334,54 +338,64 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
                         }
                     } catch (Exception e) {
                     }
-                }else {
+                } else {
                     insertImage("/br/imagens/photo.png");
                 }
             }
         }
     }//GEN-LAST:event_edtMatKeyPressed
 
-    
     private void insertImage(String path) {
         ImageIcon image = new ImageIcon(path);
         lblPhoto.setIcon(new ImageIcon(
                 image.getImage().getScaledInstance(lblPhoto.getWidth(), lblPhoto.getHeight(),
                         Image.SCALE_DEFAULT)));
     }
-    
+
     private void btConfirmStudentMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConfirmStudentMealActionPerformed
-        
-        
+
         if (student == null) {
             JOptionPane.showMessageDialog(rootPane, "Informe o Aluno.");
-            return ;
+            return;
         }
-        if(cbMeal.getSelectedIndex()==0){
+        if (cbMeal.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(rootPane, "Informe a Refeição.");
-            return ;
+            return;
         }
-        if(JOptionPane.showConfirmDialog(rootPane, "Deseja confirmar a refeição "+cbMeal.getSelectedItem()+" para "+student.getName()+"?", 
-                "IFCE", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION){
-            
+        if (JOptionPane.showConfirmDialog(rootPane, "Deseja confirmar a refeição [" + cbMeal.getSelectedItem() + "] \npara o estudante [" 
+                    + student.getName() + "]?",
+                "IFCE", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+
             SchedulingDAO sDAO = new SchedulingDAO();
             Meal meal = (Meal) cbMeal.getSelectedItem();
-            List<Scheduling> listStudentDateMeal = 
-                    sDAO.schedulingDateStudentMeal(new Date(), student, meal);
-            if(listStudentDateMeal.size()>0){
+            List<Scheduling> listStudentDateMeal
+                    = sDAO.schedulingDateStudentMeal(returnFormatDate(), student, meal);
+            if (listStudentDateMeal.size() > 0) {
                 Scheduling scheduling = new Scheduling();
                 scheduling = listStudentDateMeal.get(0);
                 scheduling.setWasPresent(true);
                 sDAO.update(scheduling);
-                
+
             } else {
-                JOptionPane.showMessageDialog(rootPane, student.getName()+" não tem permissão para a refeição "+
-                        meal.getDescription()+".", "IFCE", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(rootPane, "O estudante [" + student.getName() + "] \nNÃO tem permissão para a refeição ["
+                        + meal.getDescription() + "].", "IFCE", JOptionPane.ERROR_MESSAGE);
             }
             clearFields();
-            
+
         }
     }//GEN-LAST:event_btConfirmStudentMealActionPerformed
 
+    private Date returnFormatDate(){
+        try {
+            SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+            java.sql.Date date = new java.sql.Date(format.parse(lblData.getText()).getTime());
+            return date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+    
     private void cbMealKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_cbMealKeyPressed
         verifyF2(evt);
     }//GEN-LAST:event_cbMealKeyPressed
@@ -389,6 +403,24 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
     private void lblPhotoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_lblPhotoMouseClicked
 
     }//GEN-LAST:event_lblPhotoMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        if (JOptionPane.showConfirmDialog(rootPane, "Deseja alterar a data?", "IFCE",
+                JOptionPane.YES_NO_OPTION, JOptionPane.INFORMATION_MESSAGE)
+                == JOptionPane.YES_OPTION) {
+            String date = JOptionPane.showInputDialog("Data: ");
+            try {
+                SimpleDateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                java.sql.Date data = new java.sql.Date(format.parse(date).getTime());
+                lblData.setText(date);
+                lblData.setForeground(Color.red);
+                preencheTabela();
+            } catch (ParseException e) {
+                JOptionPane.showMessageDialog(rootPane, "Erro ao converter Data!",
+                        "IFCE", JOptionPane.ERROR_MESSAGE);
+            }
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -492,12 +524,12 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
     private javax.swing.JButton btConfirmStudentMeal;
     private javax.swing.JComboBox cbMeal;
     private javax.swing.JTextField edtMat;
+    private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;

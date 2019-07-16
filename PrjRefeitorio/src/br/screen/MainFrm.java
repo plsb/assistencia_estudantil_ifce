@@ -39,7 +39,7 @@ public class MainFrm extends javax.swing.JFrame {
         //Administrador
         if(UserActive.isAdministrador()){
             btStudent1.setEnabled(false);
-            btMeal.setEnabled(false);
+            btMenu.setEnabled(false);
             btRegisterMeal.setEnabled(false);
             btAgenda.setEnabled(false);
             btVerifyMeal.setEnabled(false);
@@ -52,10 +52,12 @@ public class MainFrm extends javax.swing.JFrame {
             mmReport.setVisible(true);
             smCampi.setVisible(true);
             smRportCarteirinhas.setVisible(false);
+            smRepublic.setVisible(false);
+            smiMeals.setVisible(false);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("ASSIS_ESTU")){
         //Assistência Estudantil
             btStudent1.setEnabled(true);
-            btMeal.setEnabled(true);
+            btMenu.setEnabled(false);
             btRegisterMeal.setEnabled(true);
             btAgenda.setEnabled(true);
             smCursos.setVisible(true);
@@ -66,10 +68,12 @@ public class MainFrm extends javax.swing.JFrame {
             mmReport.setVisible(true);
             smCampi.setVisible(false);
             smRportCarteirinhas.setVisible(true);
+            smRepublic.setVisible(true);
+            smiMeals.setVisible(false);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("RECEPCAO")){
         //Recepção
             btStudent1.setEnabled(false);
-            btMeal.setEnabled(false);
+            btMenu.setEnabled(false);
             btRegisterMeal.setEnabled(true);
             btAgenda.setEnabled(true);
             btVerifyMeal.setEnabled(true);
@@ -81,7 +85,27 @@ public class MainFrm extends javax.swing.JFrame {
             mmReport.setVisible(false);
             smCampi.setVisible(false);
             smRportCarteirinhas.setVisible(false);
+            smRepublic.setVisible(false);
+            smiMeals.setVisible(false);
+        } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("NUTRI")){
+        //Nutricionista
+            btStudent1.setEnabled(true);
+            btMenu.setEnabled(true);
+            btRegisterMeal.setEnabled(false);
+            btAgenda.setEnabled(false);
+            btVerifyMeal.setEnabled(true);
+            smCursos.setVisible(false);
+            smUsers.setVisible(false);
+            smPermissionMeal.setVisible(false);
+            smShift.setVisible(false);
+            smiConfig.setVisible(false);
+            mmReport.setVisible(true);
+            smCampi.setVisible(false);
+            smRportCarteirinhas.setVisible(true);
+            smRepublic.setVisible(false);
+            smiMeals.setVisible(true);
         }
+        
     }
 
     /**
@@ -105,7 +129,7 @@ public class MainFrm extends javax.swing.JFrame {
         btAgenda = new javax.swing.JButton();
         btVerifyMeal = new javax.swing.JButton();
         lblUserActive = new javax.swing.JLabel();
-        btMeal = new javax.swing.JButton();
+        btMenu = new javax.swing.JButton();
         btStudent1 = new javax.swing.JButton();
         btRegisterMeal = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
@@ -115,6 +139,8 @@ public class MainFrm extends javax.swing.JFrame {
         smCampi = new javax.swing.JMenuItem();
         smCursos = new javax.swing.JMenuItem();
         smiConfig = new javax.swing.JMenuItem();
+        smiMeals = new javax.swing.JMenuItem();
+        smRepublic = new javax.swing.JMenuItem();
         smShift = new javax.swing.JMenuItem();
         smUsers = new javax.swing.JMenuItem();
         mmReport = new javax.swing.JMenu();
@@ -172,14 +198,14 @@ public class MainFrm extends javax.swing.JFrame {
         lblUserActive.setText("    Usuário Ativo:");
         jPanel1.add(lblUserActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 380, 530, -1));
 
-        btMeal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/-meal_89750-2.png"))); // NOI18N
-        btMeal.setToolTipText("Refeições");
-        btMeal.addActionListener(new java.awt.event.ActionListener() {
+        btMenu.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/-meal_89750-2.png"))); // NOI18N
+        btMenu.setToolTipText("Cardápio");
+        btMenu.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btMealActionPerformed(evt);
+                btMenuActionPerformed(evt);
             }
         });
-        jPanel1.add(btMeal, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, -1, -1));
+        jPanel1.add(btMenu, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 80, -1, -1));
 
         btStudent1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/student.png"))); // NOI18N
         btStudent1.setToolTipText("Alunos");
@@ -240,6 +266,22 @@ public class MainFrm extends javax.swing.JFrame {
             }
         });
         smmCursos.add(smiConfig);
+
+        smiMeals.setText("Refeições");
+        smiMeals.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smiMealsActionPerformed(evt);
+            }
+        });
+        smmCursos.add(smiMeals);
+
+        smRepublic.setText("República");
+        smRepublic.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                smRepublicActionPerformed(evt);
+            }
+        });
+        smmCursos.add(smRepublic);
 
         smShift.setText("Turnos");
         smShift.addActionListener(new java.awt.event.ActionListener() {
@@ -314,10 +356,10 @@ public class MainFrm extends javax.swing.JFrame {
         cm.setVisible(true);
     }//GEN-LAST:event_btAgendaActionPerformed
 
-    private void btMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMealActionPerformed
-       MealFrmFind rls = new MealFrmFind();
+    private void btMenuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btMenuActionPerformed
+       MenuFrmFind rls = new MenuFrmFind();
        rls.setVisible(true);
-    }//GEN-LAST:event_btMealActionPerformed
+    }//GEN-LAST:event_btMenuActionPerformed
 
     private void btStudent1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btStudent1ActionPerformed
        StudentFrmFind rls = new StudentFrmFind();
@@ -378,6 +420,16 @@ public class MainFrm extends javax.swing.JFrame {
         rc.setVisible(true);
     }//GEN-LAST:event_smRportCarteirinhasActionPerformed
 
+    private void smRepublicActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smRepublicActionPerformed
+        RepublicFrmFind rff = new RepublicFrmFind();
+        rff.setVisible(true);
+    }//GEN-LAST:event_smRepublicActionPerformed
+
+    private void smiMealsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_smiMealsActionPerformed
+       MealFrmFind rls = new MealFrmFind();
+       rls.setVisible(true);
+    }//GEN-LAST:event_smiMealsActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -417,7 +469,7 @@ public class MainFrm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btAgenda;
     private javax.swing.JButton btExit;
-    private javax.swing.JButton btMeal;
+    private javax.swing.JButton btMenu;
     private javax.swing.JButton btRegisterMeal;
     private javax.swing.JButton btStudent1;
     private javax.swing.JButton btVerifyMeal;
@@ -440,10 +492,12 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JMenuItem smChangePass;
     private javax.swing.JMenuItem smCursos;
     private javax.swing.JMenuItem smPermissionMeal;
+    private javax.swing.JMenuItem smRepublic;
     private javax.swing.JMenuItem smRportCarteirinhas;
     private javax.swing.JMenuItem smShift;
     private javax.swing.JMenuItem smUsers;
     private javax.swing.JMenuItem smiConfig;
+    private javax.swing.JMenuItem smiMeals;
     private javax.swing.JMenu smmCursos;
     // End of variables declaration//GEN-END:variables
 }

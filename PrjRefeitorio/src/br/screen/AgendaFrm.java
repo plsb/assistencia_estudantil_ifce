@@ -16,9 +16,7 @@ import br.scheduling.SchedulingDAO;
 import br.scheduling.SchedulingTableModel;
 import br.student.Student;
 import br.student.StudentDAO;
-import br.student.StudentTableModel;
 import br.util.FormatSizeColJTable;
-import br.util.OnlyNumberField;
 import br.util.UserActive;
 import br.util.Util;
 import java.awt.Image;
@@ -388,6 +386,15 @@ public class AgendaFrm extends javax.swing.JDialog {
             JOptionPane.showMessageDialog(rootPane, "Informe as refeições.");
             return;
         }
+        
+        if(Util.verifyDateVenciment(student.getDateValid(), new Date())){
+            JOptionPane.showMessageDialog(rootPane, "O estudante ["+
+                            student.getName()+"] não pode agendar refeições.\n "
+                                    + "Está com o cadastro desatualizado.",
+                            "IFCE", JOptionPane.ERROR_MESSAGE);
+           return;         
+        }
+        
         if (JOptionPane.showConfirmDialog(rootPane, "Deseja agendar as refeições para " + student.getName() + "?",
                 "IFCE", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             SchedulingDAO sDAO = new SchedulingDAO();

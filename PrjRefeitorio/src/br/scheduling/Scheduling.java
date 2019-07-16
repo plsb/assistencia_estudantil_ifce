@@ -7,6 +7,7 @@ package br.scheduling;
 
 import br.campus.Campus;
 import br.meal.Meal;
+import br.menu.Menu;
 import br.student.Student;
 import br.user.User;
 import br.util.Util;
@@ -38,6 +39,9 @@ public class Scheduling implements Comparable<Scheduling> {
 
     @ManyToOne
     private Meal meal;
+    
+    @ManyToOne
+    private Menu menu;
 
     @Temporal(TemporalType.DATE)
     private Date date;
@@ -145,11 +149,11 @@ public class Scheduling implements Comparable<Scheduling> {
     
 
     public String getSituaction() {
-        if (getAbsenceJustification() != null) {
-            return "Justificado";
-        }
+        
         if (isWasPresent()) {
             return "Presente";
+        } if (getAbsenceJustification() != null) {
+            return "Justificado";
         } else {
             SchedulingDAO dao = new SchedulingDAO();
             if (Util.verityDateEquals(dao.getServerDate(), getDate())) {
@@ -219,6 +223,20 @@ public class Scheduling implements Comparable<Scheduling> {
      */
     public void setAbsenceJustification(String absenceJustification) {
         this.absenceJustification = absenceJustification;
+    }
+
+    /**
+     * @return the menu
+     */
+    public Menu getMenu() {
+        return menu;
+    }
+
+    /**
+     * @param menu the menu to set
+     */
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 
 }

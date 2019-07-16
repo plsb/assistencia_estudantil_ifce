@@ -148,7 +148,7 @@ public class UserFrmRegister extends javax.swing.JDialog {
         getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 200, -1, -1));
 
         cmbType.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        cmbType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--", "ASSIS_ESTU", "RECEPCAO" }));
+        cmbType.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "--", "ASSIS_ESTU", "RECEPCAO", "NUTRI" }));
         getContentPane().add(cmbType, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 270, 280, -1));
 
         cmbCampus.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N

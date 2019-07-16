@@ -32,6 +32,10 @@ public class Meal implements Comparable<Meal> {
     
     private String description;
     
+    private int qtdTimeReservationStart;
+    
+    private int qtdTimeReservationEnd;
+    
     @Temporal(TemporalType.TIME)
     private Date timeStart;
     
@@ -143,6 +147,39 @@ public class Meal implements Comparable<Meal> {
     public void setCampus(Campus campus) {
         this.campus = campus;
     }
+
+    
+
+    /**
+     * @return the qtdTimeReservationEnd
+     */
+    public int getQtdTimeReservationEnd() {
+        return qtdTimeReservationEnd;
+    }
+
+    /**
+     * @param qtdTimeReservationEnd the qtdTimeReservationEnd to set
+     */
+    public void setQtdTimeReservationEnd(int qtdTimeReservationEnd) {
+        this.qtdTimeReservationEnd = qtdTimeReservationEnd;
+    }
+
+    /**
+     * @return the qtdTimeReservationStart
+     */
+    public int getQtdTimeReservationStart() {
+        return qtdTimeReservationStart;
+    }
+
+    /**
+     * @param qtdTimeReservationStart the qtdTimeReservationStart to set
+     */
+    public void setQtdTimeReservationStart(int qtdTimeReservationStart) {
+        this.qtdTimeReservationStart = qtdTimeReservationStart;
+    }
+
+    
+    
     
     
 }

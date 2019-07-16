@@ -53,6 +53,9 @@ public class Student implements Comparable<Student> {
     @ManyToOne
     private Campus campus;
     
+    
+    private String observation;
+    
     /**
      * @return the id
      */
@@ -229,6 +232,25 @@ public class Student implements Comparable<Student> {
      */
     public void setCampus(Campus campus) {
         this.campus = campus;
+    }
+
+    @Override
+    public String toString() {
+        return getName();
+    }
+
+    /**
+     * @return the observation
+     */
+    public String getObservation() {
+        return observation;
+    }
+
+    /**
+     * @param observation the observation to set
+     */
+    public void setObservation(String observation) {
+        this.observation = observation;
     }
 
     

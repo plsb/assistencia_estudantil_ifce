@@ -323,4 +323,19 @@ public abstract class GenericDAO<T> {
             sessao.close();
         }
     }
+    
+    public void executeSQL(String query) {
+        try {
+            setSessao(HibernateUtil.getSessionFactory().openSession());
+            
+            this.setTransacao(getSessao().beginTransaction());
+            this.getSessao().createSQLQuery(query).executeUpdate();
+            this.getTransacao().commit();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        } finally {
+            sessao.close();
+        }
+    }
 }

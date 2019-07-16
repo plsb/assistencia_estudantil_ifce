@@ -5,8 +5,6 @@
  */
 package br.screen;
 
-import br.course.Course;
-import br.course.CourseDAO;
 import br.meal.Meal;
 import br.meal.MealDAO;
 import br.shift.Shift;
@@ -15,10 +13,8 @@ import br.util.UserActive;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import org.hibernate.Hibernate;
 
 /**
  *
@@ -27,7 +23,6 @@ import org.hibernate.Hibernate;
 public class ShiftFrmRegister extends javax.swing.JDialog {
 
     private Shift shift;
-    private List<Meal> meals;
 
     /**
      * Creates new form RegisterStudent

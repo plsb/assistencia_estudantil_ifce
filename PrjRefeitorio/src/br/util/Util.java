@@ -315,11 +315,11 @@ public class Util {
     public static boolean verifyStudent(Component component, Student student) {
         SchedulingDAO sDAO = new SchedulingDAO();
         List<Scheduling> listBlock = sDAO.verifyStudentBlocked(student);
-        if(listBlock!=null){
+        if (listBlock != null) {
             //verifica se estar bloqueado
-            if(listBlock.size()>0){
+            if (listBlock.size() > 0) {
                 JOptionPane.showMessageDialog(component, "O cadastro do estudante [" + student.getName()
-                    + "] \n está bloqueado!", "IFCE", JOptionPane.ERROR_MESSAGE);
+                        + "] \n está bloqueado!", "IFCE", JOptionPane.ERROR_MESSAGE);
                 return false;
             }
         } else if (student.isActive() == false) {
@@ -343,7 +343,7 @@ public class Util {
     }
 
     public static double getVersionSystem() {
-        return 2.8;
+        return 3.4;
     }
 
     public static File copyArquivo(String source, String destination, int w, int h) {
@@ -372,7 +372,6 @@ public class Util {
                     destinationChannel.close();
                 }
             }*/
-
         } catch (Exception e) {
             //Lembre-se de tratar bem suas excecoes, ou elas tambem lhe tratarão mal!
             //Aqui so vamos mostrar o stack no stderr.
@@ -451,13 +450,12 @@ public class Util {
             ex.printStackTrace();
         }
     }*/
-    
-    public static boolean verityDateEquals(Date dateAct, Date dateOld){
-        
+    public static boolean verityDateEquals(Date dateAct, Date dateOld) {
+
         Date data = dateAct;
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
         String date1 = sdf.format(data);
-        
+
         data = dateOld;
         String data2 = sdf.format(data);
         if (date1.equals(data2)) {
@@ -466,14 +464,28 @@ public class Util {
             return false;
         }
     }
-    
-    public static int returnDayWeek(Date date){
+
+    public static int returnDayWeek(Date date) {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(date);  
+        cal.setTime(date);
         int day = cal.get(Calendar.DAY_OF_WEEK);
         //1 Sunday ... 7 Saturday
         return day;
     }
-    
-    
+
+    public static boolean verifyDateVenciment(Date emissao, Date vencimento) {
+
+        boolean data;
+        if (emissao.before(vencimento)) {
+
+            data = true;
+        } else if (emissao.after(vencimento)) {
+            data = false;
+        } else {
+            data = true;
+        }
+
+        return data;
+    }
+
 }

@@ -33,6 +33,11 @@
         <mapping class="br.allowsmd.StudentAllowMealDay" />
         <mapping class="br.config.Config" />
         <mapping class="br.campus.Campus" />
+        <mapping class="br.republic.ItensRepublic" />
+        <mapping class="br.republic.Republic" />
+        <mapping class="br.menu.Menu" />
+        
+        
         
     </session-factory>
 </hibernate-configuration>

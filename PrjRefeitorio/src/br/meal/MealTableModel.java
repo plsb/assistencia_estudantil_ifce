@@ -27,7 +27,8 @@ import javax.swing.table.AbstractTableModel;
 @SuppressWarnings("serial")
 public class MealTableModel extends AbstractTableModel {
 
-    private String[] nomeColunas = {"Código", "Descrição", "Hora Início", "Hora Fim"};
+    private String[] nomeColunas = {"Código", "Descrição", "Hora Início", "Hora Fim", "Qtr Hr Reserva (inicio)",
+            "Qtr Hr Reserva (fim)"};
     private List<Meal> meals;
 
     /**
@@ -82,6 +83,10 @@ public class MealTableModel extends AbstractTableModel {
                 return s.getTimeStart()!=null ? new SimpleDateFormat("hh:mm").format( s.getTimeStart()) : "";
             case 3:
                 return s.getTimeEnd()!=null ? new SimpleDateFormat("hh:mm").format( s.getTimeEnd()) : "";
+            case 4:
+                return s.getQtdTimeReservationStart();
+            case 5:
+                return s.getQtdTimeReservationEnd();
         }
         return null;
     }
@@ -106,6 +111,10 @@ public class MealTableModel extends AbstractTableModel {
                 return nomeColunas[2];
             case 3:
                 return nomeColunas[3];
+            case 4:
+                return nomeColunas[4];
+            case 5:
+                return nomeColunas[5];
         }
         return null;
     }

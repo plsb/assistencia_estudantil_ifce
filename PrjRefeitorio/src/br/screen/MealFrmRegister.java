@@ -44,6 +44,8 @@ public class MealFrmRegister extends javax.swing.JDialog {
         setTitle("Edição de Refeição ["+meal.getDescription()+"]");
         this.meal = meal;
         tfDesc.setText(meal.getDescription());
+        tfQtdTimeReservationStart.setText(String.valueOf(meal.getQtdTimeReservationStart()));
+        tfQtdTimeReservationEnd.setText(String.valueOf(meal.getQtdTimeReservationEnd()));
         //tfTimeInitial.setText(String.valueOf(meal.getMat()));
         if (meal.getTimeStart() != null) {
             Date time = meal.getTimeStart();
@@ -68,7 +70,7 @@ public class MealFrmRegister extends javax.swing.JDialog {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        tfDesc = new javax.swing.JTextField();
+        tfQtdTimeReservationEnd = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jButton2 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
@@ -76,17 +78,23 @@ public class MealFrmRegister extends javax.swing.JDialog {
         jLabel6 = new javax.swing.JLabel();
         tfTimeEnd = new javax.swing.JFormattedTextField();
         jLabel7 = new javax.swing.JLabel();
+        jSeparator1 = new javax.swing.JSeparator();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        tfDesc = new javax.swing.JTextField();
+        tfQtdTimeReservationStart = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        tfDesc.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        getContentPane().add(tfDesc, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 39, 371, -1));
+        tfQtdTimeReservationEnd.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        getContentPane().add(tfQtdTimeReservationEnd, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 170, 150, -1));
 
         jLabel2.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
-        jLabel2.setText("Descrição: *");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 17, -1, -1));
+        jLabel2.setText("Horários de reserva:");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 130, -1, -1));
 
         jButton2.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/Save_37110.png"))); // NOI18N
@@ -95,7 +103,7 @@ public class MealFrmRegister extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 140, -1, -1));
+        getContentPane().add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 200, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/forceexit_103817.png"))); // NOI18N
@@ -105,7 +113,7 @@ public class MealFrmRegister extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 140, -1, -1));
+        getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 200, -1, -1));
 
         try {
             tfTimeStart.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.MaskFormatter("##:##")));
@@ -134,6 +142,25 @@ public class MealFrmRegister extends javax.swing.JDialog {
         jLabel7.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         jLabel7.setText("Hora Fim *:");
         getContentPane().add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(240, 70, -1, -1));
+        getContentPane().add(jSeparator1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 120, 360, -1));
+
+        jLabel3.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel3.setText("Descrição: *");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 17, -1, -1));
+
+        jLabel8.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel8.setText("Qtd Horas inicio *:");
+        getContentPane().add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 150, -1, -1));
+
+        jLabel9.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel9.setText("Qtd Horas fim *: ");
+        getContentPane().add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 150, -1, -1));
+
+        tfDesc.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        getContentPane().add(tfDesc, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 39, 371, -1));
+
+        tfQtdTimeReservationStart.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        getContentPane().add(tfQtdTimeReservationStart, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 140, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -141,9 +168,19 @@ public class MealFrmRegister extends javax.swing.JDialog {
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
 
-        if (tfDesc.getText().equals("")) {
+        if (tfQtdTimeReservationEnd.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Informe a Descrição!");
-            tfDesc.requestFocus();
+            tfQtdTimeReservationEnd.requestFocus();
+            return;
+        }
+        if (tfQtdTimeReservationEnd.getText().equals("")) {
+            JOptionPane.showMessageDialog(rootPane, "Informe o horário final da reserva!");
+            tfQtdTimeReservationEnd.requestFocus();
+            return;
+        }
+        if (tfQtdTimeReservationStart.getText().equals("")) {
+            JOptionPane.showMessageDialog(rootPane, "Informe o horário de início da reserva!");
+            tfQtdTimeReservationStart.requestFocus();
             return;
         }
 
@@ -158,6 +195,7 @@ public class MealFrmRegister extends javax.swing.JDialog {
                     "IFCE", JOptionPane.ERROR_MESSAGE);
             return ;
         }
+        
         String timeEnd = tfTimeEnd.getText();
         try {
             DateFormat fmt = new SimpleDateFormat("hh:mm");
@@ -169,7 +207,27 @@ public class MealFrmRegister extends javax.swing.JDialog {
                     "IFCE", JOptionPane.ERROR_MESSAGE);
             return ; 
         }
-
+        
+        Integer timeReservationStart = null;
+        try {
+            timeReservationStart = Integer.parseInt(tfQtdTimeReservationStart.getText());
+            meal.setQtdTimeReservationStart(timeReservationStart);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(rootPane, "Qtd Horas de reserva (inicio) em formato incorreto.", 
+                    "IFCE", JOptionPane.ERROR_MESSAGE);
+            return ;
+        }
+        
+        Integer timeReservationEnd = null;
+        try {
+            timeReservationEnd = Integer.parseInt(tfQtdTimeReservationEnd.getText());
+            meal.setQtdTimeReservationEnd(timeReservationEnd);
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(rootPane, "Qt Hora de reserva (fim) em formato incorreto.", 
+                    "IFCE", JOptionPane.ERROR_MESSAGE);
+            return ; 
+        }
+        
         meal.setDescription(tfDesc.getText());
 
         MealDAO mDAO = new MealDAO();
@@ -230,9 +288,15 @@ public class MealFrmRegister extends javax.swing.JDialog {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField tfDesc;
+    private javax.swing.JTextField tfQtdTimeReservationEnd;
+    private javax.swing.JTextField tfQtdTimeReservationStart;
     private javax.swing.JFormattedTextField tfTimeEnd;
     private javax.swing.JFormattedTextField tfTimeStart;
     // End of variables declaration//GEN-END:variables
