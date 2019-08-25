@@ -11,6 +11,8 @@ import br.config.Config;
 import br.config.ConfigDAO;
 import br.meal.Meal;
 import br.meal.MealDAO;
+import br.menu.Menu;
+import br.menu.MenuDAO;
 import br.scheduling.Scheduling;
 import br.scheduling.SchedulingDAO;
 import br.scheduling.SchedulingTableModel;
@@ -48,10 +50,9 @@ public class AgendaFrm extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         preencheTabela();
         insertListMeals();
-        //edtMat.setDocument(new OnlyNumberField());
         lblData.setText(returnDate());
         edtMat.requestFocus();
-        //tbStudents.setAutoCreateRowSorter(true);
+
     }
 
     /*public AgendaFrm(Set<Meal> meals) {
@@ -73,14 +74,28 @@ public class AgendaFrm extends javax.swing.JDialog {
     }
 
     public void insertListMeals() {
-        MealDAO dao = new MealDAO();
+        MenuDAO mDAO = new MenuDAO();
+        List<Menu> listMenu = mDAO.checkExists("campus", UserActive.returnCampus(), "date", new Date());
+        if(listMenu.size()>0){
+            DefaultListModel model = new DefaultListModel();
+            model.removeAllElements();
+            for (Menu m : listMenu) {
+                listRefeicao.setModel(model);
+                model.addElement(m);
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "O dia de hoje não possui refeição cadatsrada.", 
+                    "Atenção", JOptionPane.INFORMATION_MESSAGE);
+        }
+        
+        /*MealDAO dao = new MealDAO();
         List<Meal> list = dao.checkExists("campus", UserActive.returnCampus());
         DefaultListModel model = new DefaultListModel();
         model.removeAllElements();
         for (Meal m : list) {
             listRefeicao.setModel(model);
             model.addElement(m);
-        }
+        }*/
     }
 
     public void preencheTabela() {
@@ -376,13 +391,13 @@ public class AgendaFrm extends javax.swing.JDialog {
     
     private void btAddStudentMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btAddStudentMealActionPerformed
 
-        List<Meal> meals = (List<Meal>) listRefeicao.getSelectedValuesList();
-
+        //List<Meal> meals = (List<Meal>) listRefeicao.getSelectedValuesList();
+        List<Menu> menus = (List<Menu>) listRefeicao.getSelectedValuesList();
         if (student == null) {
             JOptionPane.showMessageDialog(rootPane, "Informe o Aluno.");
             return;
         }
-        if (meals.size() == 0) {
+        if (menus.size() == 0) {
             JOptionPane.showMessageDialog(rootPane, "Informe as refeições.");
             return;
         }
@@ -398,19 +413,19 @@ public class AgendaFrm extends javax.swing.JDialog {
         if (JOptionPane.showConfirmDialog(rootPane, "Deseja agendar as refeições para " + student.getName() + "?",
                 "IFCE", JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
             SchedulingDAO sDAO = new SchedulingDAO();
-            for (Meal m : meals) {
+            for (Menu m : menus) {
                 /*
                 CÓDIGO DE VERIFICAÇÃO DAS PERMISSÕES
                 */
-                if(verifyPermissionMeal(m, student)==false){
+                if(verifyPermissionMeal(m.getMeal(), student)==false){
                     JOptionPane.showMessageDialog(rootPane, "O estudante ["+
                             student.getName()+"] \n não tem permissão para a refeição ["+
-                            m.getDescription()+"] no dia de hoje.",
+                            m.getMeal().getDescription()+"] no dia de hoje.",
                             "IFCE", JOptionPane.ERROR_MESSAGE);
                     continue;
                 }
 
-                List listStudentDateMeal = sDAO.schedulingDateStudentMeal(new Date(), student, m);
+                List listStudentDateMeal = sDAO.schedulingDateStudentMeal(new Date(), student, m.getMeal());
                 //se já foi cadastrado a refeição para o estudante, passa para o próximo
                 if (listStudentDateMeal.size() > 0) {
                     continue;
@@ -418,7 +433,8 @@ public class AgendaFrm extends javax.swing.JDialog {
 
                 Scheduling scheduling = new Scheduling();
                 scheduling.setCampus(UserActive.returnCampus());
-                scheduling.setMeal(m);
+                scheduling.setMeal(m.getMeal());
+                scheduling.setMenu(m);
                 scheduling.setStudent(student);
                 scheduling.setDate(sDAO.getServerDate());
                 scheduling.setDateInsert(new Date());

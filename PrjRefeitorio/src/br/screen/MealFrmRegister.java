@@ -50,13 +50,13 @@ public class MealFrmRegister extends javax.swing.JDialog {
         if (meal.getTimeStart() != null) {
             Date time = meal.getTimeStart();
             SimpleDateFormat dfdtTime;
-            dfdtTime = new SimpleDateFormat("hh:mm");
+            dfdtTime = new SimpleDateFormat("HH:mm");
             tfTimeStart.setText(dfdtTime.format(time));
         }
         if (meal.getTimeEnd() != null) {
             Date time = meal.getTimeEnd();
             SimpleDateFormat dfdtTime;
-            dfdtTime = new SimpleDateFormat("hh:mm");
+            dfdtTime = new SimpleDateFormat("HH:mm");
             tfTimeEnd.setText(dfdtTime.format(time));
         }
     }
@@ -186,7 +186,7 @@ public class MealFrmRegister extends javax.swing.JDialog {
 
         String timeStart = tfTimeStart.getText();
         try {
-            DateFormat fmt = new SimpleDateFormat("hh:mm");
+            DateFormat fmt = new SimpleDateFormat("HH:mm");
             java.util.Date time;
             time = new java.util.Date(fmt.parse(timeStart).getTime());
             meal.setTimeStart(time);
@@ -198,7 +198,7 @@ public class MealFrmRegister extends javax.swing.JDialog {
         
         String timeEnd = tfTimeEnd.getText();
         try {
-            DateFormat fmt = new SimpleDateFormat("hh:mm");
+            DateFormat fmt = new SimpleDateFormat("HH:mm");
             java.util.Date time;
             time = new java.util.Date(fmt.parse(timeEnd).getTime());
             meal.setTimeEnd(time);

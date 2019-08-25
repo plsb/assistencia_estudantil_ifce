@@ -15,14 +15,15 @@
         <property name="format_sql">true</property>
         <property name="generate_statistics">true</property>
         <property name="use_sql_coments">true</property>
-        <property name="hibernate.hbm2ddl.auto">update</property>
+        <property name="hibernate.hbm2ddl.auto">update</property>   
+
         <!-- configuration pool via c3p0-->
         <property name="hibernate.c3p0.acquire_increment">10</property>  
-        <property name="hibernate.c3p0.timeout">2</property>  
+        <property name="hibernate.c3p0.timeout">90</property>  
         <property name="hibernate.c3p0.idle_test_period">60</property>  
         <property name="hibernate.c3p0.max_size">100</property>  
         <property name="hibernate.c3p0.max_statements">50</property>  
-        <property name="hibernate.c3p0.min_size">5</property> 
+        <property name="hibernate.c3p0.min_size">1</property> 
         <!-- fim configuration pool via c3p0-->
         <mapping class="br.student.Student" />
         <mapping class="br.meal.Meal" />

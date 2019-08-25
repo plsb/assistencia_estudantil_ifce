@@ -7,6 +7,8 @@ package br.screen;
 
 import br.meal.Meal;
 import br.meal.MealDAO;
+import br.menu.Menu;
+import br.menu.MenuDAO;
 import br.scheduling.Scheduling;
 import br.scheduling.SchedulingDAO;
 import br.student.Student;
@@ -41,9 +43,9 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
         setLocationRelativeTo(null);
         setModal(true);
         setTitle("Escolha de Refeições");
-        insertMeals();
         clearFields();
         edDate.setText(returnDate());
+        insertMeals();
     }
 
     public String returnDate() {
@@ -56,13 +58,26 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
     public void insertMeals() {
         cbMeal.removeAllItems();
         cbMeal.addItem("-");
-
-        MealDAO mdao = new MealDAO();
-        List<Meal> list = mdao.list("campus", UserActive.returnCampus(),"description");
-
-        for (int i = 0; i < list.size(); i++) {
-            cbMeal.addItem(list.get(i));
+        Date date = null;
+        try {
+            DateFormat fmt = new SimpleDateFormat("dd/MM/yyyy");
+            date = new java.util.Date(fmt.parse(edDate.getText()).getTime());
+        } catch (ParseException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Data inválida.");
+            edDate.requestFocus();
+            return;
         }
+  
+        MenuDAO mdao = new MenuDAO();
+        List<Menu> list = mdao.checkExists("campus", UserActive.returnCampus(), "date", date);
+        if(list.size()>0){
+            for (int i = 0; i < list.size(); i++) {
+                cbMeal.addItem(list.get(i));
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Nenhuma refeição cadastrada.");
+        }
+        
     }
 
     public void clearFields() {
@@ -134,6 +149,11 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
         jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 220, 50, -1));
 
         edDate.setFormatterFactory(new javax.swing.text.DefaultFormatterFactory(new javax.swing.text.DateFormatter(new java.text.SimpleDateFormat("dd/MM/yyyy"))));
+        edDate.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                edDateFocusLost(evt);
+            }
+        });
         jPanel1.add(edDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 40, 170, -1));
 
         jLabel4.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
@@ -227,9 +247,9 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
                 return;
             }
             SchedulingDAO sDAO = new SchedulingDAO();
-            Meal meal = (Meal) cbMeal.getSelectedItem();
+            Menu menu = (Menu) cbMeal.getSelectedItem();
             
-            List listStudentDateMeal = sDAO.schedulingDateStudentMeal(date, student, meal);
+            List listStudentDateMeal = sDAO.schedulingDateStudentMeal(date, student, menu.getMeal());
             //se já foi cadastrado a refeição para o estudante, passa para o próximo
             if (listStudentDateMeal.size() > 0) {
                 JOptionPane.showMessageDialog(rootPane, "O aluno já passui essa refeição cadastrada!");
@@ -238,7 +258,8 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
             
             Scheduling scheduling = new Scheduling();
             scheduling.setCampus(UserActive.returnCampus());
-            scheduling.setMeal(meal);
+            scheduling.setMeal(menu.getMeal());
+            scheduling.setMenu(menu);
             scheduling.setStudent(student);
             scheduling.setDate(date);
             scheduling.setDateInsert(sDAO.getServerDate());
@@ -258,6 +279,10 @@ public class AllowMealStudentFrm extends javax.swing.JDialog {
         // TODO add your handling code here:
         setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void edDateFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_edDateFocusLost
+        insertMeals();
+    }//GEN-LAST:event_edDateFocusLost
 
     /**
      * @param args the command line arguments

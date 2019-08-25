@@ -25,8 +25,7 @@ public class MainFrm extends javax.swing.JFrame {
         setTitle("Refeitório");
         String versao = Double.toString(Util.getVersionSystem());
         if(UserActive.isAdministrador()){
-            lblUserActive.setText("Usuário ativo: "+UserActive.getLogin()
-                +" | Administrador | Versão "+versao);
+            lblUserActive.setText("Usuário ativo: Administrador | Versão "+versao);
         } else {
             lblUserActive.setText("Usuário ativo: "+UserActive.retornaUsuarioAtivo().getName()
                 +" | Campus: "+UserActive.retornaUsuarioAtivo().getCampus().getDescription()
@@ -89,7 +88,7 @@ public class MainFrm extends javax.swing.JFrame {
             smiMeals.setVisible(false);
         } else if(UserActive.retornaUsuarioAtivo().getTipo().equals("NUTRI")){
         //Nutricionista
-            btStudent1.setEnabled(true);
+            btStudent1.setEnabled(false);
             btMenu.setEnabled(true);
             btRegisterMeal.setEnabled(false);
             btAgenda.setEnabled(false);

@@ -18,6 +18,7 @@ public class UserActive {
 
     private static String login;
     private static boolean administrador;
+    private static User user;
     
     /**
      * @return the login
@@ -45,19 +46,23 @@ public class UserActive {
      */
     public static void setAdministrador(boolean aAdministrador) {
         administrador = aAdministrador;
-    }   
+    }
+    
+    public static void setUser(User u){
+        user = u;
+    }
     
     public static User retornaUsuarioAtivo(){
         
-        UserDAO usuDAO = new UserDAO();
-        User user = usuDAO.checkExists("login", login).get(0);
+        /*UserDAO usuDAO = new UserDAO();
+        User user = usuDAO.checkExists("login", login).get(0);*/
         return user;
         
     }
     
     public static Campus returnCampus(){
-        UserDAO usuDAO = new UserDAO();
-        User user = usuDAO.checkExists("login", login).get(0);
+        /*UserDAO usuDAO = new UserDAO();
+        User user = usuDAO.checkExists("login", login).get(0);*/
         return user.getCampus();
     }
 }

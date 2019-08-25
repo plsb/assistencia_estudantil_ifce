@@ -22,6 +22,9 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.BatchSize;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 @Entity
 @Table(name = "student")
@@ -39,10 +42,14 @@ public class Student implements Comparable<Student> {
     
     private boolean semRegular;
     
+    @Fetch(FetchMode.JOIN)
+    @BatchSize(size = 1)
     @ManyToOne
     private Course course;
     
+    @Fetch(FetchMode.JOIN)
     @ManyToOne
+    @BatchSize(size = 11)
     private Shift shift;
     
     @Temporal(TemporalType.DATE)
@@ -50,7 +57,9 @@ public class Student implements Comparable<Student> {
     
     private String photo;
     
+    @Fetch(FetchMode.JOIN)
     @ManyToOne
+    @BatchSize(size = 1)
     private Campus campus;
     
     

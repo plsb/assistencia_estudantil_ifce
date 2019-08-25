@@ -243,14 +243,15 @@ public class LoginFrm extends javax.swing.JFrame {
              * com a camada de controle (RN) e a camada de
              * controle conversa com a camada de dados (DAO)
              */
-            User usuario = new User();
-            usuario.setLogin(tfLogin.getText());
-            usuario.setSenha(tfSenha.getText());
+            User user = new User();
+            user.setLogin(tfLogin.getText());
+            user.setSenha(tfSenha.getText());
             UserDAO uDAO = new UserDAO();
-            if (uDAO.searchUser(usuario.getLogin(), usuario.getSenha()) != null) {
+            user = uDAO.searchUser(user.getLogin(), user.getSenha());
+            if ( user != null) {
                 dispose();
-                usuario = uDAO.checkExists("login", tfLogin.getText()).get(0);
-                UserActive.setLogin(usuario.getLogin());
+                //user = uDAO.checkExists("login", tfLogin.getText()).get(0);
+                UserActive.setUser(user);
                 MainFrm tp = new MainFrm();
                 tp.setVisible(true);
 

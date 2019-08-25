@@ -4,9 +4,8 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/hibernate.cfg.xml</file>
-            <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/util/Util.java</file>
-            <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/util/ConnectionFactory.java</file>
-            <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/screen/AgendaFrm.java</file>
+            <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/screen/MainFrm.java</file>
+            <file>file:/Users/pelusb/NetBeansProjects/assistencia_estudantil_ifce/PrjRefeitorio/src/br/screen/LoginFrm.java</file>
         </group>
     </open-files>
 </project-private>

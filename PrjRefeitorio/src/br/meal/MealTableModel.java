@@ -80,9 +80,9 @@ public class MealTableModel extends AbstractTableModel {
             case 1:
                 return s.getDescription();
             case 2:
-                return s.getTimeStart()!=null ? new SimpleDateFormat("hh:mm").format( s.getTimeStart()) : "";
+                return s.getTimeStart()!=null ? new SimpleDateFormat("HH:mm").format( s.getTimeStart()) : "";
             case 3:
-                return s.getTimeEnd()!=null ? new SimpleDateFormat("hh:mm").format( s.getTimeEnd()) : "";
+                return s.getTimeEnd()!=null ? new SimpleDateFormat("HH:mm").format( s.getTimeEnd()) : "";
             case 4:
                 return s.getQtdTimeReservationStart();
             case 5:
