@@ -14,6 +14,7 @@ import br.util.Util;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
@@ -61,6 +62,11 @@ public class Scheduling implements Comparable<Scheduling> {
     private Campus campus;
 
     private String absenceJustification;
+    
+    private String ticketCode;
+    
+    @Column(columnDefinition="default false'")
+    private boolean canceled_by_student;
 
     /**
      * @return the id
@@ -237,6 +243,34 @@ public class Scheduling implements Comparable<Scheduling> {
      */
     public void setMenu(Menu menu) {
         this.menu = menu;
+    }
+
+    /**
+     * @return the ticketCode
+     */
+    public String getTicketCode() {
+        return ticketCode;
+    }
+
+    /**
+     * @param ticketCode the ticketCode to set
+     */
+    public void setTicketCode(String ticketCode) {
+        this.ticketCode = ticketCode;
+    }
+
+    /**
+     * @return the canceled_by_student
+     */
+    public boolean isCanceled_by_student() {
+        return canceled_by_student;
+    }
+
+    /**
+     * @param canceled_by_student the canceled_by_student to set
+     */
+    public void setCanceled_by_student(boolean canceled_by_student) {
+        this.canceled_by_student = canceled_by_student;
     }
 
 }

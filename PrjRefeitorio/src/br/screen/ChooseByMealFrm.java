@@ -357,7 +357,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
         } else {
             SchedulingTableModel ptm = (SchedulingTableModel) tbStudents.getModel();
                 Scheduling select = ptm.getScheduling(tbStudents.getSelectedRow());
-            if (JOptionPane.showConfirmDialog(rootPane, "Deseja Excluir a refeição de "+
+            if (JOptionPane.showConfirmDialog(rootPane, "Deseja Cancelar a refeição de "+
                     select.getStudent().getName()+"?",
                     "Excluir Refeição", JOptionPane.YES_NO_OPTION)
                     == JOptionPane.YES_OPTION) {
@@ -370,7 +370,8 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                 }
 
                 SchedulingDAO dao = new SchedulingDAO();
-                dao.remove(select);
+                select.setCanceled_by_student(true);
+                dao.update(select);
 
                 String dataString = edDate.getText();
                 java.util.Date data;

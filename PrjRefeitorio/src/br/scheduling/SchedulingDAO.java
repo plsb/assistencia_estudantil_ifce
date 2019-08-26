@@ -35,7 +35,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(Scheduling.class).add(Restrictions.eq("date", valor))
                     .add(Restrictions.eq("wasPresent", false))
-                    .add(Restrictions.eq("campus", UserActive.returnCampus())).list();
+                    .add(Restrictions.eq("campus", UserActive.returnCampus()))
+                    .add(Restrictions.eq("canceled_by_student",false)).list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -56,7 +57,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(Scheduling.class).add(Restrictions.eq("date", valor))
                     .add(Restrictions.eq("wasPresent", true))
-                    .add(Restrictions.eq("campus", UserActive.returnCampus())).list();
+                    .add(Restrictions.eq("campus", UserActive.returnCampus()))
+                    .add(Restrictions.eq("canceled_by_student",false)).list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -84,7 +86,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
                     .add(Restrictions.eq("student", s))
                     .add(Restrictions.eq("wasPresent", false))
                     .add(Restrictions.lt("date", date))
-                    .add(Restrictions.isNull("absenceJustification")).list();
+                    .add(Restrictions.isNull("absenceJustification"))
+                    .add(Restrictions.eq("canceled_by_student",false)).list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -106,7 +109,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(Scheduling.class).add(Restrictions.eq("date", date))
                     .add(Restrictions.eq("meal", meal))
-                    .add(Restrictions.eq("student", student)).list();
+                    .add(Restrictions.eq("student", student))
+                    .add(Restrictions.eq("canceled_by_student",false)).list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -126,7 +130,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(Scheduling.class).add(Restrictions.eq("date", date))
-                    .add(Restrictions.eq("meal", meal)).list();
+                    .add(Restrictions.eq("meal", meal))
+                    .add(Restrictions.eq("canceled_by_student",false)).list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -147,7 +152,8 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
             setTransacao(getSessao().beginTransaction());
             lista = this.getSessao().createCriteria(Scheduling.class).add(Restrictions.eq("date", date))
                     .add(Restrictions.eq("meal", meal))
-                    .add(Restrictions.eq("wasPresent", wasPresent)).list();
+                    .add(Restrictions.eq("wasPresent", wasPresent))
+                    .add(Restrictions.eq("canceled_by_student",false)).list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -171,8 +177,30 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
                     .add(Restrictions.eq("date", date))
                     .add(Expression.in(campo, valor))
                     .add(Restrictions.eq("meal", meal))
-                    .add(Restrictions.eq("campus", UserActive.returnCampus())).list();
+                    .add(Restrictions.eq("campus", UserActive.returnCampus()))
+                    .add(Restrictions.eq("canceled_by_student",false)).list();
 
+        } catch (Throwable e) {
+            if (getTransacao().isActive()) {
+                getTransacao().rollback();
+            }
+            JOptionPane.showMessageDialog(null, "Não foi possível listar: " + e.getMessage());
+        } finally {
+            this.getSessao().close();
+        }
+        return lista;
+
+    }
+    
+    public List<Scheduling> checkExists(String campo, Object valor) {
+        List<Scheduling> lista = null;
+        try {
+            this.setSessao(HibernateUtil.getSessionFactory().openSession());
+            setTransacao(getSessao().beginTransaction());
+            lista = this.getSessao().createCriteria(Scheduling.class)
+                    .add(Restrictions.eq(campo, valor))
+                    .add(Restrictions.eq("canceled_by_student",false)).list();
+            //Hibernate.initialize(lista);
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
                 getTransacao().rollback();
