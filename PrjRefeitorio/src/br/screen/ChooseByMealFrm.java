@@ -84,6 +84,18 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
             if (!nameStudent.equals("")) {
                 StudentDAO studentDAO = new StudentDAO();
                 List<Student> students = studentDAO.checkExistsLike("name", nameStudent);
+                if(students.size()==0){
+                    Integer codigo = 0;
+                    try {
+                         codigo = Integer.parseInt(nameStudent);
+                    } catch (Exception e) {
+                    }
+                    if(codigo != 0){
+                        students = studentDAO.checkExists("id", codigo,
+                                "campus", UserActive.returnCampus());
+                    }
+
+                }
                 list = sDAO.checkExistsin("student", students, date, (Meal) cbMeal.getSelectedItem());
             } else {
                 switch (opcao) {
