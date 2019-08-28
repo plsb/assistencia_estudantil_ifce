@@ -110,16 +110,27 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
                         break;
                 }
             }
+            int contPresent=0, contMissed=0;
+            for(Scheduling item: list){
+                if(item.isWasPresent()){
+                    contPresent++;
+                } else {
+                    contMissed++;
+                }
+                    
+            }
 
-            List<Scheduling> listPres = sDAO.schedulingDateMealWasPresent(date, (Meal) cbMeal.getSelectedItem(), true);
+            //List<Scheduling> listPres = sDAO.schedulingDateMealWasPresent(date, (Meal) cbMeal.getSelectedItem(), true);
 
-            List<Scheduling> listNoPres = sDAO.schedulingDateMealWasPresent(date, (Meal) cbMeal.getSelectedItem(), false);
+            //List<Scheduling> listNoPres = sDAO.schedulingDateMealWasPresent(date, (Meal) cbMeal.getSelectedItem(), false);
 
             if (list.size() > 0) {
                 if(!nameStudent.equals("")){
                     lblInfo.setText("Pesquisa por aluno.");
                 } else {
-                    lblInfo.setText(list.size() + " refeições (" + cbMeal.getSelectedItem().toString() + "). " + listPres.size() + " presentes. " + listNoPres.size() + " ausentes.");
+                    lblInfo.setText(list.size() + " refeições (" + 
+                            cbMeal.getSelectedItem().toString() + "). " + contPresent + " presentes. " + 
+                            contMissed + " ausentes.");
                 }
             } else {
                 lblInfo.setText("0 refeições.");
@@ -129,7 +140,7 @@ public class ChooseByMealFrm extends javax.swing.JDialog {
             tbStudents.setModel(ptm);
         }
 
-        FormatSizeColJTable.packColumns(tbStudents, 1);
+        //FormatSizeColJTable.packColumns(tbStudents, 1);
 
         tbStudents.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override

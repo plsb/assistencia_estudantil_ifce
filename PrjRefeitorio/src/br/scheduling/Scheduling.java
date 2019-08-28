@@ -65,7 +65,7 @@ public class Scheduling implements Comparable<Scheduling> {
     
     private String ticketCode;
     
-    @Column(columnDefinition="default false'")
+    @Column(columnDefinition="int default 0")
     private boolean canceled_by_student;
 
     /**

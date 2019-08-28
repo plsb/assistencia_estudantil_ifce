@@ -87,7 +87,9 @@ public class SchedulingDAO extends GenericDAO<Scheduling>{
                     .add(Restrictions.eq("wasPresent", false))
                     .add(Restrictions.lt("date", date))
                     .add(Restrictions.isNull("absenceJustification"))
-                    .add(Restrictions.eq("canceled_by_student",false)).list();
+                    .add(Restrictions.eq("canceled_by_student",false))
+                    .setMaxResults(5)
+                    .list();
             
         } catch (Throwable e) {
             if (getTransacao().isActive()) {

@@ -108,7 +108,7 @@ public class AgendaFrm extends javax.swing.JDialog {
         SchedulingTableModel ptm = new SchedulingTableModel(list);
         tbStudents.setModel(ptm);
 
-        FormatSizeColJTable.packColumns(tbStudents, 1);
+        //FormatSizeColJTable.packColumns(tbStudents, 1);
     }
 
     public void clearFields() {
@@ -442,7 +442,7 @@ public class AgendaFrm extends javax.swing.JDialog {
                 scheduling.setWasPresent(false);
                 scheduling.setUser(UserActive.retornaUsuarioAtivo());
                 sDAO.add(scheduling);
-            }
+             }
             clearFields();
 
         }
