@@ -19,6 +19,13 @@ import br.util.FormatSizeColJTable;
 import br.util.UserActive;
 import br.util.Util;
 import java.awt.event.KeyEvent;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -197,6 +204,7 @@ public class ReportCarteirinhas extends javax.swing.JDialog {
         HashMap parametros = new HashMap();
         parametros.put("sql", sql);
         parametros.put("campus", UserActive.returnCampus().getDescription());
+        System.out.println(sql);
         
         Connection connection = new ConnectionFactory().getConnection();
         try {
@@ -204,15 +212,25 @@ public class ReportCarteirinhas extends javax.swing.JDialog {
             viewer.setSize(1200, 600);
             viewer.setLocationRelativeTo(null);
             viewer.setModal(true);
-            String caminho = config.getPathReport() + "carteirinhas.jasper";
+           
+            
+            InputStream is=null;
+            try {
+                is = new URL(config.getPathReport() + "carteirinhas.jasper").openStream();
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(ReportCarteirinhas.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ReportCarteirinhas.class.getName()).log(Level.SEVERE, null, ex);
+            }
             //JOptionPane.showMessageDialog(rootPane, caminho);
             //pathjrxml = JasperCompileManager.compileReport("src/br/report/summaryMeals.jasper");
-            JasperPrint printReport = JasperFillManager.fillReport(caminho, parametros,
+            JasperPrint printReport = JasperFillManager.fillReport(is
+                    , parametros,
                     connection);
             JasperViewer jv = new JasperViewer(printReport, false);
             viewer.getContentPane().add(jv.getContentPane());
             viewer.setVisible(true);
-            //JasperExportManager.exportReportToPdfFile(printReport, "src/relatorios/RelAcervo.pdf");
+
 
             //jv.setVisible(true);
         } catch (JRException ex) {

@@ -5,6 +5,7 @@
 package br.util;
 
 import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -337,5 +338,22 @@ public abstract class GenericDAO<T> {
         } finally {
             sessao.close();
         }
+    }
+    
+    public List executaSqlPuro(String sql){
+        List list = new ArrayList();
+        try {
+            setSessao(HibernateUtil.getSessionFactory().openSession());
+            
+            this.setTransacao(getSessao().beginTransaction());
+            list = this.getSessao().createSQLQuery(sql).list();
+            this.getTransacao().commit();
+            
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, ex.getMessage());
+        } finally {
+            sessao.close();
+        }
+        return list;
     }
 }

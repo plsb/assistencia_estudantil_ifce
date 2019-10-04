@@ -10,6 +10,10 @@ import br.config.ConfigDAO;
 import br.util.ConnectionFactory;
 import br.util.UserActive;
 import java.awt.event.KeyEvent;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -177,17 +181,22 @@ public class ReportTotalMealsByPeriod extends javax.swing.JDialog {
             viewer.setSize(1200, 600);
             viewer.setLocationRelativeTo(null);
             viewer.setModal(true);
-            String caminho = config.getPathReport() + "summaryMeals.jasper";
-            //JOptionPane.showMessageDialog(rootPane, caminho);
-            //pathjrxml = JasperCompileManager.compileReport("src/br/report/summaryMeals.jasper");
-            JasperPrint printReport = JasperFillManager.fillReport(caminho, parametros,
+            
+            InputStream is=null;
+            try {
+                is = new URL(config.getPathReport() + "summaryMeals.jasper").openStream();
+            } catch (MalformedURLException ex) {
+                Logger.getLogger(ReportCarteirinhas.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (IOException ex) {
+                Logger.getLogger(ReportCarteirinhas.class.getName()).log(Level.SEVERE, null, ex);
+            }
+                     
+            JasperPrint printReport = JasperFillManager.fillReport(is, parametros,
                     connection);
             JasperViewer jv = new JasperViewer(printReport, false);
             viewer.getContentPane().add(jv.getContentPane());
             viewer.setVisible(true);
-            //JasperExportManager.exportReportToPdfFile(printReport, "src/relatorios/RelAcervo.pdf");
-
-            //jv.setVisible(true);
+            
         } catch (JRException ex) {
             JOptionPane.showMessageDialog(rootPane, ex.getMessage(), "IFCE", JOptionPane.ERROR_MESSAGE);
             Logger.getLogger(ReportTotalMealsByPeriod.class.getName()).log(Level.SEVERE, null, ex);

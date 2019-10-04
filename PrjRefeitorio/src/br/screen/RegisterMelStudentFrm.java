@@ -21,12 +21,16 @@ import br.util.UserActive;
 import java.awt.Color;
 import java.awt.Image;
 import java.awt.event.KeyEvent;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -333,23 +337,28 @@ public class RegisterMelStudentFrm extends javax.swing.JDialog {
                         if (list != null) {
                             if (list.size() > 0) {
                                 Config config = listConfig.get(0);
-                                insertImage(config.getPathPhotoStudent() + "/" + student.getPhoto());
+                                insertImage(config.getPathPhotoStudent() + student.getPhoto());
                             }
                         }
                     } catch (Exception e) {
                     }
                 } else {
-                    insertImage("/br/imagens/photo.png");
+                    lblPhoto.setIcon(null);
                 }
             }
         }
     }//GEN-LAST:event_edtMatKeyPressed
 
     private void insertImage(String path) {
-        ImageIcon image = new ImageIcon(path);
-        lblPhoto.setIcon(new ImageIcon(
-                image.getImage().getScaledInstance(lblPhoto.getWidth(), lblPhoto.getHeight(),
-                        Image.SCALE_DEFAULT)));
+        try {
+            URL urlImg = new URL(path);
+            ImageIcon image = new ImageIcon(urlImg);
+            lblPhoto.setIcon(new ImageIcon(
+                    image.getImage().getScaledInstance(lblPhoto.getWidth(), lblPhoto.getHeight(),
+                            Image.SCALE_DEFAULT)));
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(RegisterMelStudentFrm.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     private void btConfirmStudentMealActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConfirmStudentMealActionPerformed

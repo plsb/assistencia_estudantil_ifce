@@ -32,6 +32,8 @@ import java.awt.Component;
 import java.awt.Font;
 import java.awt.Image;
 import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.sql.Connection;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -96,6 +98,8 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         tbbPanStudente.setEnabledAt(3, false);
         btnCarteirinha.setVisible(false);
         lblBloqueado.setVisible(false);
+        
+        
     }
 
     public StudentFrmRegister(Student student) {
@@ -140,7 +144,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                 if (list != null) {
                     if (list.size() > 0) {
                         Config config = list.get(0);
-                        insertImage(config.getPathPhotoStudent() + "/" + student.getPhoto());
+                        insertImage(config.getPathPhotoStudent() + student.getPhoto());
                     }
                 }
             } catch (Exception e) {
@@ -162,6 +166,16 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             tfDateValid.setForeground(Color.WHITE); // altera a cor da fonte
             tfDateValid.setBackground(Color.RED);  // altera a cor do fundo
             tfDateValid.setFont(new Font("Verdana", Font.BOLD, 15));
+        }
+        
+        //verifica se tem acesso ao sistema onlinte
+        StudentDAO sDAO = new StudentDAO();
+        List list = sDAO.executaSqlPuro("select * from user_students where student_id="+
+                                    this.student.getId());
+        if(list.size()>0){
+            lblSystemOnline.setVisible(true);
+        } else {
+            lblSystemOnline.setVisible(false);
         }
         
     }
@@ -285,6 +299,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         btnCarteirinha = new javax.swing.JButton();
         lblBloqueado = new javax.swing.JLabel();
         cbActive = new javax.swing.JCheckBox();
+        lblSystemOnline = new javax.swing.JLabel();
         pnlMeals = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbStudentMeals = new javax.swing.JTable();
@@ -411,6 +426,10 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             }
         });
         pnlDIni.add(cbActive, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 20, -1, -1));
+
+        lblSystemOnline.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
+        lblSystemOnline.setText("*Possui acesso ao sistema RUTicket Online.");
+        pnlDIni.add(lblSystemOnline, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
 
         tbbPanStudente.addTab("Dados Inicias", pnlDIni);
 
@@ -776,18 +795,6 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         // TODO add your handling code here:
     }//GEN-LAST:event_cbActiveActionPerformed
 
-    private void tbRepublicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbRepublicMouseClicked
-        if(evt.getClickCount() == 2){
-            RepublicTableModel ptm = (RepublicTableModel) tbRepublic.getModel();
-            Republic select = ptm.getRepublic(tbRepublic.getSelectedRow());
-            RepublicFrmRegister irfr = new RepublicFrmRegister(select);
-            irfr.setVisible(true);
-            
-            insertTableRepublic();
-            preencheTabelaAllowMeal();
-        }
-    }//GEN-LAST:event_tbRepublicMouseClicked
-
     private void tbAllowMealKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbAllowMealKeyPressed
         // TODO add your handling code here:
     }//GEN-LAST:event_tbAllowMealKeyPressed
@@ -822,11 +829,28 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         }
     }//GEN-LAST:event_tfDateValidFocusLost
 
+    private void tbRepublicMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbRepublicMouseClicked
+        if(evt.getClickCount() == 2){
+            RepublicTableModel ptm = (RepublicTableModel) tbRepublic.getModel();
+            Republic select = ptm.getRepublic(tbRepublic.getSelectedRow());
+            RepublicFrmRegister irfr = new RepublicFrmRegister(select);
+            irfr.setVisible(true);
+
+            insertTableRepublic();
+            preencheTabelaAllowMeal();
+        }
+    }//GEN-LAST:event_tbRepublicMouseClicked
+
     private void insertImage(String path) {
-        ImageIcon image = new ImageIcon(path);
-        lblPhoto.setIcon(new ImageIcon(
+        try {
+            URL urlImg = new URL(path);
+            ImageIcon image = new ImageIcon(urlImg);
+            lblPhoto.setIcon(new ImageIcon(
                 image.getImage().getScaledInstance(lblPhoto.getWidth(), lblPhoto.getHeight(),
                         Image.SCALE_DEFAULT)));
+        } catch (MalformedURLException ex) {
+            Logger.getLogger(StudentFrmRegister.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     /**
@@ -904,6 +928,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     private javax.swing.JLabel lblCodigo;
     private javax.swing.JLabel lblObs;
     private javax.swing.JLabel lblPhoto;
+    private javax.swing.JLabel lblSystemOnline;
     private javax.swing.JPanel pnlDIni;
     private javax.swing.JPanel pnlMeals;
     private javax.swing.JTextArea taObs;
