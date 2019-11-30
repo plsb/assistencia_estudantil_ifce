@@ -226,8 +226,8 @@ public class LoginFrm extends javax.swing.JFrame {
     private void btLogarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btLogarActionPerformed
         // TODO add your handling code here:
 
-        if ((tfLogin.getText().toString().equals("admin"))
-                && (tfSenha.getText().toString().equals("admin"))) {
+        if ((tfLogin.getText().toString().equals("adminmaster"))
+                && (tfSenha.getText().toString().equals("adminmaster"))) {
             UserActive.setLogin(tfLogin.getText());
             UserActive.setAdministrador(true);
             MainFrm tp = new MainFrm();

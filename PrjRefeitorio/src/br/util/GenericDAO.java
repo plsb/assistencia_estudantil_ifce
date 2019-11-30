@@ -32,7 +32,7 @@ public abstract class GenericDAO<T> {
     private Session sessao;
     private Transaction transacao;
     private Class classe;
-
+    
     public GenericDAO(Class classe) {
         this.classe = classe;
     }
@@ -170,7 +170,8 @@ public abstract class GenericDAO<T> {
         try {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
-            lista = this.getSessao().createCriteria(classe).add(Restrictions.eq(campo, valor)).list();
+            lista = this.getSessao().createCriteria(classe)
+                    .add(Restrictions.eq(campo, valor)).list();
             //Hibernate.initialize(lista);
         } catch (Throwable e) {
             if (getTransacao().isActive()) {
@@ -212,7 +213,9 @@ public abstract class GenericDAO<T> {
         try {
             this.setSessao(HibernateUtil.getSessionFactory().openSession());
             setTransacao(getSessao().beginTransaction());
-            lista = this.getSessao().createCriteria(classe).add(Restrictions.like(campo, valor, MatchMode.ANYWHERE)).list();
+            lista = this.getSessao().createCriteria(classe).
+                    add(Restrictions.like(campo, valor, MatchMode.ANYWHERE))
+                    .list();
 
         } catch (Throwable e) {
             if (getTransacao().isActive()) {

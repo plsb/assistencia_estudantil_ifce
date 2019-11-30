@@ -15,9 +15,10 @@ public class ConnectionFactory {
         
         try {
             System.out.println("Conectando ao Banco de Dados...");
-            
-            return DriverManager.getConnection("jdbc:mysql://localhost/refeitorio",  //192.168.3.38
-                    "root", "");
+            return DriverManager.getConnection("jdbc:mysql://mysql.ifce.edu.br/rucedro",  
+                    "rucedro", "yah)Vahyu9ethu9i");
+            /*return DriverManager.getConnection("jdbc:mysql://localhost/refeitorio",  //192.168.3.38
+                    "root", "");*/
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e.getMessage(), "", JOptionPane.ERROR_MESSAGE);
             throw new RuntimeException(e);
