@@ -133,6 +133,7 @@ public class MainFrm extends javax.swing.JFrame {
         btRegisterMeal = new javax.swing.JButton();
         jLabel2 = new javax.swing.JLabel();
         btExit = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
         jMenuBar2 = new javax.swing.JMenuBar();
         smmCursos = new javax.swing.JMenu();
         smCampi = new javax.swing.JMenuItem();
@@ -226,7 +227,7 @@ public class MainFrm extends javax.swing.JFrame {
 
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 18)); // NOI18N
         jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel2.setText("SISTEMA DO REFEITÓRIO IFCE CAMPUS CEDRO");
+        jLabel2.setText("SISTEMA DO REFEITÓRIO IFCE ");
         jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 20, 540, -1));
 
         btExit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/action_exit_close_remove_13915.png"))); // NOI18N
@@ -238,7 +239,10 @@ public class MainFrm extends javax.swing.JFrame {
         });
         jPanel1.add(btExit, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 410));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/leds_menor.png"))); // NOI18N
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 380, -1, 80));
+
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 550, 450));
 
         smmCursos.setText("Cadastros");
 
@@ -473,6 +477,7 @@ public class MainFrm extends javax.swing.JFrame {
     private javax.swing.JButton btStudent1;
     private javax.swing.JButton btVerifyMeal;
     private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenu jMenu2;
     private javax.swing.JMenu jMenu3;

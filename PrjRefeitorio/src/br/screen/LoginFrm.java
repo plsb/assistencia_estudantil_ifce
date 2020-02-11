@@ -107,6 +107,7 @@ public class LoginFrm extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         lblVersion = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(204, 204, 255));
@@ -132,12 +133,12 @@ public class LoginFrm extends javax.swing.JFrame {
         jLabel1.setBackground(new java.awt.Color(255, 0, 0));
         jLabel1.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel1.setText("Usuário.:");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 30, -1, 33));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 30, -1, 33));
 
         jLabel2.setBackground(new java.awt.Color(255, 0, 0));
         jLabel2.setFont(new java.awt.Font("Verdana", 1, 14)); // NOI18N
         jLabel2.setText("Senha.:");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 60, -1, 36));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 60, -1, 36));
 
         tfLogin.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tfLogin.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -145,7 +146,7 @@ public class LoginFrm extends javax.swing.JFrame {
                 tfLoginKeyPressed(evt);
             }
         });
-        jPanel1.add(tfLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 30, 226, 29));
+        jPanel1.add(tfLogin, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 30, 226, 29));
 
         tfSenha.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         tfSenha.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -153,7 +154,7 @@ public class LoginFrm extends javax.swing.JFrame {
                 tfSenhaKeyPressed(evt);
             }
         });
-        jPanel1.add(tfSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 70, 226, 29));
+        jPanel1.add(tfSenha, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, 226, 29));
 
         btLogar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btLogar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/Login_37128.png"))); // NOI18N
@@ -162,7 +163,7 @@ public class LoginFrm extends javax.swing.JFrame {
                 btLogarActionPerformed(evt);
             }
         });
-        jPanel1.add(btLogar, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 100, -1, -1));
+        jPanel1.add(btLogar, new org.netbeans.lib.awtextra.AbsoluteConstraints(320, 100, -1, -1));
 
         btCancelar.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
         btCancelar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/forceexit_103817.png"))); // NOI18N
@@ -171,20 +172,23 @@ public class LoginFrm extends javax.swing.JFrame {
                 btCancelarActionPerformed(evt);
             }
         });
-        jPanel1.add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 100, -1, -1));
+        jPanel1.add(btCancelar, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 100, -1, -1));
 
-        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/logo-vertical-ifce.png"))); // NOI18N
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 0, 90, 130));
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/leds_menor.png"))); // NOI18N
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 110, -1, 80));
 
         lblVersion.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         lblVersion.setText("Versão 0.0");
-        jPanel1.add(lblVersion, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
+        jPanel1.add(lblVersion, new org.netbeans.lib.awtextra.AbsoluteConstraints(360, 170, -1, -1));
 
         jLabel6.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
-        jLabel6.setText("Assistência Estudantil - IFCE Campus Cedro ");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 120, -1, -1));
+        jLabel6.setText("Assistência Estudantil - IFCE ");
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 150, -1, -1));
 
-        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 460, 160));
+        jLabel5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/logo-vertical-ifce.png"))); // NOI18N
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 90, 130));
+
+        jPanel3.add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 450, 210));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -213,11 +217,13 @@ public class LoginFrm extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
@@ -336,6 +342,7 @@ public class LoginFrm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;

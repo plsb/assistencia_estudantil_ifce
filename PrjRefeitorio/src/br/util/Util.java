@@ -343,7 +343,7 @@ public class Util {
     }
 
     public static double getVersionSystem() {
-        return 4.2;
+        return 4.5;
     }
 
     public static File copyArquivo(String source, String destination, int w, int h) {

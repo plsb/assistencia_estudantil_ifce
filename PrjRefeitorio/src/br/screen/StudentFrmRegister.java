@@ -99,6 +99,9 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         btnCarteirinha.setVisible(false);
         lblBloqueado.setVisible(false);
         
+        tfEmail.setEnabled(false);
+        lblSystemOnline.setVisible(false);
+        
         
     }
 
@@ -170,13 +173,16 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         
         //verifica se tem acesso ao sistema onlinte
         StudentDAO sDAO = new StudentDAO();
-        List list = sDAO.executaSqlPuro("select * from user_students where student_id="+
+        List list = sDAO.executaSqlPuro("select email from user_students where student_id="+
                                     this.student.getId());
+        tfEmail.setEnabled(false);
+        lblSystemOnline.setVisible(false);
+        
         if(list.size()>0){
+            tfEmail.setEnabled(true);
+            tfEmail.setText(list.get(0).toString());
             lblSystemOnline.setVisible(true);
-        } else {
-            lblSystemOnline.setVisible(false);
-        }
+        } 
         
     }
 
@@ -300,6 +306,9 @@ public class StudentFrmRegister extends javax.swing.JDialog {
         lblBloqueado = new javax.swing.JLabel();
         cbActive = new javax.swing.JCheckBox();
         lblSystemOnline = new javax.swing.JLabel();
+        pnlEmail = new javax.swing.JPanel();
+        jLabel9 = new javax.swing.JLabel();
+        tfEmail = new javax.swing.JTextField();
         pnlMeals = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbStudentMeals = new javax.swing.JTable();
@@ -429,7 +438,40 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
         lblSystemOnline.setFont(new java.awt.Font("Lucida Grande", 1, 13)); // NOI18N
         lblSystemOnline.setText("*Possui acesso ao sistema RUTicket Online.");
-        pnlDIni.add(lblSystemOnline, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 290, -1, -1));
+        pnlDIni.add(lblSystemOnline, new org.netbeans.lib.awtextra.AbsoluteConstraints(340, 360, -1, -1));
+
+        pnlEmail.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+
+        jLabel9.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+        jLabel9.setText("E-mail: ");
+
+        tfEmail.setFont(new java.awt.Font("Verdana", 0, 14)); // NOI18N
+
+        javax.swing.GroupLayout pnlEmailLayout = new javax.swing.GroupLayout(pnlEmail);
+        pnlEmail.setLayout(pnlEmailLayout);
+        pnlEmailLayout.setHorizontalGroup(
+            pnlEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEmailLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(pnlEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlEmailLayout.createSequentialGroup()
+                        .addComponent(jLabel9)
+                        .addGap(370, 374, Short.MAX_VALUE))
+                    .addGroup(pnlEmailLayout.createSequentialGroup()
+                        .addComponent(tfEmail)
+                        .addContainerGap())))
+        );
+        pnlEmailLayout.setVerticalGroup(
+            pnlEmailLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlEmailLayout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(tfEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+
+        pnlDIni.add(pnlEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 280, 440, 70));
 
         tbbPanStudente.addTab("Dados Inicias", pnlDIni);
 
@@ -553,7 +595,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
 
         tbbPanStudente.addTab("República", jPanel4);
 
-        jPanel1.add(tbbPanStudente, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 660, 370));
+        jPanel1.add(tbbPanStudente, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 10, 660, 430));
 
         jButton2.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/Save_37110.png"))); // NOI18N
@@ -562,7 +604,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                 jButton2ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 380, -1, -1));
+        jPanel1.add(jButton2, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 430, -1, -1));
 
         jButton1.setFont(new java.awt.Font("Verdana", 0, 12)); // NOI18N
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/br/imagens/forceexit_103817.png"))); // NOI18N
@@ -571,9 +613,9 @@ public class StudentFrmRegister extends javax.swing.JDialog {
                 jButton1ActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 380, -1, -1));
+        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 430, -1, -1));
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 440));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 670, 480));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -676,9 +718,12 @@ public class StudentFrmRegister extends javax.swing.JDialog {
             student.setActive(cbActive.isSelected());
             sDAO.update(student);
         }
+        if(tfEmail.getText().toString().length()>0){
+            sDAO.executeSQL("update user_students set email='"+tfEmail.getText().toString()+"' where student_id="+
+                                    student.getId());
+        }
 
-        setVisible(
-                false);
+        setVisible(false);
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
@@ -916,6 +961,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -930,6 +976,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     private javax.swing.JLabel lblPhoto;
     private javax.swing.JLabel lblSystemOnline;
     private javax.swing.JPanel pnlDIni;
+    private javax.swing.JPanel pnlEmail;
     private javax.swing.JPanel pnlMeals;
     private javax.swing.JTextArea taObs;
     private javax.swing.JTable tbAllowMeal;
@@ -937,6 +984,7 @@ public class StudentFrmRegister extends javax.swing.JDialog {
     private javax.swing.JTable tbStudentMeals;
     private javax.swing.JTabbedPane tbbPanStudente;
     private javax.swing.JFormattedTextField tfDateValid;
+    private javax.swing.JTextField tfEmail;
     private javax.swing.JTextField tfMat;
     private javax.swing.JTextField tfName;
     // End of variables declaration//GEN-END:variables
